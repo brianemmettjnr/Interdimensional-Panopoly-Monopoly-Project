@@ -28,12 +28,12 @@ class BoardPanel extends JPanel {
 		this.players = players;
 		setPreferredSize(new Dimension(FRAME_WIDTH, FRAME_HEIGHT));
 		setBackground(Color.WHITE);
-		try {
+		/*try {
 //			boardImage = ImageIO.read(new File("board.jpg"));
 			boardImage = ImageIO.read(this.getClass().getResource("board.jpg"));
 		} catch (IOException ex) {
 			System.out.println("Could not find the image file " + ex.toString());
-		}
+		}*/
 		int sideLength = Board.NUM_SQUARES/4;
  		for (int s=0; s<Board.NUM_SQUARES; s++) {
 			for (int p=0; p<Players.MAX_NUM_PLAYERS; p++) {
