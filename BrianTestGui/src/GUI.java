@@ -4,66 +4,67 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+import java.awt.*;
+
 public class GUI {
 
-    public int BOARD_SIZE;
-    public GUI(int BoardSize)
+    public int BOARD_SIZE,FRAME_SIZE;
+    public GUI(int BoardSize,int FrameSquareSize)
     {
         BOARD_SIZE=BoardSize;
+        FRAME_SIZE=FrameSquareSize;
         JFrame frame = new JFrame("PANOPOLY");
-        frame.setSize(1000,1000);
+        frame.setSize(FRAME_SIZE, FRAME_SIZE);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        JPanel[] panels = new JPanel[BoardSize];
-        for(int i=0;i<BOARD_SIZE;i++)
-        {
-            panels[i]=new JPanel();
-            panels[i].setLayout(null);
-            frame.add(panels[i]);
-        }
-        placeComponents(panels);
+        JPanel panel = new JPanel();
+           panel.setLayout(null);
+            frame.add(panel);
+        placeComponents(panel);
         // Setting the frame visibility to true
         frame.setVisible(true);
     }
-    private void placeComponents(JPanel[] panel)
+    private void placeComponents(JPanel panel)
     {
         int SquaresOnSide=(((BOARD_SIZE-4)/4)+2);
-        int Offset=1000/SquaresOnSide;
-        int x=Offset*(SquaresOnSide-1),y=Offset;
+        double frameSize=FRAME_SIZE*.9;
+        int Offset=(int)(frameSize)/SquaresOnSide;
+        int x=Offset,y=0;
         int height=Offset-1,width=Offset-1;
         int NumOnBoard=0;
         JLabel[] userLabels = new JLabel[BOARD_SIZE];
+        while (x<Offset*SquaresOnSide)
+        {
+            userLabels[NumOnBoard]=new JLabel(""+NumOnBoard);
+            userLabels[NumOnBoard].setBounds(x,y,width,height);
+            panel.add(userLabels[NumOnBoard]);
+            x+=Offset;
+            NumOnBoard++;
+
+        }
+        while(y<(Offset*(SquaresOnSide-1)))
+        {
+            userLabels[NumOnBoard]=new JLabel(""+NumOnBoard);
+            userLabels[NumOnBoard].setBounds(x,y,height,width);
+            panel.add(userLabels[NumOnBoard]);
+            y+=Offset;
+            NumOnBoard++;
+
+        }
         while (x>Offset)
         {
-            userLabels[NumOnBoard]=new JLabel("PLACEHOLDER");
-            userLabels[NumOnBoard].setBounds(x,y,100,30);
-            panel[NumOnBoard].add(userLabels[NumOnBoard]);
+            userLabels[NumOnBoard]=new JLabel(""+NumOnBoard);
+            userLabels[NumOnBoard].setBounds(x,y,height,width);
+            panel.add(userLabels[NumOnBoard]);
             x-=Offset;
             NumOnBoard++;
         }
-        while(y<=(Offset*SquaresOnSide-1))
+        while (y>=Offset)
         {
-            userLabels[NumOnBoard]=new JLabel("PLACEHOLDER");
+            userLabels[NumOnBoard]=new JLabel(""+NumOnBoard);
             userLabels[NumOnBoard].setBounds(x,y,height,width);
-            panel[NumOnBoard].add(userLabels[NumOnBoard]);
-            y+=Offset;
-            NumOnBoard++;
-        }
-        while (x<(Offset*SquaresOnSide-1))
-        {
-            userLabels[NumOnBoard]=new JLabel("PLACEHOLDER");
-            userLabels[NumOnBoard].setBounds(x,y,height,width);
-            panel[NumOnBoard].add(userLabels[NumOnBoard]);
-            x+=Offset;
-            NumOnBoard++;
-        }
-        while (y>Offset)
-        {
-            userLabels[NumOnBoard]=new JLabel("PLACEHOLDER");
-            userLabels[NumOnBoard].setBounds(x,y,height,width);
-            panel[NumOnBoard].add(userLabels[NumOnBoard]);
+            panel.add(userLabels[NumOnBoard]);
             y-=Offset;
             NumOnBoard++;
-            System.out.println(y);
         }
     }
 
