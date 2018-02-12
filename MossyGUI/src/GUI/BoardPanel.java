@@ -15,6 +15,7 @@ public class BoardPanel extends JPanel{
         int x=Offset,y=0;
         int height=Offset-1,width=Offset-1;
         int NumOnBoard=0;
+        //
         //setLayout(null);
 
         JLabel[] userLabels = new JLabel[BOARD_SIZE];
