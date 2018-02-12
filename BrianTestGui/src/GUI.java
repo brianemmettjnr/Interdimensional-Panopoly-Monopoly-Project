@@ -1,10 +1,8 @@
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JTextField;
+import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
+
+import static java.awt.Color.BLACK;
 
 public class GUI {
 
@@ -31,12 +29,14 @@ public class GUI {
         int x=Offset,y=0;
         int height=Offset-1,width=Offset-1;
         int NumOnBoard=0;
+        Border border =BorderFactory.createLineBorder(BLACK, 1);
         JLabel[] userLabels = new JLabel[BOARD_SIZE];
         while (x<Offset*SquaresOnSide)
         {
             userLabels[NumOnBoard]=new JLabel(""+NumOnBoard);
             userLabels[NumOnBoard].setBounds(x,y,width,height);
             panel.add(userLabels[NumOnBoard]);
+            userLabels[NumOnBoard].setBorder(border);
             x+=Offset;
             NumOnBoard++;
 
@@ -46,6 +46,7 @@ public class GUI {
             userLabels[NumOnBoard]=new JLabel(""+NumOnBoard);
             userLabels[NumOnBoard].setBounds(x,y,height,width);
             panel.add(userLabels[NumOnBoard]);
+            userLabels[NumOnBoard].setBorder(border);
             y+=Offset;
             NumOnBoard++;
 
@@ -55,6 +56,7 @@ public class GUI {
             userLabels[NumOnBoard]=new JLabel(""+NumOnBoard);
             userLabels[NumOnBoard].setBounds(x,y,height,width);
             panel.add(userLabels[NumOnBoard]);
+            userLabels[NumOnBoard].setBorder(border);
             x-=Offset;
             NumOnBoard++;
         }
@@ -63,6 +65,7 @@ public class GUI {
             userLabels[NumOnBoard]=new JLabel(""+NumOnBoard);
             userLabels[NumOnBoard].setBounds(x,y,height,width);
             panel.add(userLabels[NumOnBoard]);
+            userLabels[NumOnBoard].setBorder(border);
             y-=Offset;
             NumOnBoard++;
         }
