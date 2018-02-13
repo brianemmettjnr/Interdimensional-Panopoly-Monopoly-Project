@@ -33,42 +33,37 @@ public class GUI {
         JLabel[] userLabels = new JLabel[BOARD_SIZE];
         while (x<Offset*SquaresOnSide)
         {
-            userLabels[NumOnBoard]=new JLabel(""+NumOnBoard);
-            userLabels[NumOnBoard].setBounds(x,y,width,height);
-            panel.add(userLabels[NumOnBoard]);
-            userLabels[NumOnBoard].setBorder(border);
+            updateLabels(panel,userLabels[NumOnBoard],x,y,height,width,NumOnBoard,border);
             x+=Offset;
             NumOnBoard++;
 
         }
         while(y<(Offset*(SquaresOnSide-1)))
         {
-            userLabels[NumOnBoard]=new JLabel(""+NumOnBoard);
-            userLabels[NumOnBoard].setBounds(x,y,height,width);
-            panel.add(userLabels[NumOnBoard]);
-            userLabels[NumOnBoard].setBorder(border);
+            updateLabels(panel,userLabels[NumOnBoard],x,y,height,width,NumOnBoard,border);
             y+=Offset;
             NumOnBoard++;
 
         }
         while (x>Offset)
         {
-            userLabels[NumOnBoard]=new JLabel(""+NumOnBoard);
-            userLabels[NumOnBoard].setBounds(x,y,height,width);
-            panel.add(userLabels[NumOnBoard]);
-            userLabels[NumOnBoard].setBorder(border);
+            updateLabels(panel,userLabels[NumOnBoard],x,y,height,width,NumOnBoard,border);
             x-=Offset;
             NumOnBoard++;
         }
         while (y>=Offset)
         {
-            userLabels[NumOnBoard]=new JLabel(""+NumOnBoard);
-            userLabels[NumOnBoard].setBounds(x,y,height,width);
-            panel.add(userLabels[NumOnBoard]);
-            userLabels[NumOnBoard].setBorder(border);
+
+            updateLabels(panel,userLabels[NumOnBoard],x,y,height,width,NumOnBoard,border);
             y-=Offset;
             NumOnBoard++;
         }
     }
-
-}/////////jesus christ i fucking hate guis OOPS CAPS LOCK WAS ONE awhdIA\£wdh||b oi@{unblk
+    private void updateLabels(JPanel panel,JLabel label,int x,int y,int height, int width,int NumOnBoard,Border border)
+    {
+        label=new JLabel(""+NumOnBoard);
+        label.setBounds(x,y,height,width);
+        panel.add(label);
+        label.setBorder(border);
+    }
+}

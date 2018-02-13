@@ -18,7 +18,7 @@ public class UI {
             frame.setSize(FRAME_SIZE, FRAME_SIZE);
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 //            frame.add(infoPanel);
-//            frame.add(commandPanel);
+  //           frame.add(commandPanel);
             frame.add(boardPanel);
             frame.pack();
             frame.setVisible(true);

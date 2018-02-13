@@ -21,43 +21,43 @@ public class BoardPanel extends JPanel{
         JLabel[] userLabels = new JLabel[BOARD_SIZE];
 
         this.add(new JLabel("Hello"));
-//        userLabels[NumOnBoard]=new JLabel(""+NumOnBoard);
-//        userLabels[NumOnBoard].setBounds(x,y,width,height);
-//        this.add(userLabels[NumOnBoard]);
+        userLabels[NumOnBoard]=new JLabel(""+NumOnBoard);
+        userLabels[NumOnBoard].setBounds(x,y,width,height);
+        this.add(userLabels[NumOnBoard]);
 
-//        while (x<Offset*SquaresOnSide)
-//        {
-//            userLabels[NumOnBoard]=new JLabel(""+NumOnBoard);
-//            userLabels[NumOnBoard].setBounds(x,y,width,height);
-//            add(userLabels[NumOnBoard]);
-//            x+=Offset;
-//            NumOnBoard++;
-//
-//        }
-//        while(y<(Offset*(SquaresOnSide-1)))
-//        {
-//            userLabels[NumOnBoard]=new JLabel(""+NumOnBoard);
-//            userLabels[NumOnBoard].setBounds(x,y,height,width);
-//            this.add(userLabels[NumOnBoard]);
-//            y+=Offset;
-//            NumOnBoard++;
-//
-//        }
-//        while (x>Offset)
-//        {
-//            userLabels[NumOnBoard]=new JLabel(""+NumOnBoard);
-//            userLabels[NumOnBoard].setBounds(x,y,height,width);
-//            this.add(userLabels[NumOnBoard]);
-//            x-=Offset;
-//            NumOnBoard++;
-//        }
-//        while (y>=Offset)
-//        {
-//            userLabels[NumOnBoard]=new JLabel(""+NumOnBoard);
-//            userLabels[NumOnBoard].setBounds(x,y,height,width);
-//            this.add(userLabels[NumOnBoard]);
-//            y-=Offset;
-//            NumOnBoard++;
-//        }
+        while (x<Offset*SquaresOnSide)
+        {
+            userLabels[NumOnBoard]=new JLabel(""+NumOnBoard);
+            userLabels[NumOnBoard].setBounds(x,y,width,height);
+            add(userLabels[NumOnBoard]);
+            x+=Offset;
+            NumOnBoard++;
+
+        }
+        while(y<(Offset*(SquaresOnSide-1)))
+        {
+            userLabels[NumOnBoard]=new JLabel(""+NumOnBoard);
+            userLabels[NumOnBoard].setBounds(x,y,height,width);
+            this.add(userLabels[NumOnBoard]);
+            y+=Offset;
+            NumOnBoard++;
+
+        }
+        while (x>Offset)
+        {
+            userLabels[NumOnBoard]=new JLabel(""+NumOnBoard);
+            userLabels[NumOnBoard].setBounds(x,y,height,width);
+            this.add(userLabels[NumOnBoard]);
+            x-=Offset;
+            NumOnBoard++;
+        }
+        while (y>=Offset)
+        {
+            userLabels[NumOnBoard]=new JLabel(""+NumOnBoard);
+            userLabels[NumOnBoard].setBounds(x,y,height,width);
+            this.add(userLabels[NumOnBoard]);
+            y-=Offset;
+            NumOnBoard++;
+        }
     }
 }
