@@ -1,6 +1,5 @@
 import javax.swing.*;
 import javax.swing.border.Border;
-import java.awt.*;
 
 import static java.awt.Color.BLACK;
 
@@ -15,8 +14,8 @@ public class GUI {
         frame.setSize(FRAME_SIZE, FRAME_SIZE);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         JPanel panel = new JPanel();
-           panel.setLayout(null);
-            frame.add(panel);
+        panel.setLayout(null);
+        frame.add(panel);
         placeComponents(panel);
         // Setting the frame visibility to true
         frame.setVisible(true);
@@ -26,12 +25,12 @@ public class GUI {
         int SquaresOnSide=(((BOARD_SIZE-4)/4)+2);
         double frameSize=FRAME_SIZE*.9;
         int Offset=(int)(frameSize)/SquaresOnSide;
-        int x=Offset,y=0;
+        int x=10,y=10;
         int height=Offset-1,width=Offset-1;
         int NumOnBoard=0;
         Border border =BorderFactory.createLineBorder(BLACK, 1);
         JLabel[] userLabels = new JLabel[BOARD_SIZE];
-        while (x<Offset*SquaresOnSide)
+        while (x<Offset*(SquaresOnSide-1))
         {
             updateLabels(panel,userLabels[NumOnBoard],x,y,height,width,NumOnBoard,border);
             x+=Offset;
@@ -45,7 +44,7 @@ public class GUI {
             NumOnBoard++;
 
         }
-        while (x>Offset)
+        while (x>=Offset)
         {
             updateLabels(panel,userLabels[NumOnBoard],x,y,height,width,NumOnBoard,border);
             x-=Offset;

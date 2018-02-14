@@ -1,6 +1,6 @@
-public class main
+public class Main
 {
     public static void main(String args[]) {
-        GUI gui = new GUI(44,700);
+        GUI gui = new GUI(40,700);
     }
 }
