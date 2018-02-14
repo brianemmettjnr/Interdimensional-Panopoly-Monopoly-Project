@@ -4,7 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/BrianTestGui/BrianTestGui.iml" filepath="$PROJECT_DIR$/BrianTestGui/BrianTestGui.iml" />
       <module fileurl="file://$PROJECT_DIR$/ChrisCode/ChrisCode.iml" filepath="$PROJECT_DIR$/ChrisCode/ChrisCode.iml" />
-      <module fileurl="file://$PROJECT_DIR$/BrianTestGui/InterdimensionalPanopoly.iml" filepath="$PROJECT_DIR$/BrianTestGui/InterdimensionalPanopoly.iml" />
+      <module fileurl="file://$PROJECT_DIR$/InterdimensionalPanopoly/InterdimensionalPanopoly.iml" filepath="$PROJECT_DIR$/InterdimensionalPanopoly/InterdimensionalPanopoly.iml" />
       <module fileurl="file://$PROJECT_DIR$/MossyGUI/MossyGUI.iml" filepath="$PROJECT_DIR$/MossyGUI/MossyGUI.iml" />
     </modules>
   </component>
