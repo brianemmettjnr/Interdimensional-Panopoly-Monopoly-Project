@@ -60,7 +60,7 @@ public class GUI {
     }
     private void updateLabels(JPanel panel,JLabel label,int x,int y,int height, int width,int NumOnBoard,Border border)
     {
-        label=new JLabel(""+NumOnBoard);
+        label=new JLabel("       "+NumOnBoard);
         label.setBounds(x,y,height,width);
         panel.add(label);
         label.setBorder(border);
