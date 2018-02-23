@@ -1,11 +1,14 @@
 package monopoly;
 
+import java.util.ArrayList;
+
 public class Player implements Playable {
 	
 	private static final int STARTING_BALANCE = 1500;
 	
 	private String name;
 	private int balance;
+	private ArrayList<Ownable> properties = new ArrayList<Ownable>();
 	
 	Player(String name)
 	{
@@ -18,12 +21,26 @@ public class Player implements Playable {
 	{
 		return name;
 	}
+	
+	public void buyProperty(Ownable property)
+	{
+		balance -= property.getPrice();
+		
+		property.setOwner(this);
+		properties.add(property);
+	}
 
 	@Override
 	public int getNetWorth() 
 	{
-		// TODO Auto-generated method stub
-		return 0;
+		int netWorth = balance;
+		
+		for(Ownable p: properties)
+		{
+			netWorth += p.getPrice();
+		}
+		
+		return netWorth;
 	}
 
 	@Override
