@@ -1,43 +1,40 @@
-import jdk.internal.util.xml.impl.Input;
+import com.sun.org.apache.xml.internal.security.utils.JDKXPathAPI;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
 
-import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 
 import static java.awt.Color.BLACK;
 import static java.awt.Color.white;
 
 public class GUI {
 
-    public int BOARD_SIZE,FRAME_SIZE;
-    private JLabel[] jlabels;
+    private int BOARD_SIZE,FRAME_SIZE;
+    private JLabel[] PropertyLabels;
+    private JPanel MainPanel;
+    private JFrame MainFrame;
+
     public GUI(int BoardSize,int FrameSquareSize)
     {
         BOARD_SIZE=BoardSize;
         FRAME_SIZE=FrameSquareSize;
-        JFrame frame = new JFrame("PANOPOLY");
-        frame.setSize(FRAME_SIZE, FRAME_SIZE);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        jlabels=new JLabel[BOARD_SIZE];
-        JPanel panel = new JPanel();
-        panel.setLayout(null);
-        panel.setOpaque(true);
-        panel.setBackground(white);
-        frame.add(panel);
-        placeComponents(panel);
+        MainFrame = new JFrame("PANOPOLY");
+        MainFrame.setSize(FRAME_SIZE, FRAME_SIZE);
+        MainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        PropertyLabels =new JLabel[BOARD_SIZE];
+        MainPanel = new JPanel();
+        MainPanel.setLayout(null);
+        MainPanel.setOpaque(true);
+        MainPanel.setBackground(white);
+        MainFrame.add(MainPanel);
+        placeComponents(MainPanel);
         // Setting the frame visibility to true
-        frame.setVisible(true);
+        MainFrame.setVisible(true);
     }
     public JLabel getPropertyLabel(int index) throws ArrayIndexOutOfBoundsException{
-        return jlabels[index];
+        return PropertyLabels[index];
     }
 
     private void placeComponents(JPanel panel)
@@ -51,28 +48,28 @@ public class GUI {
         Border border =BorderFactory.createLineBorder(BLACK, 1);
         while (x<Offset*(SquaresOnSide-1))
         {
-            updateLabels(panel,jlabels[NumOnBoard],x,y,height,width,NumOnBoard,border);
+            updateLabels(panel, PropertyLabels[NumOnBoard],x,y,height,width,NumOnBoard,border);
             x+=Offset;
             NumOnBoard++;
 
         }
         while(y<(Offset*(SquaresOnSide-1)))
         {
-            updateLabels(panel,jlabels[NumOnBoard],x,y,height,width,NumOnBoard,border);
+            updateLabels(panel, PropertyLabels[NumOnBoard],x,y,height,width,NumOnBoard,border);
             y+=Offset;
             NumOnBoard++;
 
         }
         while (x>=Offset)
         {
-            updateLabels(panel,jlabels[NumOnBoard],x,y,height,width,NumOnBoard,border);
+            updateLabels(panel, PropertyLabels[NumOnBoard],x,y,height,width,NumOnBoard,border);
             x-=Offset;
             NumOnBoard++;
         }
         while (y>=Offset)
         {
 
-            updateLabels(panel,jlabels[NumOnBoard],x,y,height,width,NumOnBoard,border);
+            updateLabels(panel, PropertyLabels[NumOnBoard],x,y,height,width,NumOnBoard,border);
             y-=Offset;
             NumOnBoard++;
         }
@@ -84,22 +81,23 @@ public class GUI {
     private void updateLabels(JPanel panel,JLabel label,int x,int y,int height, int width,int NumOnBoard,Border border)
     {
         label=new JLabel("       "+NumOnBoard);
+        JLabel finalLabel = label;
         label.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
-                super.mouseEntered(e);
+                finalLabel.setText("hello");
             }
         });
         label.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseExited(MouseEvent e) {
-                super.mouseExited(e);
+                finalLabel.setText("bye");
             }
         });
         label.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
+                finalLabel.setText("hi");
             }
         });
         label.setBounds(x,y,height,width);
