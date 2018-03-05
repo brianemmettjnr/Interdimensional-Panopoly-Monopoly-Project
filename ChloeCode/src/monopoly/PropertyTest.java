@@ -14,12 +14,12 @@ public class PropertyTest {
 		NamedLocation go = new NamedLocation("Go");
 		NamedLocation freeParking = new NamedLocation("Free Parking");
 		
-		RentalProperty marylebone = new RentalProperty("Marylebone Station", 500, 100, 200, stations);
-		RentalProperty liverpool = new RentalProperty("Liverpool St. Station", 1500, 300, 500, stations);
+		RentalProperty marylebone = new RentalProperty("Marylebone Station", 500, new int[] {100}, 200, stations);
+		RentalProperty liverpool = new RentalProperty("Liverpool St. Station", 1500, new int[] {300}, 500, stations);
 		
-		InvestmentProperty eustonRd = new InvestmentProperty("Euston Road", 400, 50, 100, 30, green);
-		InvestmentProperty piccadilly = new InvestmentProperty("Piccadilly", 450, 50, 150, 40, green);
-		InvestmentProperty leicester = new InvestmentProperty("Leicester Square", 70, 10, 30, 10, lightBlue);
+		InvestmentProperty eustonRd = new InvestmentProperty("Euston Road", 400, new int[] {50}, 100, 30, green);
+		InvestmentProperty piccadilly = new InvestmentProperty("Piccadilly", 450, new int[] {50}, 150, 40, green);
+		InvestmentProperty leicester = new InvestmentProperty("Leicester Square", 70, new int[] {10}, 30, 10, lightBlue);
 		
 		//dummy player to test Set/Get Owner methods
 		Player testPlayer = new Player("Test Player");

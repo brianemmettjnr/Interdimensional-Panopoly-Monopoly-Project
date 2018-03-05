@@ -7,14 +7,20 @@ public class InvestmentProperty extends RentalProperty implements Improvable{
 	//0 houses and hotels at beginning
 	int houses = 0, hotels = 0, buildPrice;
 
-	public InvestmentProperty(String name, int price, int rent, int mortgage, int buildPrice, Group group) 
+	public InvestmentProperty(String name, int price, int[] rent, int mortgage, int buildPrice, Group group) 
 	{
-		super(name, price, mortgage, rent, group);
+		super(name, price, rent, mortgage, group);
 		this.buildPrice = buildPrice;
 	}
 	
 	public int getBuildPrice() {
 		return buildPrice;
+	}
+	
+	@Override
+	public int getRentalAmount() 
+	{
+		return rent[getNumHouses() + (getNumHotels()*5)];
 	}
 
 	@Override

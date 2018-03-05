@@ -8,7 +8,7 @@ public class Player implements Playable {
 	
 	private String name;
 	private int balance;
-	private ArrayList<Ownable> properties = new ArrayList<Ownable>();
+	private ArrayList<Rentable> properties = new ArrayList<Rentable>();
 	
 	Player(String name)
 	{
@@ -22,7 +22,7 @@ public class Player implements Playable {
 		return name;
 	}
 	
-	public void buyProperty(Ownable property)
+	public void buyProperty(Rentable property)
 	{
 		balance -= property.getPrice();
 		
@@ -47,5 +47,50 @@ public class Player implements Playable {
 	public int getBalance() 
 	{
 		return balance;
+	}
+	
+	public boolean ownsGroup(Group group)
+	{
+		boolean isGroupOwner = true;
+		
+		for(Groupable property: group.getMembers())
+		{
+			if(!properties.contains(property))
+			{
+				isGroupOwner = false;
+			}
+		}
+		
+		return isGroupOwner;
+	}
+	
+	public int ownedStations()
+	{
+		int stations = 0;
+		
+		for(Rentable p: properties)
+		{
+			if(p.getGroup().getIdentifier() == "stations")
+			{
+				stations++;
+			}
+		}
+		
+		return stations;
+	}
+	
+	public int ownedUtilities()
+	{
+		int utilities = 0;
+		
+		for(Rentable p: properties)
+		{
+			if(p.getGroup().getIdentifier() == "utilities")
+			{
+				utilities++;
+			}
+		}
+		
+		return utilities;
 	}
 }

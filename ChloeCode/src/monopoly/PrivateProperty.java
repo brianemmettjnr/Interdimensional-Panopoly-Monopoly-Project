@@ -1,10 +1,10 @@
 package monopoly;
 
-public class PrivateProperty extends NamedLocation implements Ownable{
-	
+public class PrivateProperty extends NamedLocation implements Ownable
+{	
 	private Playable owner;
 	private int price;
-
+	
 	public PrivateProperty(String name, int price) {
 		super(name);
 		this.price = price;

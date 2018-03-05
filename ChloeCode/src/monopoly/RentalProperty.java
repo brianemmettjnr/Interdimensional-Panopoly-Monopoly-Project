@@ -4,11 +4,12 @@ package monopoly;
 
 public class RentalProperty extends PrivateProperty implements Rentable, Mortgageable, Groupable
 {
-	private int rent, mortgage;
+	protected int[] rent;
+	private int mortgage;
 	private Group group;
 	private boolean mortgaged = false;
 	
-	public RentalProperty(String name, int price, int rent, int mortgageCost, Group group) {
+	public RentalProperty(String name, int price, int[] rent, int mortgageCost, Group group) {
 		super(name, price);
 		this.rent = rent;
 		mortgage = mortgageCost;
@@ -26,7 +27,8 @@ public class RentalProperty extends PrivateProperty implements Rentable, Mortgag
 	@Override
 	public int getRentalAmount() 
 	{
-		return rent;
+		//TODO: fix for stations + utilities
+		return rent[0];
 	}
 
 	//returns if property is currently mortgaged
