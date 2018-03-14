@@ -9,11 +9,13 @@ public class Player implements Playable {
 	private String name;
 	private int balance;
 	private ArrayList<Rentable> properties = new ArrayList<Rentable>();
+	private int position;
 	
 	Player(String name)
 	{
 		this.name = name;
 		balance = STARTING_BALANCE;
+		position = 0;
 	}
 
 	@Override
@@ -22,12 +24,39 @@ public class Player implements Playable {
 		return name;
 	}
 	
-	public void buyProperty(Rentable property)
+	public int getPosition()
 	{
-		balance -= property.getPrice();
+		return position;
+	}
+	
+	public void move(int squares, boolean clockwise)
+	{
+		if(clockwise)
+		{
+			position += squares;
+		}
+		
+		else
+		{
+			position -= squares;
+		}
+	}
+	
+	public void buyProperty(Rentable property, int price)
+	{
+		balance -= price;
 		
 		property.setOwner(this);
 		properties.add(property);
+	}
+	
+	//sell property to other player
+	public void sellProperty(Rentable property, int sellPrice, Player newOwner)
+	{
+		balance += sellPrice;
+		properties.remove(property);
+		
+		newOwner.buyProperty(property, sellPrice);
 	}
 
 	@Override

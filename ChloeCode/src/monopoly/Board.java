@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Board 
 {
-	private ArrayList<Locatable> locations;
+	private ArrayList<Locatable> locations = new ArrayList<Locatable>();
 	private Group brown = new Group("brown");
 	private Group stations = new Group("stations");
 	

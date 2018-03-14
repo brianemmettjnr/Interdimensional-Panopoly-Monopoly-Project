@@ -24,7 +24,7 @@ public class PropertyTest {
 		//dummy player to test Set/Get Owner methods
 		Player testPlayer = new Player("Test Player");
 		
-		testPlayer.buyProperty(leicester);
+		testPlayer.buyProperty(leicester, leicester.getPrice());
 		
 		TaxableProperty superTax = new TaxableProperty("Super Tax", 0, 200);
 		TaxableProperty incomeTax = new TaxableProperty("Income Tax", 0, 100);
