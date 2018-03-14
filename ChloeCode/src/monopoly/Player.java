@@ -42,9 +42,14 @@ public class Player implements Playable {
 		}
 	}
 	
+	public void pay(int payment)
+	{
+		balance -= payment;
+	}
+	
 	public void buyProperty(Rentable property, int price)
 	{
-		balance -= price;
+		pay(price);
 		
 		property.setOwner(this);
 		properties.add(property);
