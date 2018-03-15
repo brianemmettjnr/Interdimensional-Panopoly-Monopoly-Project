@@ -2,6 +2,8 @@
 
 package monopoly;
 
+import interfaces.Taxable;
+
 public class TaxableProperty extends NamedLocation implements Taxable{
 	
 	private int incomePercentage, flatAmount;

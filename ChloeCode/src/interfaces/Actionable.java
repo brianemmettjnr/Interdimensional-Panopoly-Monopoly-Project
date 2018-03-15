@@ -1,4 +1,4 @@
-package monopoly;
+package interfaces;
 
 public interface Actionable extends Identifiable{
 

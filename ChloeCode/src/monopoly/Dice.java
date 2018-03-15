@@ -2,6 +2,8 @@ package monopoly;
 
 import java.util.Random;
 
+import interfaces.Rollable;
+
 public class Dice implements Rollable 
 {
 	private final static Random RND = new Random();

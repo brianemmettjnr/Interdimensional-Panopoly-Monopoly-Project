@@ -2,6 +2,8 @@
 
 package monopoly;
 
+import interfaces.Groupable;
+
 public class PropertyTest {
 
 	public static void main(String[] args) {

@@ -2,6 +2,10 @@
 
 package monopoly;
 
+import interfaces.Groupable;
+import interfaces.Mortgageable;
+import interfaces.Rentable;
+
 public class RentalProperty extends PrivateProperty implements Rentable, Mortgageable, Groupable
 {
 	protected int[] rent;

@@ -2,6 +2,11 @@ package monopoly;
 
 import java.util.ArrayList;
 
+import interfaces.Groupable;
+import interfaces.Ownable;
+import interfaces.Playable;
+import interfaces.Rentable;
+
 public class Player implements Playable {
 	
 	private static final int STARTING_BALANCE = 1500;

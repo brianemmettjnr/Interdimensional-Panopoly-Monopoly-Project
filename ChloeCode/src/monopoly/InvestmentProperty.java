@@ -2,6 +2,8 @@
 
 package monopoly;
 
+import interfaces.Improvable;
+
 public class InvestmentProperty extends RentalProperty implements Improvable{
 	
 	//0 houses and hotels at beginning

@@ -2,6 +2,9 @@ package monopoly;
 
 import java.util.ArrayList;
 
+import interfaces.Locatable;
+import interfaces.Taxable;
+
 public class Panopoly 
 {
 	private ArrayList<Player> players = new ArrayList<Player>();

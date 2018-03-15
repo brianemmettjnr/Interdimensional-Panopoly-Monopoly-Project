@@ -2,6 +2,8 @@
 
 package monopoly;
 
+import interfaces.Locatable;
+
 public class NamedLocation implements Locatable {
 	
 	private String name;

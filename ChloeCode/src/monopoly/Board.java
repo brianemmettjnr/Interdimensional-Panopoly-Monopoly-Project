@@ -2,6 +2,8 @@ package monopoly;
 
 import java.util.ArrayList;
 
+import interfaces.Locatable;
+
 public class Board 
 {
 	private ArrayList<Locatable> locations = new ArrayList<Locatable>();

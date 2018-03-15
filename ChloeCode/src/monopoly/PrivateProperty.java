@@ -1,5 +1,8 @@
 package monopoly;
 
+import interfaces.Ownable;
+import interfaces.Playable;
+
 public class PrivateProperty extends NamedLocation implements Ownable
 {	
 	private Playable owner;

@@ -2,6 +2,9 @@ package monopoly;
 
 import java.util.ArrayList;
 
+import interfaces.Groupable;
+import interfaces.Identifiable;
+
 public class Group implements Identifiable
 {
 	private String name;
