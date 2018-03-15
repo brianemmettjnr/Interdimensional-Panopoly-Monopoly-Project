@@ -18,10 +18,12 @@ public class GUI {
     private JPanel MainPanel;
     private JFrame MainFrame;
     private int LabelWidth,LabelHeight;
+    private static JTextField nameSpace=new JTextField();
     private JLabel SelectedLabel=new JLabel();
-    private static String[] characters={"boat","car","dog","hat","penguin","thimble"};
+    private static String[] characters={"boat","car","dog","hat","iron","thimble"};
     private static int selectedpictureIndex=-1;
-    private static JLabel selectedImage =new JLabel();
+    private static JLabel selectedImage =null;
+    private static int playerCount=0;
 
     public GUI(int BoardSize, Dimension FrameDimension)
     {
@@ -96,12 +98,12 @@ public class GUI {
         JFrame playerFrame= new JFrame("INTERDIMENSIONAL PANOPOLY");
         JPanel playerPanel=new JPanel();
 
-        playerFrame.setSize(400,400);
+        playerFrame.setSize(400,210);
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         playerFrame.setLocation(dim.width/2-playerFrame.getSize().width/2, dim.height/2-playerFrame.getSize().height/2);
         playerFrame.add(playerPanel);
         //panel changes after here
-        playerPanel.setBackground(Color.PINK);
+        playerPanel.setBackground(Color.WHITE);
         playerPanel.setLayout(null);
         JLabel image=new JLabel(new ImageIcon("BrianTestGui\\src\\MiniLogo.png"));
         JLabel[] button=new JLabel[5];
@@ -109,22 +111,22 @@ public class GUI {
         for(int i=0;i<5;i++)
         {
             button[i]=new JLabel();
-            button[i].setBounds(((i)*75)+7,150,70,80);
+            button[i].setBounds(((i)*75)+7,80,70,80);
             button[i].setBorder(border);
-            button[i].setText(i+2+" Players");
+            button[i].setText("  "+(i+2)+" Players");
             int finalI = i;
             button[i].addMouseListener(new MouseAdapter()
             {
                 @Override
                 public void mouseEntered(MouseEvent e) {
                     button[finalI].setText(finalI +2+" Players?");
-                    button[finalI].setBorder(BorderFactory.createLineBorder(Color.CYAN,3,true));
+                    button[finalI].setBorder(BorderFactory.createLineBorder(Color.blue,3,true));
                 }
             });
             button[i].addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseExited(MouseEvent e) {
-                    button[finalI].setText(finalI +2+" Players");
+                    button[finalI].setText("  "+(finalI +2)+" Players");
                     button[finalI].setBorder(border);
                 }
             });
@@ -133,8 +135,7 @@ public class GUI {
                 public void mouseClicked(MouseEvent e)
                 {
                   //THIS IS WHERE  THE PLAYER COUNT IS SETFSIHJISFEHJIESF|HJISEFJH|EFSIHJ IMPORTANT
-                  int playercount= finalI+2;
-                  playerFrame.dispatchEvent(new WindowEvent(playerFrame, WindowEvent.WINDOW_CLOSING));
+                  playerFrame.dispatchEvent(new WindowEvent(playerFrame, WindowEvent.WINDOW_CLOSING));playerCount= finalI+2;
                   GUI.PlayerNameGUI();
                 }
             });
@@ -142,7 +143,7 @@ public class GUI {
         }
         //player select
         playerFrame.setVisible(true);
-        image.setBounds(100,0,200,100);//this isnt relative yet okay jeez
+        image.setBounds(-10,0,400,100);//this isnt relative yet okay jeez
         playerPanel.add(image);
 
     }
@@ -150,7 +151,7 @@ public class GUI {
     private static void PlayerNameGUI() {
         JFrame playerFrame= new JFrame("INTERDIMENSIONAL PANOPOLY");
         JPanel playerPanel=new JPanel();
-        playerFrame.setBounds(300,300,636,300);
+        playerFrame.setBounds(300,300,636,270);
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         playerFrame.setLocation(dim.width/2-playerFrame.getSize().width/2, dim.height/2-playerFrame.getSize().height/2);
         playerFrame.add(playerPanel);
@@ -163,21 +164,17 @@ public class GUI {
             JLabel image=new JLabel(new ImageIcon("BrianTestGui\\src\\"+characters[i]+".png"));
             playerPanel.add(image);
             image.setBounds(10+(i*100),40,100,100);
-            JLabel upperline=new JLabel("Select your Icon, then enter your username.");
-            upperline.setBounds(120,0,600,20);
-            upperline.setFont(new Font("Times New Roman",Font.ITALIC,20));
-            upperline.setForeground(Color.white);
-            playerPanel.add(upperline);
             int finalI = i;
             image.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
                     if(selectedImage ==image) {
                         image.setBorder(BorderFactory.createLineBorder(Color.black,3,true));
-                        selectedImage = new JLabel();
+                        selectedImage = null;
                     }
                     else {
-                        selectedImage.setBorder(null);
+                        if(selectedImage!=null)
+                            selectedImage.setBorder(null);
                         image.setBorder(BorderFactory.createLineBorder(Color.WHITE, 3,true));
                         selectedImage = image;
                         selectedpictureIndex = finalI;
@@ -200,6 +197,42 @@ public class GUI {
                 }
             });
         }
+        JLabel upperline=new JLabel("Select your Icon, then enter your username.");
+        upperline.setBounds(120,10,600,20);
+        upperline.setFont(new Font("Times New Roman",Font.ITALIC,20));
+        upperline.setForeground(Color.white);
+        playerPanel.add(upperline);
+        nameSpace.setBounds(218,150,200,20);
+        JButton sendinputButton=new JButton();
+        sendinputButton.setBounds(218,180,200,40);
+        sendinputButton.setText("PRESS TO CONFIRM");
+        nameSpace.setText("");
+        final int[] playerIncrement = {0};
+        sendinputButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if(!(nameSpace.getText().isEmpty()||selectedImage==null||nameSpace.getText()==null))
+                {
+                    upperline.setForeground(Color.white);
+                    //PLAYER SETUP go here
+                    nameSpace.setText("");
+                    selectedImage.setVisible(false);
+                    selectedImage=null;
+                    playerIncrement[0]++;
+                }
+                else
+                {
+                    upperline.setForeground(Color.red);
+                }
+                if(playerCount== playerIncrement[0])
+                {
+                    playerFrame.dispatchEvent(new WindowEvent(playerFrame, WindowEvent.WINDOW_CLOSING));
+                }
+
+            }
+        });
+        playerPanel.add(sendinputButton);
+        playerPanel.add(nameSpace);
 
     }
 
