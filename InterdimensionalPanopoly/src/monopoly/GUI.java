@@ -6,6 +6,7 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
 
 import static java.awt.Color.*;
 
@@ -25,6 +26,7 @@ public class GUI {
     private static int selectedpictureIndex=-1;
     private static JLabel selectedImage =null;
     private static int playerCount=0;
+    private static ArrayList<Player> players=new ArrayList<Player>();
 
     public GUI(int BoardSize, Dimension FrameDimension)
     {
@@ -106,7 +108,7 @@ public class GUI {
         //panel changes after here
         playerPanel.setBackground(Color.WHITE);
         playerPanel.setLayout(null);
-        JLabel image=new JLabel(new ImageIcon("BrianTestGui\\src\\MiniLogo.png"));
+        JLabel image=new JLabel(new ImageIcon("InterdimensionalPanopoly\\src\\MiniLogo.png"));
         JLabel[] button=new JLabel[5];
         Border border=BorderFactory.createLineBorder(MAGENTA,2,true);
         for(int i=0;i<5;i++)
@@ -162,7 +164,7 @@ public class GUI {
         playerFrame.setVisible(true);
         for(int i=0;i<6;i++)
         {
-            JLabel image=new JLabel(new ImageIcon("BrianTestGui\\src\\"+characters[i]+".png"));
+            JLabel image=new JLabel(new ImageIcon("InterdimensionalPanopoly\\src\\"+characters[i]+".png"));
             playerPanel.add(image);
             image.setBounds(10+(i*100),40,100,100);
             int finalI = i;
@@ -215,7 +217,7 @@ public class GUI {
                 if(!(nameSpace.getText().isEmpty()||selectedImage==null||nameSpace.getText()==null))
                 {
                     upperline.setForeground(Color.white);
-                    //PLAYER SETUP go here
+                    players.add(new Player(nameSpace.getText(),selectedImage));
                     nameSpace.setText("");
                     selectedImage.setVisible(false);
                     selectedImage=null;
@@ -237,7 +239,14 @@ public class GUI {
 
     }
 
-
+    public ArrayList<Player> getPlayersArray()
+    {
+        return players;
+    }
+    public int getPlayerCount()
+    {
+        return  playerCount;
+    }
     public JLabel getSelectedLocation()
     {
         return SelectedLabel;

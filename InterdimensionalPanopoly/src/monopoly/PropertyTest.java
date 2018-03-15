@@ -24,7 +24,7 @@ public class PropertyTest {
 		InvestmentProperty leicester = new InvestmentProperty("Leicester Square", 70, new int[] {10}, 30, 10, lightBlue);
 		
 		//dummy player to test Set/Get Owner methods
-		Player testPlayer = new Player("Test Player");
+		Player testPlayer = new Player("Test Player",null);
 		
 		testPlayer.buyProperty(leicester, leicester.getPrice());
 		

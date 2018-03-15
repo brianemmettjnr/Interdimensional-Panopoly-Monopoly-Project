@@ -7,6 +7,8 @@ import interfaces.Ownable;
 import interfaces.Playable;
 import interfaces.Rentable;
 
+import javax.swing.*;
+
 public class Player implements Playable {
 	
 	private static final int STARTING_BALANCE = 1500;
@@ -15,9 +17,11 @@ public class Player implements Playable {
 	private int balance;
 	private ArrayList<Rentable> properties = new ArrayList<Rentable>();
 	private int position;
+	private JLabel icon=null;
 	
-	Player(String name)
+	Player(String name,JLabel icon)
 	{
+		this.icon=icon;
 		this.name = name;
 		balance = STARTING_BALANCE;
 		position = 0;

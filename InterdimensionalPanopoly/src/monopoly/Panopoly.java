@@ -20,7 +20,8 @@ public class Panopoly
 	
 	public void createPlayers()
 	{
-		players.add(new Player("Player 1"));
+		players.add(new Player("Player 1",null));
+
 	}
 	
 	private void roll()
