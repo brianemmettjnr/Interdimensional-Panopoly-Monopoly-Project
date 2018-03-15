@@ -9,7 +9,7 @@ import static java.awt.Color.MAGENTA;
 public class LocationLabel
 {
     private GUI gui;
-    private Border BorderColour=BorderFactory.createLineBorder(BLACK, 2);
+    private Border BorderColour=BorderFactory.createLineBorder(BLACK, 1);
 
     public LocationLabel(JLabel label, int x, int y, int NumOnBoard,GUI guiObj)
     {

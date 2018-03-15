@@ -7,7 +7,7 @@ public class Main
     {
         Random rand=new Random();
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-       // GUI gui = new GUI(4*(rand.nextInt((12-4))+4),screenSize);
+        GUI gui = new GUI(4*(rand.nextInt((12-4))+4),screenSize);
         GUI.PlayerCountGui();
     }
 }
