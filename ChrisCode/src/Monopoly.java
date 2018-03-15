@@ -27,7 +27,7 @@ public class Monopoly {
 	Monopoly (String[] args) {
 		setupBots(args);
 		ui = new UI(players, board, bots);
-		ui.display();
+	ui.display();
 		return;
 	}
 		

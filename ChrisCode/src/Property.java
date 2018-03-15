@@ -18,7 +18,6 @@ public class Property extends Square {
 		owner = null;
 		mortgaged = false;
 		this.mortgageValue = mortgageValue;
-		return;
 	}
 		
 // METHODS DEALING WITH NAMES
