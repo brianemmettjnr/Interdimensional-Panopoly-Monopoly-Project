@@ -2,9 +2,7 @@ import javax.swing.*;
 import javax.swing.border.Border;
 
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 
 import static java.awt.Color.*;
 
@@ -24,6 +22,7 @@ public class GUI {
     private static int selectedpictureIndex=-1;
     private static JLabel selectedImage =null;
     private static int playerCount=0;
+    private JLabel[] playerImages=new JLabel[6];
 
     public GUI(int BoardSize, Dimension FrameDimension)
     {
@@ -208,6 +207,28 @@ public class GUI {
         sendinputButton.setText("PRESS TO CONFIRM");
         nameSpace.setText("");
         final int[] playerIncrement = {0};
+        nameSpace.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(!(nameSpace.getText().isEmpty()||selectedImage==null||nameSpace.getText()==null))
+                {
+                    upperline.setForeground(Color.white);
+                    //PLAYER SETUP go here
+                    nameSpace.setText("");
+                    selectedImage.setVisible(false);
+                    selectedImage=null;
+                    playerIncrement[0]++;
+                }
+                else
+                {
+                    upperline.setForeground(Color.red);
+                }
+                if(playerCount== playerIncrement[0])
+                {
+                    playerFrame.dispatchEvent(new WindowEvent(playerFrame, WindowEvent.WINDOW_CLOSING));
+                }
+            }
+        });
         sendinputButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
