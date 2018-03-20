@@ -16,6 +16,7 @@ public class Panopoly
 	Panopoly(int numLocations)
 	{
 		board = new Board(numLocations);
+		GUI.PlayerCountGui();
 	}
 	
 	public void createPlayers()

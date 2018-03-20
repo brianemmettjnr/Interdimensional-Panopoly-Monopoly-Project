@@ -164,7 +164,7 @@ public class GUI {
         playerFrame.setVisible(true);
         for(int i=0;i<6;i++)
         {
-            JLabel image=new JLabel(new ImageIcon("InterdimensionalPanopoly\\src\\"+characters[i]+".png"));
+            JLabel image=new JLabel(new ImageIcon("/InterdimensionalPanopoly/src/"+characters[i]+".png"));
             playerPanel.add(image);
             image.setBounds(10+(i*100),40,100,100);
             int finalI = i;
