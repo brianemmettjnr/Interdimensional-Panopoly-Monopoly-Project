@@ -148,7 +148,6 @@ public class GUI {
         playerFrame.setVisible(true);
         image.setBounds(-10,0,400,100);//this isnt relative yet okay jeez
         playerPanel.add(image);
-
     }
 
     private static void PlayerNameGUI() {
@@ -164,7 +163,7 @@ public class GUI {
         playerFrame.setVisible(true);
         for(int i=0;i<6;i++)
         {
-            JLabel image=new JLabel(new ImageIcon("/InterdimensionalPanopoly/src/"+characters[i]+".png"));
+            JLabel image=new JLabel(new ImageIcon("boat.png"));
             playerPanel.add(image);
             image.setBounds(10+(i*100),40,100,100);
             int finalI = i;
@@ -230,16 +229,16 @@ public class GUI {
                 if(playerCount== playerIncrement[0])
                 {
                     playerFrame.dispatchEvent(new WindowEvent(playerFrame, WindowEvent.WINDOW_CLOSING));
+                    Panopoly.createGUI();
                 }
 
             }
         });
         playerPanel.add(sendinputButton);
         playerPanel.add(nameSpace);
-
     }
 
-    public ArrayList<Player> getPlayersArray()
+    public static ArrayList<Player> getPlayersArray()
     {
         return players;
     }
