@@ -27,6 +27,7 @@ public class Panopoly
 	private void roll()
 	{
 		currentPlayer.move(dice.rollDice(1, 6), clockwiseMovement);
+		setPossibleCommands();
 		getSquareAction();
 	}
 
@@ -49,7 +50,8 @@ public class Panopoly
 		
 		//unowned property
 		if(square instanceof Rentable && ((Rentable) square).getOwner() == null)
-			GUI.rentCommand = true;
+			gui.buyCommand = true;
+		
 	}
 
 	public void createGUI() 
