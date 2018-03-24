@@ -27,6 +27,8 @@ public class GUI {
     private static JLabel selectedImage =null;
     private static int playerCount=0;
     private static ArrayList<Player> players=new ArrayList<Player>();
+	public static boolean rentCommand;
+	private static Panopoly panopoly;
 
     public GUI(int BoardSize, Dimension FrameDimension)
     {
@@ -90,13 +92,13 @@ public class GUI {
             y-=Offset;
             NumOnBoard++;
         }
-        JLabel image=new JLabel(new ImageIcon("BrianTestGui\\src\\ReasonsWhyBrianIsntAGraphicDesigner.png"));
+        JLabel image=new JLabel(new ImageIcon("src\\ReasonsWhyBrianIsntAGraphicDesigner.png"));
         image.setBounds(((frameSize)/2)-200,((frameSize)/2)-200,400,400);//this isnt relative yet okay jeez
         MainPanel.add(image);
-
     }
-    public static void PlayerCountGui()
+    public static void PlayerCountGui(Panopoly panopoly1)
     {
+    	panopoly = panopoly1;
         //how many players
         JFrame playerFrame= new JFrame("INTERDIMENSIONAL PANOPOLY");
         JPanel playerPanel=new JPanel();
@@ -108,7 +110,7 @@ public class GUI {
         //panel changes after here
         playerPanel.setBackground(Color.WHITE);
         playerPanel.setLayout(null);
-        JLabel image=new JLabel(new ImageIcon("InterdimensionalPanopoly\\src\\MiniLogo.png"));
+        JLabel image=new JLabel(new ImageIcon("src\\MiniLogo.png"));
         JLabel[] button=new JLabel[5];
         Border border=BorderFactory.createLineBorder(MAGENTA,2,true);
         for(int i=0;i<5;i++)
@@ -137,8 +139,9 @@ public class GUI {
                 @Override
                 public void mouseClicked(MouseEvent e)
                 {
-                  //THIS IS WHERE  THE PLAYER COUNT IS SETFSIHJISFEHJIESF|HJISEFJH|EFSIHJ IMPORTANT
-                  playerFrame.dispatchEvent(new WindowEvent(playerFrame, WindowEvent.WINDOW_CLOSING));playerCount= finalI+2;
+                  //set player count
+                  playerFrame.dispatchEvent(new WindowEvent(playerFrame, WindowEvent.WINDOW_CLOSING));
+                  playerCount= finalI+2;
                   GUI.PlayerNameGUI();
                 }
             });
@@ -163,7 +166,7 @@ public class GUI {
         playerFrame.setVisible(true);
         for(int i=0;i<6;i++)
         {
-            JLabel image=new JLabel(new ImageIcon("boat.png"));
+            JLabel image=new JLabel(new ImageIcon("src/"+ characters[i] + ".png"));
             playerPanel.add(image);
             image.setBounds(10+(i*100),40,100,100);
             int finalI = i;
@@ -229,7 +232,8 @@ public class GUI {
                 if(playerCount== playerIncrement[0])
                 {
                     playerFrame.dispatchEvent(new WindowEvent(playerFrame, WindowEvent.WINDOW_CLOSING));
-                    Panopoly.createGUI();
+                    //create main game GUI
+                    panopoly.createGUI();
                 }
 
             }

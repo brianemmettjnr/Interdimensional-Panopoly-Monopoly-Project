@@ -11,6 +11,7 @@ public class PrivateProperty extends NamedLocation implements Ownable
 	public PrivateProperty(String name, int price) {
 		super(name);
 		this.price = price;
+		this.owner = null;
 	}
 
 	@Override

@@ -43,17 +43,36 @@ public class Player implements Playable {
 		if(clockwise)
 		{
 			position += squares;
+			
+			//if passed GO
+			if(position > Panopoly.getNumLocations())
+			{
+				earn(200);
+				position = position % Panopoly.getNumLocations();
+			}
 		}
 		
 		else
 		{
 			position -= squares;
+			
+			//if passed GO
+			if(position < 0)
+			{
+				earn(200);
+				position = position % Panopoly.getNumLocations();
+			}
 		}
 	}
 	
 	public void pay(int payment)
 	{
 		balance -= payment;
+	}
+	
+	public void earn(int earnings)
+	{
+		balance += earnings;
 	}
 	
 	public void buyProperty(Rentable property, int price)

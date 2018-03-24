@@ -47,5 +47,9 @@ public class Board
 		//TODO generate property names?
 		return null;
 	}
-
+	
+	public int getNumLocations()
+	{
+		return locations.size();
+	}
 }

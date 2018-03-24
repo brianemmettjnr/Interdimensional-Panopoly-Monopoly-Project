@@ -12,13 +12,15 @@ public class Board
 	
 	Board(int numLocations)
 	{
-		/*
-		 * for(int i = 0; i < numLocations; i++)
-		 * {
-		 * 		locations.add(newLocation());
-		 * } 
-		 * 
-		 */
+		for(int i = 0; i < numLocations; i++)
+		{
+			if(i == 0)
+				locations.add(new NamedLocation("GO"));
+			else if(i == numLocations/4)
+				locations.add(new NamedLocation("Jail"));
+			else if(i == numLocations/2)
+				locations.add(new NamedLocation("Free Parking"));
+		}
 		
 		locations.add(new NamedLocation("GO"));
 		locations.add(new InvestmentProperty("Old Kent Rd", 60, new int[] {2,10,30,90,160,250}, 50, 50, brown));

@@ -15,11 +15,6 @@ public class TaxableProperty extends NamedLocation implements Taxable{
 	}
 
 	@Override
-	public int getIncomePercentage() {
-		return incomePercentage;
-	}
-
-	@Override
 	public int getFlatAmount() {
 		return flatAmount;
 	}
