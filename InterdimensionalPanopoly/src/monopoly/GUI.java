@@ -32,7 +32,7 @@ public class GUI {
     private static JLabel selectedImage =null;
     private static int playerCount=0;
     private static ArrayList<Player> players=new ArrayList<Player>();
-	public static boolean rentCommand;
+	public boolean buyCommand;
 	private static Panopoly panopoly;
     private static BufferedImage[] images = new BufferedImage[6];
 
