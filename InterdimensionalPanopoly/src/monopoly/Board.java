@@ -43,6 +43,11 @@ public class Board
 		return locations.get(squareLocation);
 	}
 
+	public ArrayList<Locatable> getLocations()
+	{
+		return locations;
+	}
+
 	private Locatable newLocation() 
 	{
 		// TODO generate new location?

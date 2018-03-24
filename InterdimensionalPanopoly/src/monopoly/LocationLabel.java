@@ -1,4 +1,6 @@
 package monopoly;
+import interfaces.Locatable;
+
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.event.MouseAdapter;
@@ -13,9 +15,11 @@ public class LocationLabel
     private GUI gui;
     private Border BorderColour=BorderFactory.createLineBorder(BLACK, 2);
     private JLabel label=null;
-    public LocationLabel(JLabel label, int x, int y, int NumOnBoard,GUI guiObj)
+    private Locatable location;
+    public LocationLabel(JLabel label, int x, int y, int NumOnBoard, GUI guiObj, Locatable location)
     {
         this.label=label;
+        this.location=location;
         gui=guiObj;
         label=new JLabel("       "+NumOnBoard);
         JLabel finalLabel = label;

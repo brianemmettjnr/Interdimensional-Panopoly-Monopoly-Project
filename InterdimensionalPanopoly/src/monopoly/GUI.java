@@ -1,4 +1,6 @@
 package monopoly;
+import interfaces.Locatable;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -80,6 +82,7 @@ public class GUI {
 
     private void PlaceBoard()
     {
+        ArrayList<Locatable> Locations=panopoly.getBoard().getLocations();
         int SquaresOnSide=(((BOARD_SIZE-4)/4)+2);
         int frameSize=(int)(FRAME_SIZE.getHeight()*.9);
         int Offset=(frameSize)/SquaresOnSide;
@@ -90,7 +93,7 @@ public class GUI {
         while (x<Offset*(SquaresOnSide-1))
         {
             PropertyLabels[NumOnBoard]=new JLabel();
-            LocationLabels[NumOnBoard]= new LocationLabel(PropertyLabels[NumOnBoard],x,y,NumOnBoard,this);
+            LocationLabels[NumOnBoard]= new LocationLabel(PropertyLabels[NumOnBoard],x,y,NumOnBoard,this,Locations.get(NumOnBoard));
             x+=Offset;
             NumOnBoard++;
 
@@ -98,7 +101,7 @@ public class GUI {
         while(y<(Offset*(SquaresOnSide-1)))
         {
             PropertyLabels[NumOnBoard]=new JLabel();
-            LocationLabels[NumOnBoard]= new LocationLabel(PropertyLabels[NumOnBoard],x,y,NumOnBoard,this);
+            LocationLabels[NumOnBoard]= new LocationLabel(PropertyLabels[NumOnBoard],x,y,NumOnBoard,this,Locations.get(NumOnBoard));
             y+=Offset;
             NumOnBoard++;
 
@@ -106,14 +109,14 @@ public class GUI {
         while (x>=Offset)
         {
             PropertyLabels[NumOnBoard]=new JLabel();
-            LocationLabels[NumOnBoard]= new LocationLabel(PropertyLabels[NumOnBoard],x,y,NumOnBoard,this);
+            LocationLabels[NumOnBoard]= new LocationLabel(PropertyLabels[NumOnBoard],x,y,NumOnBoard,this,Locations.get(NumOnBoard));
             x-=Offset;
             NumOnBoard++;
         }
         while (y>=Offset)
         {
             PropertyLabels[NumOnBoard]=new JLabel();
-            LocationLabels[NumOnBoard]= new LocationLabel(PropertyLabels[NumOnBoard],x,y,NumOnBoard,this);
+            LocationLabels[NumOnBoard]= new LocationLabel(PropertyLabels[NumOnBoard],x,y,NumOnBoard,this,Locations.get(NumOnBoard));
             y-=Offset;
             NumOnBoard++;
         }
