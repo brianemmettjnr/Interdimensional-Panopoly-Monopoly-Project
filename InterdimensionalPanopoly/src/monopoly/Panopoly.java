@@ -56,11 +56,6 @@ public class Panopoly
 		players = GUI.getPlayersArray();
 		currentPlayer = players.get(0);
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		gui = new GUI(40, screenSize);		
-	}
-	
-	public static int getNumLocations()
-	{
-		return board.getNumLocations();
+		gui = new GUI(board.getNumLocations(), screenSize);		
 	}
 }

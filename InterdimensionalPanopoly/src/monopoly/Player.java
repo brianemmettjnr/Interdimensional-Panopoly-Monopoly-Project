@@ -57,10 +57,10 @@ public class Player implements Playable {
 			position += squares;
 			
 			//if passed GO
-			if(position > Panopoly.getNumLocations())
+			if(position > Panopoly.getBoard().getNumLocations())
 			{
 				earn(200);
-				position = position % Panopoly.getNumLocations();
+				position = position % Panopoly.getBoard().getNumLocations();
 			}
 		}
 		
@@ -72,7 +72,7 @@ public class Player implements Playable {
 			if(position < 0)
 			{
 				earn(200);
-				position = position % Panopoly.getNumLocations();
+				position = position % Panopoly.getBoard().getNumLocations();
 			}
 		}
 	}
