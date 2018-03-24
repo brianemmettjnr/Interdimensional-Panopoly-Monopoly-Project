@@ -18,18 +18,13 @@ public class Board
 				locations.add(new NamedLocation("GO"));
 			else if(i == numLocations/4)
 				locations.add(new NamedLocation("Jail/Just Visiting"));
-			else if(i == numLocations/3)
+			else if(i == (numLocations*3)/4)
 				locations.add(new NamedLocation("Go to Jail"));
 			else if(i == numLocations/2)
 				locations.add(new NamedLocation("Free Parking"));
 			else
 				locations.add(new NamedLocation(""));
 		}
-		
-		System.out.println(locations.get(0).getIdentifier());
-		System.out.println(locations.get(numLocations/4).getIdentifier());
-		System.out.println(locations.get(numLocations/2).getIdentifier());
-		
 //		locations.add(new NamedLocation("GO"));
 //		locations.add(new InvestmentProperty("Old Kent Rd", 60, new int[] {2,10,30,90,160,250}, 50, 50, brown));
 //		locations.add(new NamedLocation("CommunityChest"));

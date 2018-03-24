@@ -21,7 +21,7 @@ public class LocationLabel
         this.label=label;
         this.location=location;
         gui=guiObj;
-        label=new JLabel("       "+NumOnBoard);
+        label=new JLabel(location.getIdentifier());
         JLabel finalLabel = label;
         label.addMouseListener(new MouseAdapter() {
             @Override
