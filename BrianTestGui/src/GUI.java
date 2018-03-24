@@ -86,7 +86,7 @@ public class GUI {
             y-=Offset;
             NumOnBoard++;
         }
-        JLabel image=new JLabel(new ImageIcon("BrianTestGui\\src\\ReasonsWhyBrianIsntAGraphicDesigner.png"));
+        JLabel image=new JLabel(new ImageIcon("src\\ReasonsWhyBrianIsntAGraphicDesigner.png"));
         image.setBounds(((frameSize)/2)-200,((frameSize)/2)-200,400,400);//this isnt relative yet okay jeez
         MainPanel.add(image);
 
@@ -104,7 +104,7 @@ public class GUI {
         //panel changes after here
         playerPanel.setBackground(Color.WHITE);
         playerPanel.setLayout(null);
-        JLabel image=new JLabel(new ImageIcon("BrianTestGui\\src\\MiniLogo.png"));
+        JLabel image=new JLabel(new ImageIcon("src\\MiniLogo.png"));
         JLabel[] button=new JLabel[5];
         Border border=BorderFactory.createLineBorder(MAGENTA,2,true);
         for(int i=0;i<5;i++)
@@ -160,7 +160,7 @@ public class GUI {
         playerFrame.setVisible(true);
         for(int i=0;i<6;i++)
         {
-            JLabel image=new JLabel(new ImageIcon("BrianTestGui\\src\\"+characters[i]+".png"));
+            JLabel image=new JLabel(new ImageIcon("InterdimensionalPanopoly\\src\\"+characters[i]+".png"));
             playerPanel.add(image);
             image.setBounds(10+(i*100),40,100,100);
             int finalI = i;
