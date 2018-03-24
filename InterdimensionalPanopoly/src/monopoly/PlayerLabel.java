@@ -23,10 +23,11 @@ public class PlayerLabel
         this.icon.setBounds(this.gui.getFRAME_SIZE().height,i*100,100,100);
         this.icon.setVisible(true);
         gui.getMainPanel().add(this.icon);
-        name.setBounds(this.gui.getFRAME_SIZE().height+120,i*100,100,100);
+        name.setFont(new Font("Arial",Font.BOLD,32));
+        name.setBounds(this.gui.getFRAME_SIZE().height+120,i*100,200,100);
         name.setVisible(true);
         gui.getMainPanel().add(name);
-        balance.setBounds(this.gui.getFRAME_SIZE().height+220,i*100,100,100);
+        balance.setBounds(this.gui.getFRAME_SIZE().height+320,i*100,100,100);
         balance.setVisible(true);
         gui.getMainPanel().add(balance);
 
