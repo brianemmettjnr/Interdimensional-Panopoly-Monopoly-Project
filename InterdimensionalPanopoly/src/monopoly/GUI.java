@@ -117,7 +117,7 @@ public class GUI {
             y-=Offset;
             NumOnBoard++;
         }
-        JLabel image=new JLabel(new ImageIcon("InterdimensionalPanopoly\\src\\ReasonsWhyBrianIsntAGraphicDesigner.png"));
+        JLabel image=new JLabel(new ImageIcon(GUI.class.getResource("ReasonsWhyBrianIsntAGraphicDesigner.png")));
         image.setBounds(((frameSize)/2)-200,((frameSize)/2)-200,400,400);//this isnt relative yet okay jeez
         MainPanel.add(image);
     }
@@ -135,7 +135,7 @@ public class GUI {
         //panel changes after here
         playerPanel.setBackground(Color.WHITE);
         playerPanel.setLayout(null);
-        JLabel image=new JLabel(new ImageIcon("src\\MiniLogo.png"));
+        JLabel image=new JLabel(new ImageIcon(GUI.class.getResource("MiniLogo.png")));
         JLabel[] button=new JLabel[5];
         Border border=BorderFactory.createLineBorder(MAGENTA,2,true);
         for(int i=0;i<5;i++)
@@ -185,7 +185,7 @@ public class GUI {
 
             try
             {
-                images[i] = ImageIO.read(new File("InterdimensionalPanopoly\\src\\"+characters[i]+".png"));
+                images[i] = ImageIO.read(GUI.class.getResource(characters[i]+".png"));
             } catch (IOException e) {
                 e.printStackTrace();
             }
