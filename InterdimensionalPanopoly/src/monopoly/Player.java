@@ -12,16 +12,19 @@ import javax.swing.*;
 public class Player implements Playable {
 	
 	private static final int STARTING_BALANCE = 1500;
-	
+	private int playerIndex;
+
 	private String name;
 	private int balance;
 	private ArrayList<Rentable> properties = new ArrayList<Rentable>();
 	private int position;
-	private JLabel icon=null;
+	private int imageIndex=0;
+	private JLabel icon=new JLabel();
 	
-	Player(String name,JLabel icon)
+	Player(String name, int imageIndex, int playerIndex)
 	{
-		this.icon=icon;
+		this.playerIndex=playerIndex;
+		this.imageIndex=imageIndex;
 		this.name = name;
 		balance = STARTING_BALANCE;
 		position = 0;
@@ -32,10 +35,19 @@ public class Player implements Playable {
 	{
 		return name;
 	}
-	
+
+	public JLabel getIcon() {
+		return icon;
+	}
+
 	public int getPosition()
 	{
 		return position;
+	}
+
+	public int getImageIndex()
+	{
+		return imageIndex;
 	}
 	
 	public void move(int squares, boolean clockwise)
