@@ -1,8 +1,18 @@
+package monopoly;
+import interfaces.Locatable;
+
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
 
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.WindowEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 
 import static java.awt.Color.*;
 
@@ -12,6 +22,7 @@ public class GUI {
     private Dimension FRAME_SIZE;
     private LocationLabel[] LocationLabels;
     private JLabel[] PropertyLabels;
+    private PlayerLabel[] PlayerLabels;
     private NamedLocation[] Locations;
     private JPanel MainPanel;
     private JFrame MainFrame;
@@ -22,7 +33,10 @@ public class GUI {
     private static int selectedpictureIndex=-1;
     private static JLabel selectedImage =null;
     private static int playerCount=0;
-    private JLabel[] playerImages=new JLabel[6];
+    private static ArrayList<Player> players=new ArrayList<Player>();
+	public boolean buyCommand;
+	private static Panopoly panopoly;
+    private static BufferedImage[] images = new BufferedImage[6];
 
     public GUI(int BoardSize, Dimension FrameDimension)
     {
@@ -38,17 +52,37 @@ public class GUI {
         MainPanel.setOpaque(true);
         MainPanel.setBackground(WHITE);
         MainFrame.add(MainPanel);
-        placeComponents();
-        // Setting the frame visibility to true
+        PlaceBoard();
+        PlayerLabels=new PlayerLabel[players.size()];
+        PlacePlayers();
+//        for(Player player:players)
+//        {
+//            JLabel icon=player.getIcon();
+//            icon.setVisible(true);
+//            icon.
+//        }
+//        // Setting the frame visibility to true
         MainFrame.setVisible(true);
         MainFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
+
+    private void PlacePlayers()
+    {
+        int i=0;
+        for(Player player:players)
+        {
+            PlayerLabels[i]=new PlayerLabel(player,i,new ImageIcon(images[player.getImageIndex()]),this);
+            i++;
+        }
+    }
+
     public JLabel getPropertyLabel(int index) throws ArrayIndexOutOfBoundsException{
         return PropertyLabels[index];
     }
 
-    private void placeComponents()
+    private void PlaceBoard()
     {
+        ArrayList<Locatable> Locations=panopoly.getBoard().getLocations();
         int SquaresOnSide=(((BOARD_SIZE-4)/4)+2);
         int frameSize=(int)(FRAME_SIZE.getHeight()*.9);
         int Offset=(frameSize)/SquaresOnSide;
@@ -59,7 +93,7 @@ public class GUI {
         while (x<Offset*(SquaresOnSide-1))
         {
             PropertyLabels[NumOnBoard]=new JLabel();
-            LocationLabels[NumOnBoard]= new LocationLabel(PropertyLabels[NumOnBoard],x,y,NumOnBoard,this);
+            LocationLabels[NumOnBoard]= new LocationLabel(PropertyLabels[NumOnBoard],x,y,NumOnBoard,this,Locations.get(NumOnBoard));
             x+=Offset;
             NumOnBoard++;
 
@@ -67,7 +101,7 @@ public class GUI {
         while(y<(Offset*(SquaresOnSide-1)))
         {
             PropertyLabels[NumOnBoard]=new JLabel();
-            LocationLabels[NumOnBoard]= new LocationLabel(PropertyLabels[NumOnBoard],x,y,NumOnBoard,this);
+            LocationLabels[NumOnBoard]= new LocationLabel(PropertyLabels[NumOnBoard],x,y,NumOnBoard,this,Locations.get(NumOnBoard));
             y+=Offset;
             NumOnBoard++;
 
@@ -75,24 +109,24 @@ public class GUI {
         while (x>=Offset)
         {
             PropertyLabels[NumOnBoard]=new JLabel();
-            LocationLabels[NumOnBoard]= new LocationLabel(PropertyLabels[NumOnBoard],x,y,NumOnBoard,this);
+            LocationLabels[NumOnBoard]= new LocationLabel(PropertyLabels[NumOnBoard],x,y,NumOnBoard,this,Locations.get(NumOnBoard));
             x-=Offset;
             NumOnBoard++;
         }
         while (y>=Offset)
         {
             PropertyLabels[NumOnBoard]=new JLabel();
-            LocationLabels[NumOnBoard]= new LocationLabel(PropertyLabels[NumOnBoard],x,y,NumOnBoard,this);
+            LocationLabels[NumOnBoard]= new LocationLabel(PropertyLabels[NumOnBoard],x,y,NumOnBoard,this,Locations.get(NumOnBoard));
             y-=Offset;
             NumOnBoard++;
         }
-        JLabel image=new JLabel(new ImageIcon("src\\ReasonsWhyBrianIsntAGraphicDesigner.png"));
+        JLabel image=new JLabel(new ImageIcon(GUI.class.getResource("ReasonsWhyBrianIsntAGraphicDesigner.png")));
         image.setBounds(((frameSize)/2)-200,((frameSize)/2)-200,400,400);//this isnt relative yet okay jeez
         MainPanel.add(image);
-
     }
-    public static void PlayerCountGui()
+    public static void PlayerCountGui(Panopoly panopoly1)
     {
+    	panopoly = panopoly1;
         //how many players
         JFrame playerFrame= new JFrame("INTERDIMENSIONAL PANOPOLY");
         JPanel playerPanel=new JPanel();
@@ -104,7 +138,7 @@ public class GUI {
         //panel changes after here
         playerPanel.setBackground(Color.WHITE);
         playerPanel.setLayout(null);
-        JLabel image=new JLabel(new ImageIcon("src\\MiniLogo.png"));
+        JLabel image=new JLabel(new ImageIcon(GUI.class.getResource("MiniLogo.png")));
         JLabel[] button=new JLabel[5];
         Border border=BorderFactory.createLineBorder(MAGENTA,2,true);
         for(int i=0;i<5;i++)
@@ -133,8 +167,9 @@ public class GUI {
                 @Override
                 public void mouseClicked(MouseEvent e)
                 {
-                  //THIS IS WHERE  THE PLAYER COUNT IS SETFSIHJISFEHJIESF|HJISEFJH|EFSIHJ IMPORTANT
-                  playerFrame.dispatchEvent(new WindowEvent(playerFrame, WindowEvent.WINDOW_CLOSING));playerCount= finalI+2;
+                  //set player count
+                  playerFrame.dispatchEvent(new WindowEvent(playerFrame, WindowEvent.WINDOW_CLOSING));
+                  playerCount= finalI+2;
                   GUI.PlayerNameGUI();
                 }
             });
@@ -142,15 +177,27 @@ public class GUI {
         }
         //player select
         playerFrame.setVisible(true);
+        playerFrame.setResizable(false);
         image.setBounds(-10,0,400,100);//this isnt relative yet okay jeez
         playerPanel.add(image);
-
     }
 
     private static void PlayerNameGUI() {
+        for(int i=0;i<6;i++)
+        {
+
+            try
+            {
+                images[i] = ImageIO.read(GUI.class.getResource(characters[i]+".png"));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
         JFrame playerFrame= new JFrame("INTERDIMENSIONAL PANOPOLY");
         JPanel playerPanel=new JPanel();
         playerFrame.setBounds(300,300,636,270);
+        playerFrame.setResizable(false);
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         playerFrame.setLocation(dim.width/2-playerFrame.getSize().width/2, dim.height/2-playerFrame.getSize().height/2);
         playerFrame.add(playerPanel);
@@ -160,9 +207,10 @@ public class GUI {
         playerFrame.setVisible(true);
         for(int i=0;i<6;i++)
         {
-            JLabel image=new JLabel(new ImageIcon("InterdimensionalPanopoly\\src\\"+characters[i]+".png"));
+            JLabel image=new JLabel(new ImageIcon(images[i]));
             playerPanel.add(image);
             image.setBounds(10+(i*100),40,100,100);
+            image.setText(String.valueOf(i));
             int finalI = i;
             image.addMouseListener(new MouseAdapter() {
                 @Override
@@ -207,35 +255,13 @@ public class GUI {
         sendinputButton.setText("PRESS TO CONFIRM");
         nameSpace.setText("");
         final int[] playerIncrement = {0};
-        nameSpace.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(!(nameSpace.getText().isEmpty()||selectedImage==null||nameSpace.getText()==null))
-                {
-                    upperline.setForeground(Color.white);
-                    //PLAYER SETUP go here
-                    nameSpace.setText("");
-                    selectedImage.setVisible(false);
-                    selectedImage=null;
-                    playerIncrement[0]++;
-                }
-                else
-                {
-                    upperline.setForeground(Color.red);
-                }
-                if(playerCount== playerIncrement[0])
-                {
-                    playerFrame.dispatchEvent(new WindowEvent(playerFrame, WindowEvent.WINDOW_CLOSING));
-                }
-            }
-        });
         sendinputButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if(!(nameSpace.getText().isEmpty()||selectedImage==null||nameSpace.getText()==null))
                 {
                     upperline.setForeground(Color.white);
-                    //PLAYER SETUP go here
+                    players.add(new Player(nameSpace.getText(),selectedpictureIndex,playerIncrement[0]));
                     nameSpace.setText("");
                     selectedImage.setVisible(false);
                     selectedImage=null;
@@ -248,16 +274,30 @@ public class GUI {
                 if(playerCount== playerIncrement[0])
                 {
                     playerFrame.dispatchEvent(new WindowEvent(playerFrame, WindowEvent.WINDOW_CLOSING));
+                    //create main game GUI
+                    panopoly.createGUI();
                 }
 
             }
         });
         playerPanel.add(sendinputButton);
         playerPanel.add(nameSpace);
-
     }
-
-
+    public void updatePlayerBalances()
+    {
+        for(PlayerLabel label:PlayerLabels)
+        {
+            label.updateLabel();
+        }
+    }
+    public static ArrayList<Player> getPlayersArray()
+    {
+        return players;
+    }
+    public int getPlayerCount()
+    {
+        return  playerCount;
+    }
     public JLabel getSelectedLocation()
     {
         return SelectedLabel;
@@ -273,6 +313,9 @@ public class GUI {
     public int getLabelWidth()
     {
         return LabelWidth;
+    }
+    public Dimension getFRAME_SIZE() {
+        return FRAME_SIZE;
     }
 
     public int getLabelHeight() {
