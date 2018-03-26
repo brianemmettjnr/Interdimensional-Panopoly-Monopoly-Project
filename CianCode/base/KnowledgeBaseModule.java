@@ -1,3 +1,5 @@
+package base;
+
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -67,7 +69,7 @@ public class KnowledgeBaseModule
 		return null;
 	}
 	
-	
+/*	
 	public String getFirstValue(String fieldName, String key)
 	{
 		Vector values = getFieldValues(fieldName, key);
@@ -76,7 +78,7 @@ public class KnowledgeBaseModule
 			return null;
 		else
 			return (String)values.elementAt(0);
-	}
+	}*/
 	
 	
 	// Check whether a key concept has a given value for a given field
@@ -159,6 +161,76 @@ public class KnowledgeBaseModule
 		return matchingKeys;
 	}
 	
+	public Vector<String> getAllKeysWithValue(String fieldname, String value)
+	{
+		Vector<String> matchingKeys = new Vector();
+
+		if (value == null) 
+			return matchingKeys;
+		else
+			value = value.intern();
+		
+		for (int f = 0; f < fieldTables.size(); f++)
+		{
+			String name = (String)fieldNames.elementAt(f);
+			
+			if (!name.equals(fieldname)) continue;
+		
+			Hashtable field = (Hashtable)fieldTables.elementAt(f);
+			
+			Vector keys =  (Vector)field.get("*keylist*");
+			
+			if (keys == null) break;
+			
+			for (int k = 0; k < keys.size(); k++)
+			{
+				String key = (String)keys.elementAt(k);
+				
+				Vector values = (Vector)field.get(key);
+				
+				if (values != null && values.contains(value))
+					matchingKeys.add(key);
+			}
+		}
+		
+		return matchingKeys;
+	}
+	
+	public Vector<String> getAllKeysWithFieldValueAndKey(String fieldname, String value, String keyss)
+	{
+		Vector<String> matchingKeys = new Vector();
+
+		if (value == null) 
+			return matchingKeys;
+		else
+			value = value.intern();
+		
+		for (int f = 0; f < fieldTables.size(); f++)
+		{
+			String name = (String)fieldNames.elementAt(f);
+			
+			if (!name.equals(fieldname)) continue;
+		
+			Hashtable field = (Hashtable)fieldTables.elementAt(f);
+			
+			Vector keys =  (Vector)field.get(keyss);
+			
+			if (keys == null) break;
+			
+			for (int k = 0; k < keys.size(); k++)
+			{
+				String key = (String)keys.elementAt(k);
+				
+				Vector values = (Vector)field.get(key);
+				
+				if (values != null && values.contains(value))
+					matchingKeys.add(key);
+			}
+		}
+		
+		return matchingKeys;
+	}
+	
 	public Vector<String> getAllKeysWithoutFieldValue(String fieldname, String value)
 	{
 		Vector<String> matchingKeys = new Vector();
@@ -209,52 +281,8 @@ public class KnowledgeBaseModule
 	//-----------------------------------------------------------------------------------------------//
 	//-----------------------------------------------------------------------------------------------//
 
-	// Turn a field value into a hashtag
 	
-	public String hashtagify(String phrase)
-	{
-		if (phrase == null || phrase.length() < 1)
-			return phrase;
-		
-		if (phrase.indexOf((int)' ') < 0)
-			return "#" + Character.toUpperCase(phrase.charAt(0)) + phrase.substring(1);
-		
-		StringBuffer tagged = new StringBuffer("#"); 
-		
-		char prev = ' ', curr = ' ';
-		
-		for (int i = 0; i < phrase.length(); i++)
-		{
-			prev = curr;
-			curr = phrase.charAt(i);
-			
-			if ((prev == ' ' || prev == '.' || prev == '_') && Character.isLowerCase(curr))
-				curr = Character.toUpperCase(curr);
-			
-			if (curr != ' ' && curr != '\"' && curr != '.' && curr != '-' && curr != '\'')
-				tagged.append(curr);
-		}
-		
-		return tagged.toString();
-	}
-	
-	
-	
-	public String replaceWith(String whole, String before, String after)
-	{
-		int where = whole.indexOf(before);
-		
-		while (where >= 0)
-		{
-			whole = whole.substring(0, where) + after + whole.substring(where + before.length());
-			
-			where = whole.indexOf(before, where + after.length());
-		}
-		
-		return whole;
-	}
 
-	
 	// Get the intersection of two lists of concepts
 	
 	public Vector intersect(Vector v1, Vector v2)
@@ -452,71 +480,6 @@ public class KnowledgeBaseModule
 		return inversion;
 	}
 	
-	
-	//-----------------------------------------------------------------------------------------------//
-	//-----------------------------------------------------------------------------------------------//
-	//   Return an ordered list of the most similar key concepts to a given key, most similar first
-	//-----------------------------------------------------------------------------------------------//
-	//-----------------------------------------------------------------------------------------------//
-
-	public Vector getSimilarConcepts(String given)
-	{
-		return getSimilarConcepts(given, fieldNames, 1);
-	}
-	
-	
-	public Vector getSimilarConcepts(String given, int minSimilarity)
-	{
-		return getSimilarConcepts(given, fieldNames, minSimilarity);
-	}
-
-	
-	public Vector getSimilarConcepts(String given, Vector fieldNames)
-	{
-		return getSimilarConcepts(given, fieldNames, 1);
-	}
-	
-	
-	public Vector getSimilarConcepts(String given, Vector fieldNames, int minSimilarity)
-	{
-		Vector keys = getAllFrames();
-		
-		Vector[] scale = new Vector[fieldNames.size()*10];
-		
-		String other = null;
-		
-		for (int k = 0; k < keys.size(); k++)
-		{
-			other = (String)keys.elementAt(k);
-			
-			if (other.equals(given)) continue;
-			
-			Vector overlap = getOverlappingFields(given, other, fieldNames);
-			
-			if (overlap == null || overlap.size() < minSimilarity) continue;
-			
-			int simScore = overlap.size();
-			
-			if (simScore >= scale.length) simScore = scale.length-1;
-			
-			if (scale[simScore] == null)
-				scale[simScore] = new Vector();
-			
-			scale[simScore].add(other);
-		}
-		
-		Vector rank = new Vector();
-		
-		for (int s = scale.length-1; s > 0; s--)
-		{
-			if (scale[s] == null) continue;
-			
-			for (int v = 0; v < scale[s].size(); v++)
-				rank.add(scale[s].elementAt(v));
-		}
-		
-		return rank;
-	}
 	
 	//-----------------------------------------------------------------------------------------------//
 	//-----------------------------------------------------------------------------------------------//

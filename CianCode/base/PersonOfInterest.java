@@ -1,3 +1,5 @@
+package base;
+
 //-----------------------------------------------------------------------------------------------//
 	//-----------------------------------------------------------------------------------------------//
 	//  Please excuse lack of comments atm, JFrame are yet to be implemented and questions are just 		//
@@ -5,10 +7,6 @@
 	// 	will get on that over next few days, run from this class and see results, any input welcome		//												
 	//-----------------------------------------------------------------------------------------------//
 	//-----------------------------------------------------------------------------------------------//
-
-
-
-
 
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
@@ -23,17 +21,16 @@ import java.awt.Container;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 
+import java.util.ArrayList;
 import java.util.Hashtable;
 
-
-
-// Use the knowledge-base(s) of famous people (real and fictional) to generate apt comparisons
+//Use the knowledge-base(s) of famous people (real and fictional) to generate apt comparisons
 
 public class PersonOfInterest
 {
-	static Random DICE 						 = new Random();
+	static Random DICE = new Random();
 	
-	private String knowledgeDir				 = null;   // directory where knowledge-base(s) can be found
+	private String knowledgeDir	= null;   // directory where knowledge-base(s) can be found
 	
 	// Various modules of the knowledge-base
 	
@@ -50,6 +47,9 @@ public class PersonOfInterest
 	private KnowledgeBaseModule COMPARATIVES = null;
 	private KnowledgeBaseModule ANTONYMS	 = null;
 	private KnowledgeBaseModule PAST_PERFECTS= null;
+	private KnowledgeBaseModule NOC1          = null;
+	private KnowledgeBaseModule NOC2          = null;
+
 	
 	private static Vector allPeople				 = null;
 	private static Vector fictionalPeople			 = null;
@@ -62,6 +62,10 @@ public class PersonOfInterest
 	private static Vector notmothers			= null;
 	private static Vector insideusa    			= null;
 	private static Vector outsideusa				= null;
+	private static Vector fictionalworldsDC 		= null;
+	private static Vector fictionalworldsSW		= null;
+	private static Vector realworldAmPol		= null;
+
 	
 	private Hashtable NEG_QUALITIES 		 = null;
 	private Hashtable POS_QUALITIES 		 = null;
@@ -92,6 +96,8 @@ public class PersonOfInterest
 		NEG_QUALITIES = NOC.getInvertedField("Negative Talking Points");
 		ALL_QUALITIES = NOC.getInvertedField("Positive Talking Points");
 		ALL_QUALITIES = NOC.getInvertedField("Negative Talking Points", ALL_QUALITIES);
+		NOC1		  = new KnowledgeBaseModule(knowledgeDir + "Veale's The NOC List.txt", 3);
+		NOC2		  = new KnowledgeBaseModule(knowledgeDir + "Veale's The NOC List.txt", 5);
 		
 		allPeople       = NOC.getAllFrames();
 		
@@ -105,17 +111,53 @@ public class PersonOfInterest
 		notfathers 		= NOC.getAllKeysWithoutFieldValue("Category", "Father");
 		mothers			= NOC.getAllKeysWithFieldValue("Category", "Mother");
 		notmothers		= NOC.getAllKeysWithoutFieldValue("Category", "Mother");
+		fictionalworldsDC = NOC1.getAllKeysWithFieldValue("Domains", "DC Comics");
+		fictionalworldsSW = NOC2.getAllKeysWithFieldValue("Domains", "Star Wars");
+		realworldAmPol 	  = NOC1.getAllKeysWithFieldValue("Domains", "American politics");
 		
 		
-		allFields		= NOC.getFieldNames();
 		
+			
 	}
+	
+	
 	public static void main(String[] args)
 	{
 		String kdir = "";
 		String tdir = "";	
 		
 		PersonOfInterest stereonomicon = new PersonOfInterest(kdir);
+		ArrayList<String> locations = new ArrayList<String>();
+		
+		
+		int qs = DICE.nextInt(5) + 1;
+		for(int z = 0; z < qs; z++)
+		{
+			int n = DICE.nextInt(fictionalworldsDC.size());
+			locations.add((String) fictionalworldsDC.get(n));
+			fictionalworldsDC.remove(n);
+		}
+		for(int z = 0; z < qs; z++)
+		{
+			int n = DICE.nextInt(fictionalworldsSW.size());
+			locations.add((String) fictionalworldsSW.get(n));
+			fictionalworldsSW.remove(n);
+		}
+		for(int z = 0; z < qs; z++)
+		{
+			int n = DICE.nextInt(realworldAmPol.size());
+			locations.add((String) realworldAmPol.get(n));
+			realworldAmPol.remove(n);
+		}
+		// sometimes only gets 1 need to fix this
+		
+		for(int q = 0; q < locations.size(); q++)
+		{
+			System.out.println(locations.get(q));
+		}
+				
+	}
+		/*
 		
 		int qs = DICE.nextInt(8) + 1;
 		
@@ -146,7 +188,7 @@ public class PersonOfInterest
 		}
 		else if(qs == 3)
 		{
-			System.out.println("Which of the folling does not call America home?");
+			System.out.println("Which of the following does not call America home?");
 			for(int z = 0; z < 3; z++)
 			{
 				int n = DICE.nextInt(insideusa.size());
@@ -157,7 +199,7 @@ public class PersonOfInterest
 		}
 		else if(qs == 4)
 		{
-			System.out.println("Which of the folling resides in America?");
+			System.out.println("Which of the following resides in America?");
 			for(int z = 0; z < 3; z++)
 			{
 				int n = DICE.nextInt(outsideusa.size());
@@ -209,11 +251,8 @@ public class PersonOfInterest
 			}
 			int n = DICE.nextInt(mothers.size());
 			System.out.println(mothers.get(n));
-		}
-		
-		
-		
-	}
+		}	
+	}*/
 		
 }	
 
