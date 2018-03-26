@@ -157,7 +157,7 @@ public class PersonOfInterest
 		}
 				
 	}
-		/*
+		/*///
 		
 		int qs = DICE.nextInt(8) + 1;
 		
