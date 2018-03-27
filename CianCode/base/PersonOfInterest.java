@@ -65,6 +65,9 @@ public class PersonOfInterest
 	private static Vector fictionalworldsDC 		= null;
 	private static Vector fictionalworldsSW		= null;
 	private static Vector realworldAmPol		= null;
+	private static Vector fictionalworldsMarvel  = null;
+	private static Vector fictionalworldsLOTR    = null;
+	private static Vector fictionalworldsSimpsons = null;
 
 	
 	private Hashtable NEG_QUALITIES 		 = null;
@@ -114,6 +117,9 @@ public class PersonOfInterest
 		fictionalworldsDC = NOC1.getAllKeysWithFieldValue("Domains", "DC Comics");
 		fictionalworldsSW = NOC2.getAllKeysWithFieldValue("Domains", "Star Wars");
 		realworldAmPol 	  = NOC1.getAllKeysWithFieldValue("Domains", "American politics");
+		fictionalworldsMarvel = NOC1.getAllKeysWithFieldValue("Domains", "Marvel Comics");
+		fictionalworldsLOTR   = NOC1.getAllKeysWithFieldValue("Creator", "J. R. R. Tolkien");
+		fictionalworldsSimpsons = NOC1.getAllKeysWithFieldValue("Domains", "The Simpsons");
 		
 		
 		
@@ -148,6 +154,27 @@ public class PersonOfInterest
 			int n = DICE.nextInt(realworldAmPol.size());
 			locations.add((String) realworldAmPol.get(n));
 			realworldAmPol.remove(n);
+		}
+		
+		for(int z = 0; z < qs; z++)
+		{
+			int n = DICE.nextInt(fictionalworldsMarvel.size());
+			locations.add((String) fictionalworldsMarvel.get(n));
+			fictionalworldsMarvel.remove(n);
+		}
+		
+		for(int z = 0; z < qs; z++)
+		{
+			int n = DICE.nextInt(fictionalworldsLOTR.size());
+			locations.add((String) fictionalworldsLOTR.get(n));
+			fictionalworldsLOTR.remove(n);
+		}
+		
+		for(int z = 0; z < qs; z++)
+		{
+			int n = DICE.nextInt(fictionalworldsSimpsons.size());
+			locations.add((String) fictionalworldsSimpsons.get(n));
+			fictionalworldsSimpsons.remove(n);
 		}
 		// sometimes only gets 1 need to fix this
 		
