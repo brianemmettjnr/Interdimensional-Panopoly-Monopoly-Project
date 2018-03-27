@@ -20,10 +20,12 @@ public class Panopoly
 		board = new Board(numLocations);
 		GUI.PlayerCountGui(this);
 	}
+	
 	public Board getBoard()
 	{
 		return this.board;
 	}
+	
 	private void roll()
 	{
 		currentPlayer.move(dice.rollDice(1, 6), clockwiseMovement);

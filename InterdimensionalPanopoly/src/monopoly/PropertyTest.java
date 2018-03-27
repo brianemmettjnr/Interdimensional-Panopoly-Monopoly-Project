@@ -28,8 +28,8 @@ public class PropertyTest {
 		
 		testPlayer.buyProperty(leicester, leicester.getPrice());
 		
-		TaxableProperty superTax = new TaxableProperty("Super Tax", 0, 200);
-		TaxableProperty incomeTax = new TaxableProperty("Income Tax", 0, 100);
+		TaxableProperty superTax = new TaxableProperty("Super Tax", 200);
+		TaxableProperty incomeTax = new TaxableProperty("Income Tax", 100);
 		
 		go.setRight(eustonRd);
 		eustonRd.setRight(piccadilly);

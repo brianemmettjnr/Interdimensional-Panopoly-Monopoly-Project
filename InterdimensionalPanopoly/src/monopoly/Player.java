@@ -50,30 +50,18 @@ public class Player implements Playable {
 		return imageIndex;
 	}
 	
+	
+	//TO DO Check for passing Go
 	public void move(int squares, boolean clockwise)
 	{
 		if(clockwise)
 		{
 			position += squares;
-			
-			//if passed GO
-			if(position > Panopoly.getBoard().getNumLocations())
-			{
-				earn(200);
-				position = position % Panopoly.getBoard().getNumLocations();
-			}
 		}
 		
 		else
 		{
 			position -= squares;
-			
-			//if passed GO
-			if(position < 0)
-			{
-				earn(200);
-				position = position % Panopoly.getBoard().getNumLocations();
-			}
 		}
 	}
 	

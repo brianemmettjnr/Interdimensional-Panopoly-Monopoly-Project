@@ -22,6 +22,10 @@ public class Board
 				locations.add(new NamedLocation("Go to Jail"));
 			else if(i == numLocations/2)
 				locations.add(new NamedLocation("Free Parking"));
+			else if(i == 4)
+				locations.add(new TaxableProperty("Income Tax", 200));
+			else if(i == numLocations-3)
+				locations.add(new TaxableProperty("Super Tax", 100));
 			else
 				locations.add(new NamedLocation(""));
 		}
