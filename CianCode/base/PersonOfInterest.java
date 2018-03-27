@@ -35,20 +35,21 @@ public class PersonOfInterest
 	// Various modules of the knowledge-base
 	
 	private KnowledgeBaseModule NOC          = null;
-	private KnowledgeBaseModule CATEGORIES   = null;
+/*	private KnowledgeBaseModule CATEGORIES   = null;
 	private KnowledgeBaseModule CLOTHES      = null;
 	private KnowledgeBaseModule CREATIONS    = null;
 	private KnowledgeBaseModule DOMAINS      = null;
-	private KnowledgeBaseModule WORLDS       = null;
 	private KnowledgeBaseModule VEHICLES     = null;
 	private KnowledgeBaseModule WEAPONS	     = null;
 	private KnowledgeBaseModule PLACES       = null;
 	private KnowledgeBaseModule SUPERLATIVES = null;
 	private KnowledgeBaseModule COMPARATIVES = null;
 	private KnowledgeBaseModule ANTONYMS	 = null;
-	private KnowledgeBaseModule PAST_PERFECTS= null;
+	private KnowledgeBaseModule PAST_PERFECTS= null;*/
 	private KnowledgeBaseModule NOC1          = null;
 	private KnowledgeBaseModule NOC2          = null;
+	private KnowledgeBaseModule WORLDS       = null;
+
 
 	
 	private static Vector allPeople				 = null;
@@ -68,26 +69,18 @@ public class PersonOfInterest
 	private static Vector fictionalworldsMarvel  = null;
 	private static Vector fictionalworldsLOTR    = null;
 	private static Vector fictionalworldsSimpsons = null;
+	private static Vector checkers;
 
-	
-	private Hashtable NEG_QUALITIES 		 = null;
-	private Hashtable POS_QUALITIES 		 = null;
-	private Hashtable ALL_QUALITIES 		 = null;
-	
-
-	private Vector attributeFields 			 = null;
-	private Vector allFields	 			 = null;
 	
 	public PersonOfInterest(String kbDirectory)
 	{
 		knowledgeDir = kbDirectory;
 		
 		NOC           = new KnowledgeBaseModule(knowledgeDir + "Veale's The NOC List.txt", 0);
-		CATEGORIES    = new KnowledgeBaseModule(knowledgeDir + "Veale's Category Hierarchy.txt", 0);
+		/*CATEGORIES    = new KnowledgeBaseModule(knowledgeDir + "Veale's Category Hierarchy.txt", 0);
 		CLOTHES       = new KnowledgeBaseModule(knowledgeDir + "Veale's clothing line.txt", 1);  // 1 is the column number of the key value
 		CREATIONS     = new KnowledgeBaseModule(knowledgeDir + "Veale's creations.txt", 0);
 		DOMAINS       = new KnowledgeBaseModule(knowledgeDir + "Veale's domains.txt", 0);
-		WORLDS        = new KnowledgeBaseModule(knowledgeDir + "Veale's fictional worlds.txt", 0);
 		VEHICLES      = new KnowledgeBaseModule(knowledgeDir + "Veale's vehicle fleet.txt", 1);  // 1 is the column number of the key value
 		WEAPONS	      = new KnowledgeBaseModule(knowledgeDir + "Veale's weapon arsenal.txt", 1);  // 1 is the column number of the key value
 		PLACES        = new KnowledgeBaseModule(knowledgeDir + "Veale's place elements.txt", 0);		
@@ -98,9 +91,11 @@ public class PersonOfInterest
 		POS_QUALITIES = NOC.getInvertedField("Positive Talking Points");
 		NEG_QUALITIES = NOC.getInvertedField("Negative Talking Points");
 		ALL_QUALITIES = NOC.getInvertedField("Positive Talking Points");
-		ALL_QUALITIES = NOC.getInvertedField("Negative Talking Points", ALL_QUALITIES);
+		ALL_QUALITIES = NOC.getInvertedField("Negative Talking Points", ALL_QUALITIES);*/
 		NOC1		  = new KnowledgeBaseModule(knowledgeDir + "Veale's The NOC List.txt", 3);
 		NOC2		  = new KnowledgeBaseModule(knowledgeDir + "Veale's The NOC List.txt", 5);
+		WORLDS        = new KnowledgeBaseModule(knowledgeDir + "Veale's fictional worlds.txt", 0);
+
 		
 		allPeople       = NOC.getAllFrames();
 		
@@ -120,13 +115,12 @@ public class PersonOfInterest
 		fictionalworldsMarvel = NOC1.getAllKeysWithFieldValue("Domains", "Marvel Comics");
 		fictionalworldsLOTR   = NOC1.getAllKeysWithFieldValue("Creator", "J. R. R. Tolkien");
 		fictionalworldsSimpsons = NOC1.getAllKeysWithFieldValue("Domains", "The Simpsons");
-		
+		checkers = WORLDS.getAllKeys("Fictional World"); 
 		
 		
 			
 	}
-	
-	
+		
 	public static void main(String[] args)
 	{
 		String kdir = "";
@@ -180,9 +174,10 @@ public class PersonOfInterest
 		
 		for(int q = 0; q < locations.size(); q++)
 		{
-			System.out.println(locations.get(q));
+			//System.out.println(locations.get(q));
 		}
 				
+		System.out.println(checkers);
 	}
 		/*///
 		

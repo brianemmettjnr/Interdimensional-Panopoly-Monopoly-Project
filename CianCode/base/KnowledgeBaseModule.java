@@ -69,18 +69,7 @@ public class KnowledgeBaseModule
 		return null;
 	}
 	
-/*	
-	public String getFirstValue(String fieldName, String key)
-	{
-		Vector values = getFieldValues(fieldName, key);
 		
-		if (values == null || values.size() < 1)
-			return null;
-		else
-			return (String)values.elementAt(0);
-	}*/
-	
-	
 	// Check whether a key concept has a given value for a given field
 	
 	public boolean hasFieldValue(String fieldName, String key, String value)
@@ -160,6 +149,36 @@ public class KnowledgeBaseModule
 		
 		return matchingKeys;
 	}
+	
+	public Vector<String> getAllKeys(String fieldname)
+	{
+		Vector<String> matchingKeys = new Vector();
+
+		
+		for (int f = 0; f < fieldTables.size(); f++)
+		{
+			String name = (String)fieldNames.elementAt(f);
+			
+			if (!name.equals(fieldname)) continue;
+		
+			Hashtable field = (Hashtable)fieldTables.elementAt(f);
+			
+			Vector keys =  (Vector)field.get("*keylist*");
+			
+			if (keys == null) break;
+			
+			for (int k = 0; k < keys.size(); k++)
+			{
+				String key = (String)keys.elementAt(k);
+				
+				Vector values = (Vector)field.get(key);
+					matchingKeys.add(key);
+			}
+		}
+		
+		return matchingKeys;
+	}
+	
 	
 	public Vector<String> getAllKeysWithValue(String fieldname, String value)
 	{
