@@ -21,7 +21,7 @@ public class Player implements Playable {
 	private int imageIndex=0;
 	private JLabel icon=new JLabel();
 	
-	Player(String name, int imageIndex, int playerIndex)
+	public Player(String name, int imageIndex, int playerIndex)
 	{
 		this.playerIndex=playerIndex;
 		this.imageIndex=imageIndex;
@@ -132,7 +132,7 @@ public class Player implements Playable {
 		
 		for(Rentable p: properties)
 		{
-			if(p.getGroup().getIdentifier() == "stations")
+			if(p instanceof Station)
 			{
 				stations++;
 			}
@@ -147,7 +147,7 @@ public class Player implements Playable {
 		
 		for(Rentable p: properties)
 		{
-			if(p.getGroup().getIdentifier() == "utilities")
+			if(p instanceof Utility)
 			{
 				utilities++;
 			}
