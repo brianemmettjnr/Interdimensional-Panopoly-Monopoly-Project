@@ -19,11 +19,10 @@ import static java.awt.Color.*;
 public class GUI {
 
     private int BOARD_SIZE;
-    private Dimension FRAME_SIZE;
+    private Dimension FRAME_SIZE=Toolkit.getDefaultToolkit().getScreenSize();
     private LocationLabel[] LocationLabels;
     private JLabel[] PropertyLabels;
     private PlayerLabel[] PlayerLabels;
-    private NamedLocation[] Locations;
     private JPanel MainPanel;
     private JFrame MainFrame;
     private int LabelWidth,LabelHeight;
@@ -38,10 +37,9 @@ public class GUI {
 	private static Panopoly panopoly;
     private static BufferedImage[] images = new BufferedImage[6];
 
-    public GUI(int BoardSize, Dimension FrameDimension)
+    public GUI(int BoardSize)
     {
         BOARD_SIZE=BoardSize;
-        FRAME_SIZE=FrameDimension;
         MainFrame = new JFrame("Interdimensional Panopoly");
         MainFrame.setSize(FRAME_SIZE);
         MainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -50,18 +48,16 @@ public class GUI {
         MainPanel = new JPanel();
         MainPanel.setLayout(null);
         MainPanel.setOpaque(true);
-        MainPanel.setBackground(WHITE);
+        MainPanel.setBackground(Color.LIGHT_GRAY);
         MainFrame.add(MainPanel);
         PlaceBoard();
         PlayerLabels=new PlayerLabel[players.size()];
         PlacePlayers();
-//        for(Player player:players)
-//        {
-//            JLabel icon=player.getIcon();
-//            icon.setVisible(true);
-//            icon.
-//        }
-//        // Setting the frame visibility to true
+        for(Player player:players)
+        {
+
+        }
+        // Setting the frame visibility to true
         MainFrame.setVisible(true);
         MainFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
@@ -121,7 +117,7 @@ public class GUI {
             NumOnBoard++;
         }
         JLabel image=new JLabel(new ImageIcon(GUI.class.getResource("ReasonsWhyBrianIsntAGraphicDesigner.png")));
-        image.setBounds(((frameSize)/2)-200,((frameSize)/2)-200,400,400);//this isnt relative yet okay jeez
+        image.setBounds(((frameSize)/2)-190,((frameSize)/2)-190,400,400);//this isnt relative yet okay jeez
         MainPanel.add(image);
     }
     public static void PlayerCountGui(Panopoly panopoly1)
@@ -318,6 +314,10 @@ public class GUI {
     }
     public Dimension getFRAME_SIZE() {
         return FRAME_SIZE;
+    }
+
+    public int getBOARD_SIZE() {
+        return BOARD_SIZE;
     }
 
     public int getLabelHeight() {

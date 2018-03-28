@@ -3,6 +3,7 @@ import interfaces.Locatable;
 
 import javax.swing.*;
 import javax.swing.border.Border;
+import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -21,7 +22,9 @@ public class LocationLabel
         this.label=label;
         this.location=location;
         gui=guiObj;
-        label=new JLabel(location.getIdentifier());
+
+        label=new JLabel("<html><p>"+location.getIdentifier().replace(" ","<br>")+"</p></html>",SwingConstants.CENTER);
+
         JLabel finalLabel = label;
         label.addMouseListener(new MouseAdapter() {
             @Override
@@ -52,6 +55,9 @@ public class LocationLabel
         label.setBounds(x,y,gui.getLabelHeight(),gui.getLabelWidth());
         label.setBorder(BorderColour);
         gui.getMainPanel().add(label);
+        label.setOpaque(true);
+        label.setBackground(Color.white);
+        label.setFont(new Font("Serif",Font.BOLD,18-(gui.getBOARD_SIZE()/6)));
     }
     public int getX()
     {
