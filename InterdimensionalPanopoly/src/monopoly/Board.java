@@ -12,6 +12,7 @@ public class Board
 	
 	Board(int numLocations)
 	{
+		//Fill in locations for board - hard-coded Named Locations/Tax and Utilities
 		for(int i = 0; i < numLocations; i++)
 		{
 			if(i == 0)
@@ -30,10 +31,16 @@ public class Board
 				locations.add(new TaxableProperty("Income Tax", 200));
 			else if(i == numLocations-2)
 				locations.add(new TaxableProperty("Super Tax", 100));
+			//one in 10 chance that property is station, 3 in 10 card or 6 in 10 investment
 			else
 			{
-				if(ThreadLocalRandom.current().nextInt(0, 5 + 1) == 5)
+				int rnd = ThreadLocalRandom.current().nextInt(1, 8 + 1);
+				if(rnd == 1)
 					locations.add(new Station("Surname Station"));
+				else if(rnd == 2)
+					locations.add(new Chance());
+				else if(rnd == 3)
+					locations.add(new CommunityChest());
 				else
 					locations.add(new InvestmentProperty("Investment", 200, new int[] {1, 2}, 100, 10, brown));
 			}
