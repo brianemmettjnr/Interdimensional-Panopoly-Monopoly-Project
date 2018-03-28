@@ -42,7 +42,7 @@ public class GUI {
     {
         BOARD_SIZE=BoardSize;
         FRAME_SIZE=FrameDimension;
-        MainFrame = new JFrame("PANOPOLY");
+        MainFrame = new JFrame("Interdimensional Panopoly");
         MainFrame.setSize(FRAME_SIZE);
         MainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         PropertyLabels =new JLabel[BOARD_SIZE];
@@ -128,10 +128,10 @@ public class GUI {
     {
     	panopoly = panopoly1;
         //how many players
-        JFrame playerFrame= new JFrame("INTERDIMENSIONAL PANOPOLY");
+        JFrame playerFrame= new JFrame("Interdimensional Panopoly");
         JPanel playerPanel=new JPanel();
 
-        playerFrame.setSize(400,210);
+        playerFrame.setSize(400,170);
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         playerFrame.setLocation(dim.width/2-playerFrame.getSize().width/2, dim.height/2-playerFrame.getSize().height/2);
         playerFrame.add(playerPanel);
@@ -144,15 +144,16 @@ public class GUI {
         for(int i=0;i<5;i++)
         {
             button[i]=new JLabel();
-            button[i].setBounds(((i)*75)+7,80,70,80);
+            button[i].setBounds(((i)*75)+7,80,70,40);
             button[i].setBorder(border);
             button[i].setText("  "+(i+2)+" Players");
+            button[i].setFont(new Font("Times New Roman",Font.BOLD,12));
             int finalI = i;
             button[i].addMouseListener(new MouseAdapter()
             {
                 @Override
                 public void mouseEntered(MouseEvent e) {
-                    button[finalI].setText(finalI +2+" Players?");
+                    button[finalI].setText("  "+(finalI +2)+" Players?");
                     button[finalI].setBorder(BorderFactory.createLineBorder(Color.blue,3,true));
                 }
             });
@@ -194,7 +195,7 @@ public class GUI {
             }
 
         }
-        JFrame playerFrame= new JFrame("INTERDIMENSIONAL PANOPOLY");
+        JFrame playerFrame= new JFrame("Interdimensional Panopoly");
         JPanel playerPanel=new JPanel();
         playerFrame.setBounds(300,300,636,270);
         playerFrame.setResizable(false);
@@ -253,6 +254,7 @@ public class GUI {
         JButton sendinputButton=new JButton();
         sendinputButton.setBounds(218,180,200,40);
         sendinputButton.setText("PRESS TO CONFIRM");
+        sendinputButton.setFont(new Font("Times New Roman",Font.ITALIC,16));
         nameSpace.setText("");
         final int[] playerIncrement = {0};
         sendinputButton.addMouseListener(new MouseAdapter() {
