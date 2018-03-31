@@ -23,7 +23,7 @@ public class PlayerLabel
         this.index=i;
         this.icon=new JLabel(icon);
 
-        this.icon.setBounds(this.gui.getFRAME_SIZE().height,i*100+10,100,100);
+        this.icon.setBounds(this.gui.getFRAME_SIZE().height,i*110+10,100,100);
         this.icon.setVisible(true);
         this.icon.setBackground(Color.DARK_GRAY);
         this.icon.setOpaque(true);
@@ -32,7 +32,7 @@ public class PlayerLabel
 
         name.setText(player.getIdentifier());
         name.setFont(new Font("Arial",Font.BOLD,32));
-        name.setBounds(this.gui.getFRAME_SIZE().height+100,i*100+10,200,100);
+        name.setBounds(this.gui.getFRAME_SIZE().height+100,i*110+10,200,100);
         name.setVisible(true);
         name.setBackground(Color.DARK_GRAY);
         name.setForeground(Color.white);
@@ -40,7 +40,7 @@ public class PlayerLabel
 
         balance.setText("$"+player.getBalance());
         balance.setFont(new Font("Times New Roman",Font.ITALIC,32));
-        balance.setBounds(this.gui.getFRAME_SIZE().height+300,i*100+10,100,100);
+        balance.setBounds(this.gui.getFRAME_SIZE().height+300,i*110+10,100,100);
         balance.setVisible(true);
         balance.setOpaque(true);
         balance.setBackground(Color.DARK_GRAY);
@@ -61,7 +61,7 @@ public class PlayerLabel
     {
         balance.setText("$"+player.getBalance());
         positionIcon.setBounds(gui.getLocationLabel(player.getPosition()).getX()+(int)(index%3*(gui.getLabelHeight()/4)),
-                gui.getLocationLabel(player.getPosition()).getY()+(int)(index%2*(gui.getLabelHeight()/2)),scale,scale);
+                gui.getLocationLabel(player.getPosition()).getY()+1+(int)(index%2*(gui.getLabelHeight()/2)),scale,scale);
         positionIcon.updateUI();
     }
 }

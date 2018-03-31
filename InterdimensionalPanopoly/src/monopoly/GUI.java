@@ -26,7 +26,7 @@ public class GUI {
     private JFrame MainFrame;
     private int LabelWidth,LabelHeight;
     private static JTextField nameSpace=new JTextField();
-    private JLabel SelectedLabel=new JLabel();
+    private LocationLabel SelectedLabel=null;
     private static String[] characters={"boat","car","dog","hat","iron","thimble"};
     private static int selectedpictureIndex=-1;
     private static JLabel selectedImage =null;
@@ -35,6 +35,8 @@ public class GUI {
 	public boolean buyCommand;
 	private static Panopoly panopoly;
     private static BufferedImage[] images = new BufferedImage[6];
+    private JLabel locationWindow=new JLabel(" ",SwingConstants.CENTER);
+    private JLabel latestAction=new JLabel("",SwingConstants.CENTER);
 
     public GUI(int BoardSize)
     {
@@ -58,7 +60,23 @@ public class GUI {
         PlacePlayers();
         PlaceBoard();
         this.updatePlayers();
-        // Setting the frame visibility to true
+
+        JLabel image=new JLabel(new ImageIcon(GUI.class.getResource("ReasonsWhyBrianIsntAGraphicDesigner.png")));
+        image.setBounds((((int)(FRAME_SIZE.getHeight()*.9))/2)-190,(((int)(FRAME_SIZE.getHeight()*.9))/2)-190,400,400);
+        MainPane.add(image);
+
+        latestAction.setBounds((((int)(FRAME_SIZE.getHeight()*.9))/2)-90,(((int)(FRAME_SIZE.getHeight()*.9))/2)+210,200,30);
+        latestAction.setVisible(true);
+        MainPane.add(latestAction);
+
+        locationWindow.setBounds((((int)(FRAME_SIZE.getHeight()*.9))/2)-90,(((int)(FRAME_SIZE.getHeight()*.9))/2)-180,200,380);
+        locationWindow.setVisible(true);
+        locationWindow.setBackground(Color.WHITE);
+        locationWindow.setForeground(Color.BLACK);
+        locationWindow.setBorder(BorderFactory.createLineBorder(Color.black,4,true));
+        locationWindow.setVerticalAlignment(JLabel.TOP);
+        MainPane.add(locationWindow);
+
         MainFrame.setVisible(true);
         MainFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
@@ -115,9 +133,6 @@ public class GUI {
             y-=LabelWidth;
             NumOnBoard++;
         }
-        JLabel image=new JLabel(new ImageIcon(GUI.class.getResource("ReasonsWhyBrianIsntAGraphicDesigner.png")));
-        image.setBounds((((int)(FRAME_SIZE.getHeight()*.9))/2)-190,(((int)(FRAME_SIZE.getHeight()*.9))/2)-190,400,400);//this isnt relative yet okay jeez
-        MainPane.add(image);
     }
     public static void PlayerCountGui(Panopoly panopoly1)
     {
@@ -295,13 +310,35 @@ public class GUI {
     {
         return  playerCount;
     }
-    public JLabel getSelectedLocation()
+    public LocationLabel getSelectedLocation()
     {
         return SelectedLabel;
     }
-    public void setSelectedLabel(JLabel location)
+    public void setSelectedLabel(LocationLabel location)
     {
         this.SelectedLabel=location;
+        locationWindow.setOpaque(true);
+        if(location==null)
+        {
+            locationWindow.setText(" ");
+            locationWindow.setOpaque(false);
+        }
+        else
+        {
+            Class Comparitor = location.getLocation().getClass();
+            String colour="";
+            //I WOULD MAKE THIS A SWITCH STATEMENT BUT APPARENTLY THEY CANT ACCEPT CLASSES AS ARGUMENTS??????
+            if (Comparitor == Chance.class)
+                colour="red";
+            else if(Comparitor == CommunityChest.class)
+                colour="blue";
+            else if(Comparitor == Station.class)
+                colour="gray";
+            locationWindow.setText("<html><font color=\""+colour+"\">"+SelectedLabel.getLocation().getIdentifier()+"</font><br>"+"</html>");
+        }
+
+
+
     }
     public JLayeredPane getMainPane()
     {
@@ -314,7 +351,10 @@ public class GUI {
     public Dimension getFRAME_SIZE() {
         return FRAME_SIZE;
     }
-
+    public void updateAction(String action)
+    {
+        latestAction.setText(action);
+    }
     public int getBOARD_SIZE() {
         return BOARD_SIZE;
     }

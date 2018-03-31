@@ -9,7 +9,6 @@ import java.awt.event.MouseEvent;
 
 import static java.awt.Color.BLACK;
 import static java.awt.Color.MAGENTA;
-import static java.awt.Color.black;
 
 public class LocationLabel
 {
@@ -17,44 +16,49 @@ public class LocationLabel
     private Border BorderColour=BorderFactory.createLineBorder(BLACK, 2);
     private JLabel label=new JLabel();
     private Locatable location;
+    private LocationLabel thisLocation =this;
 
     public LocationLabel(int x, int y, int NumOnBoard, GUI guiObj, Locatable location) {
         this.location = location;
         gui = guiObj;
         label = new JLabel("<html><p>" + location.getIdentifier().replace(" ", "<br>") + "</p></html>", SwingConstants.CENTER);
-        JLabel finalLabel = label;
 //        label.addMouseListener(new MouseAdapter() {
 //            @Override
 //            public void mouseEntered(MouseEvent e) {
-//                gui.updatePlayers();
 //                if (finalLabel.getBorder() != BorderFactory.createLineBorder(MAGENTA, 2))
 //                    finalLabel.setBorder(BorderFactory.createLineBorder(black, 3));
 //                gui.updatePlayers();
 //            }
 //        });
-//        label.addMouseListener(new MouseAdapter() {
-//            @Override
-//            public void mouseExited(MouseEvent e) {
-//                gui.updatePlayers();
-//                finalLabel.setBorder(BorderFactory.createLineBorder(black, 2));
-//            }
-//        });
-//        label.addMouseListener(new MouseAdapter() {
-//            @Override
-//            public void mouseClicked(MouseEvent e) {
-//                gui.getSelectedLocation().setBorder(BorderColour);
-//                if (finalLabel != gui.getSelectedLocation()) {
-//                    gui.setSelectedLabel(finalLabel);
-//                    finalLabel.setBorder(BorderFactory.createLineBorder(MAGENTA, 2));
-//                    gui.updatePlayers();
-//                } else
-//                    gui.setSelectedLabel(new JLabel());//return an empty jlabel, not sure how to approach
-//                    gui.updatePlayers();
-//            }
-//        });
-//        if(NumOnBoard%(gui.getBOARD_SIZE()/4)==0)
-//            label.setBounds(x, y, gui.getLabelHeight()*2, gui.getLabelWidth()*2);
-//        else
+        label.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseExited(MouseEvent e) {
+                gui.updatePlayers();
+            }
+        });
+        label.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if(gui.getSelectedLocation()==null)
+                {
+                    gui.setSelectedLabel(thisLocation);
+                    thisLocation.getLabel().setBorder(BorderFactory.createLineBorder(MAGENTA, 2));
+                    gui.updatePlayers();
+                }
+                else if (thisLocation != gui.getSelectedLocation()) {
+                    gui.getSelectedLocation().getLabel().setBorder(BorderColour);
+                    gui.setSelectedLabel(thisLocation);
+                    thisLocation.getLabel().setBorder(BorderFactory.createLineBorder(MAGENTA, 2));
+                    gui.updatePlayers();
+                } else
+                {
+                    gui.getSelectedLocation().getLabel().setBorder(BorderColour);
+                    gui.setSelectedLabel(null);//return an empty jlabel, not sure how to approach
+                }
+                gui.updatePlayers();
+
+            }
+        });
             label.setBounds(x, y, gui.getLabelHeight(), gui.getLabelWidth());
         label.setBorder(BorderColour);
         gui.getMainPane().add(label,7);
@@ -67,6 +71,8 @@ public class LocationLabel
            label.setForeground(Color.red);
         else if(Comparitor == CommunityChest.class)
             label.setForeground(Color.BLUE);
+        else if(Comparitor == Station.class)
+            label.setForeground(Color.GRAY);
     }
     public int getX()
     {
@@ -75,6 +81,10 @@ public class LocationLabel
     public int getY()
     {
         return label.getY();
+    }
+
+    public Locatable getLocation() {
+        return location;
     }
 
     public JLabel getLabel() {
