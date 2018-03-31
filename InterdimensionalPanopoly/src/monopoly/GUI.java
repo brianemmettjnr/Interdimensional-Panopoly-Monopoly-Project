@@ -10,7 +10,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -23,7 +22,7 @@ public class GUI {
     private LocationLabel[] LocationLabels;
     private JLabel[] PropertyLabels;
     private PlayerLabel[] PlayerLabels;
-    private JPanel MainPanel;
+    private JLayeredPane MainPane;
     private JFrame MainFrame;
     private int LabelWidth,LabelHeight;
     private static JTextField nameSpace=new JTextField();
@@ -45,18 +44,20 @@ public class GUI {
         MainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         PropertyLabels =new JLabel[BOARD_SIZE];
         LocationLabels=new LocationLabel[BOARD_SIZE];
-        MainPanel = new JPanel();
-        MainPanel.setLayout(null);
-        MainPanel.setOpaque(true);
-        MainPanel.setBackground(Color.LIGHT_GRAY);
-        MainFrame.add(MainPanel);
-        PlaceBoard();
+        MainPane = new JLayeredPane();
+        MainPane.setLayout(null);
+        MainPane.setOpaque(true);
+        MainPane.setBackground(Color.LIGHT_GRAY);
+        MainFrame.add(MainPane);
         PlayerLabels=new PlayerLabel[players.size()];
+        int SquaresOnSide=(((BOARD_SIZE-4)/4)+2);
+        int frameSize=(int)(FRAME_SIZE.getHeight()*.9);
+        int Offset=(frameSize)/SquaresOnSide;
+        LabelHeight=Offset;
+        LabelWidth=Offset;
         PlacePlayers();
-        for(Player player:players)
-        {
-
-        }
+        PlaceBoard();
+        this.updatePlayers();
         // Setting the frame visibility to true
         MainFrame.setVisible(true);
         MainFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -71,54 +72,52 @@ public class GUI {
             i++;
         }
     }
-
-    public JLabel getPropertyLabel(int index) throws ArrayIndexOutOfBoundsException{
-        return PropertyLabels[index];
+    public void updatePlayers()
+    {
+        for(PlayerLabel player:PlayerLabels)
+        {
+            player.updateLabel();
+        }
     }
 
+    public LocationLabel getLocationLabel(int index) throws ArrayIndexOutOfBoundsException{
+        return LocationLabels[index];
+    }
     private void PlaceBoard()
     {
         ArrayList<Locatable> Locations=panopoly.getBoard().getLocations();
-        int SquaresOnSide=(((BOARD_SIZE-4)/4)+2);
-        int frameSize=(int)(FRAME_SIZE.getHeight()*.9);
-        int Offset=(frameSize)/SquaresOnSide;
         int x=10,y=10;
-        LabelHeight=Offset;
-        LabelWidth=Offset;
+        int SquaresOnSide=(((BOARD_SIZE-4)/4)+2);
         int NumOnBoard=0;
-        while (x<Offset*(SquaresOnSide-1))
+        while (x<LabelWidth*(SquaresOnSide-1))
         {
-            PropertyLabels[NumOnBoard]=new JLabel();
-            LocationLabels[NumOnBoard]= new LocationLabel(PropertyLabels[NumOnBoard],x,y,NumOnBoard,this,Locations.get(NumOnBoard));
-            x+=Offset;
+            LocationLabels[NumOnBoard]= new LocationLabel(x,y,NumOnBoard,this,Locations.get(NumOnBoard));
+            x+=LabelWidth;
             NumOnBoard++;
 
         }
-        while(y<(Offset*(SquaresOnSide-1)))
+        while(y<(LabelWidth*(SquaresOnSide-1)))
         {
-            PropertyLabels[NumOnBoard]=new JLabel();
-            LocationLabels[NumOnBoard]= new LocationLabel(PropertyLabels[NumOnBoard],x,y,NumOnBoard,this,Locations.get(NumOnBoard));
-            y+=Offset;
+            LocationLabels[NumOnBoard]= new LocationLabel(x,y,NumOnBoard,this,Locations.get(NumOnBoard));
+            y+=LabelWidth;
             NumOnBoard++;
 
         }
-        while (x>=Offset)
+        while (x>=LabelWidth)
         {
-            PropertyLabels[NumOnBoard]=new JLabel();
-            LocationLabels[NumOnBoard]= new LocationLabel(PropertyLabels[NumOnBoard],x,y,NumOnBoard,this,Locations.get(NumOnBoard));
-            x-=Offset;
+            LocationLabels[NumOnBoard]= new LocationLabel(x,y,NumOnBoard,this,Locations.get(NumOnBoard));
+            x-=LabelWidth;
             NumOnBoard++;
         }
-        while (y>=Offset)
+        while (y>=LabelWidth)
         {
-            PropertyLabels[NumOnBoard]=new JLabel();
-            LocationLabels[NumOnBoard]= new LocationLabel(PropertyLabels[NumOnBoard],x,y,NumOnBoard,this,Locations.get(NumOnBoard));
-            y-=Offset;
+            LocationLabels[NumOnBoard]= new LocationLabel(x,y,NumOnBoard,this,Locations.get(NumOnBoard));
+            y-=LabelWidth;
             NumOnBoard++;
         }
         JLabel image=new JLabel(new ImageIcon(GUI.class.getResource("ReasonsWhyBrianIsntAGraphicDesigner.png")));
-        image.setBounds(((frameSize)/2)-190,((frameSize)/2)-190,400,400);//this isnt relative yet okay jeez
-        MainPanel.add(image);
+        image.setBounds((((int)(FRAME_SIZE.getHeight()*.9))/2)-190,(((int)(FRAME_SIZE.getHeight()*.9))/2)-190,400,400);//this isnt relative yet okay jeez
+        MainPane.add(image);
     }
     public static void PlayerCountGui(Panopoly panopoly1)
     {
@@ -304,9 +303,9 @@ public class GUI {
     {
         this.SelectedLabel=location;
     }
-    public JPanel getMainPanel()
+    public JLayeredPane getMainPane()
     {
-        return MainPanel;
+        return MainPane;
     }
     public int getLabelWidth()
     {
