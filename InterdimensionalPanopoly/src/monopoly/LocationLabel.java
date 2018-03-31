@@ -76,4 +76,8 @@ public class LocationLabel
     {
         return label.getY();
     }
+
+    public JLabel getLabel() {
+        return label;
+    }
 }
