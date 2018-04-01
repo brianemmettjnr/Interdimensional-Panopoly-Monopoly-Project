@@ -20,15 +20,18 @@ public class Panopoly
 		board = new Board(numLocations);
 		GUI.PlayerCountGui(this);
 	}
+	
 	public Board getBoard()
 	{
 		return this.board;
 	}
-	private void roll()
+	
+	public void roll()
 	{
-		currentPlayer.move(dice.rollDice(1, 6), clockwiseMovement);
+		currentPlayer.move(dice.rollDice(2, 6), clockwiseMovement);
 		setPossibleCommands();
 		getSquareAction();
+		gui.updatePlayers();
 	}
 
 	//TO DO: COMPLETE ALL POSSIBILITIES
@@ -58,7 +61,10 @@ public class Panopoly
 	{
 		players = GUI.getPlayersArray();
 		currentPlayer = players.get(0);
-		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		gui = new GUI(board.getNumLocations(), screenSize);		
+		gui = new GUI(board.getNumLocations());
+	}
+
+	public Player getCurrentPlayer() {
+		return currentPlayer;
 	}
 }

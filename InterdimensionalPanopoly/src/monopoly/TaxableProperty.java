@@ -6,11 +6,10 @@ import interfaces.Taxable;
 
 public class TaxableProperty extends NamedLocation implements Taxable{
 	
-	private int incomePercentage, flatAmount;
+	private int flatAmount;
 
-	public TaxableProperty(String name, int percent, int flat) {
+	public TaxableProperty(String name, int flat) {
 		super(name);
-		incomePercentage = percent;
 		flatAmount = flat;
 	}
 

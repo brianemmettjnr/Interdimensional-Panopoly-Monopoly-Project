@@ -24,12 +24,12 @@ public class PropertyTest {
 		InvestmentProperty leicester = new InvestmentProperty("Leicester Square", 70, new int[] {10}, 30, 10, lightBlue);
 		
 		//dummy player to test Set/Get Owner methods
-		Player testPlayer = new Player("Test Player",1,0);
+		Player testPlayer = new Player("Test Player",1,0,null);
 		
 		testPlayer.buyProperty(leicester, leicester.getPrice());
 		
-		TaxableProperty superTax = new TaxableProperty("Super Tax", 0, 200);
-		TaxableProperty incomeTax = new TaxableProperty("Income Tax", 0, 100);
+		TaxableProperty superTax = new TaxableProperty("Super Tax", 200);
+		TaxableProperty incomeTax = new TaxableProperty("Income Tax", 100);
 		
 		go.setRight(eustonRd);
 		eustonRd.setRight(piccadilly);

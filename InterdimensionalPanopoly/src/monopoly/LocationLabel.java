@@ -3,55 +3,76 @@ import interfaces.Locatable;
 
 import javax.swing.*;
 import javax.swing.border.Border;
+import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import static java.awt.Color.BLACK;
 import static java.awt.Color.MAGENTA;
-import static java.awt.Color.black;
 
 public class LocationLabel
 {
     private GUI gui;
     private Border BorderColour=BorderFactory.createLineBorder(BLACK, 2);
-    private JLabel label=null;
+    private JLabel label=new JLabel();
     private Locatable location;
-    public LocationLabel(JLabel label, int x, int y, int NumOnBoard, GUI guiObj, Locatable location)
-    {
-        this.label=label;
-        this.location=location;
-        gui=guiObj;
-        label=new JLabel(location.getIdentifier());
-        JLabel finalLabel = label;
-        label.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                if (finalLabel.getBorder()!=BorderFactory.createLineBorder(MAGENTA, 2))
-                    finalLabel.setBorder(BorderFactory.createLineBorder(black,3));
-            }
-        });
+    private LocationLabel thisLocation =this;
+
+    public LocationLabel(int x, int y, int NumOnBoard, GUI guiObj, Locatable location) {
+        this.location = location;
+        gui = guiObj;
+        label = new JLabel("<html><p>" + location.getIdentifier().replace(" ", "<br>") + "</p></html>", SwingConstants.CENTER);
+//        label.addMouseListener(new MouseAdapter() {
+//            @Override
+//            public void mouseEntered(MouseEvent e) {
+//                if (finalLabel.getBorder() != BorderFactory.createLineBorder(MAGENTA, 2))
+//                    finalLabel.setBorder(BorderFactory.createLineBorder(black, 3));
+//                gui.updatePlayers();
+//            }
+//        });
         label.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseExited(MouseEvent e) {
-                    finalLabel.setBorder(BorderFactory.createLineBorder(black,2));
+                gui.updatePlayers();
             }
         });
         label.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                gui.getSelectedLocation().setBorder(BorderColour);
-                if(finalLabel!=gui.getSelectedLocation())
+                if(gui.getSelectedLocation()==null)
                 {
-                    gui.setSelectedLabel(finalLabel);
-                    finalLabel.setBorder(BorderFactory.createLineBorder(MAGENTA, 2));
+                    gui.setSelectedLabel(thisLocation);
+                    thisLocation.getLabel().setBorder(BorderFactory.createLineBorder(MAGENTA, 2));
+                    gui.updatePlayers();
                 }
-                else
-                    gui.setSelectedLabel(new JLabel());//return an empty jlabel, not sure how to approach
+                else if (thisLocation != gui.getSelectedLocation()) {
+                    gui.getSelectedLocation().getLabel().setBorder(BorderColour);
+                    gui.setSelectedLabel(thisLocation);
+                    thisLocation.getLabel().setBorder(BorderFactory.createLineBorder(MAGENTA, 2));
+                    gui.updatePlayers();
+                } else
+                {
+                    gui.getSelectedLocation().getLabel().setBorder(BorderColour);
+                    gui.setSelectedLabel(null);//return an empty jlabel, not sure how to approach
+                }
+                gui.updatePlayers();
+
             }
         });
-        label.setBounds(x,y,gui.getLabelHeight(),gui.getLabelWidth());
+            label.setBounds(x, y, gui.getLabelHeight(), gui.getLabelWidth());
         label.setBorder(BorderColour);
-        gui.getMainPanel().add(label);
+        gui.getMainPane().add(label,7);
+        label.setOpaque(true);
+        label.setBackground(Color.white);
+        label.setFont(new Font("Serif", Font.BOLD, 18 - (gui.getBOARD_SIZE() / 6)));
+        Class Comparitor = location.getClass();
+        //I WOULD MAKE THIS A SWITCH STATEMENT BUT APPARENTLY THEY CANT ACCEPT CLASSES AS ARGUMENTS??????
+        if (Comparitor == Chance.class)
+           label.setForeground(Color.red);
+        else if(Comparitor == CommunityChest.class)
+            label.setForeground(Color.BLUE);
+        else if(Comparitor == Station.class)
+            label.setForeground(Color.GRAY);
     }
     public int getX()
     {
@@ -60,5 +81,13 @@ public class LocationLabel
     public int getY()
     {
         return label.getY();
+    }
+
+    public Locatable getLocation() {
+        return location;
+    }
+
+    public JLabel getLabel() {
+        return label;
     }
 }

@@ -28,4 +28,12 @@ public class PrivateProperty extends NamedLocation implements Ownable
 	public int getPrice() {
 		return price;
 	}
+	
+	public boolean isOwned() {
+		if(owner != null)
+			return true;
+		
+		else
+			return false;
+	}
 }

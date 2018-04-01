@@ -20,9 +20,11 @@ public class Player implements Playable {
 	private int position;
 	private int imageIndex=0;
 	private JLabel icon=new JLabel();
+	private Panopoly panopoly;
 	
-	Player(String name, int imageIndex, int playerIndex)
+	public Player(String name, int imageIndex, int playerIndex,Panopoly panopoly)
 	{
+		this.panopoly=panopoly;
 		this.playerIndex=playerIndex;
 		this.imageIndex=imageIndex;
 		this.name = name;
@@ -49,31 +51,26 @@ public class Player implements Playable {
 	{
 		return imageIndex;
 	}
-	
+
 	public void move(int squares, boolean clockwise)
 	{
 		if(clockwise)
 		{
 			position += squares;
-			
-			//if passed GO
-			if(position > Panopoly.getBoard().getNumLocations())
-			{
+			if(position>=panopoly.getBoard().getNumLocations()) {
+				position = position - panopoly.getBoard().getNumLocations();
 				earn(200);
-				position = position % Panopoly.getBoard().getNumLocations();
 			}
 		}
 		
 		else
 		{
 			position -= squares;
-			
-			//if passed GO
-			if(position < 0)
-			{
+			if(position<0) {
+				position = position + panopoly.getBoard().getNumLocations();
 				earn(200);
-				position = position % Panopoly.getBoard().getNumLocations();
 			}
+
 		}
 	}
 	
@@ -90,7 +87,6 @@ public class Player implements Playable {
 	public void buyProperty(Rentable property, int price)
 	{
 		pay(price);
-		
 		property.setOwner(this);
 		properties.add(property);
 	}
@@ -144,7 +140,7 @@ public class Player implements Playable {
 		
 		for(Rentable p: properties)
 		{
-			if(p.getGroup().getIdentifier() == "stations")
+			if(p instanceof Station)
 			{
 				stations++;
 			}
@@ -159,7 +155,7 @@ public class Player implements Playable {
 		
 		for(Rentable p: properties)
 		{
-			if(p.getGroup().getIdentifier() == "utilities")
+			if(p instanceof Utility)
 			{
 				utilities++;
 			}
