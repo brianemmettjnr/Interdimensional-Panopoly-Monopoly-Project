@@ -7,7 +7,6 @@ package base;
 	// 	will get on that over next few days, run from this class and see results, any input welcome		//												
 	//-----------------------------------------------------------------------------------------------//
 	//-----------------------------------------------------------------------------------------------//
-
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import java.util.Random;
@@ -174,7 +173,7 @@ public class PersonOfInterest
 		
 		for(int q = 0; q < locations.size(); q++)
 		{
-			//System.out.println(locations.get(q));
+			System.out.println(locations.get(q));
 		}
 				
 		System.out.println(checkers);

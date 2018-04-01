@@ -1,6 +1,8 @@
 package monopolyTest;
 import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
+import monopoly.Panopoly;
 import org.junit.Test;
 
 import monopoly.Player;
@@ -12,7 +14,7 @@ public class StationTest {
 	Station station2 = new Station("station2");
 	Station station3 = new Station("station3");
 	Station station4 = new Station("station4");
-	Player test = new Player("testPlayer", 0, 0);
+	Player test = new Player("testPlayer", 0, 0,null);
 
 	@Test
 	public void testGetRentalAmount() {

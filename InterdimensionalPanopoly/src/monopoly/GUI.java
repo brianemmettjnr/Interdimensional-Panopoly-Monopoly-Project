@@ -77,6 +77,18 @@ public class GUI {
         locationWindow.setVerticalAlignment(JLabel.TOP);
         MainPane.add(locationWindow);
 
+        JLabel rollButton=new JLabel("Roll");
+        MainPane.add(rollButton);
+        rollButton.setVisible(true);
+        rollButton.setBounds((((int)(FRAME_SIZE.getHeight()*.9))/2)-90,(((int)(FRAME_SIZE.getHeight()*.9))/2)+240,50,30);
+        rollButton.setOpaque(true);
+        rollButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                panopoly.roll();
+            }
+        });
+
         MainFrame.setVisible(true);
         MainFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
@@ -273,7 +285,7 @@ public class GUI {
                 if(!(nameSpace.getText().isEmpty()||selectedImage==null||nameSpace.getText()==null))
                 {
                     upperline.setForeground(Color.white);
-                    players.add(new Player(nameSpace.getText(),selectedpictureIndex,playerIncrement[0]));
+                    players.add(new Player(nameSpace.getText(),selectedpictureIndex,playerIncrement[0],panopoly));
                     nameSpace.setText("");
                     selectedImage.setVisible(false);
                     selectedImage=null;

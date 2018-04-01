@@ -20,9 +20,11 @@ public class Player implements Playable {
 	private int position;
 	private int imageIndex=0;
 	private JLabel icon=new JLabel();
+	private Panopoly panopoly;
 	
-	public Player(String name, int imageIndex, int playerIndex)
+	public Player(String name, int imageIndex, int playerIndex,Panopoly panopoly)
 	{
+		this.panopoly=panopoly;
 		this.playerIndex=playerIndex;
 		this.imageIndex=imageIndex;
 		this.name = name;
@@ -49,19 +51,26 @@ public class Player implements Playable {
 	{
 		return imageIndex;
 	}
-	
-	
-	//TO DO Check for passing Go
+
 	public void move(int squares, boolean clockwise)
 	{
 		if(clockwise)
 		{
 			position += squares;
+			if(position>=panopoly.getBoard().getNumLocations()) {
+				position = position - panopoly.getBoard().getNumLocations();
+				earn(200);
+			}
 		}
 		
 		else
 		{
 			position -= squares;
+			if(position<0) {
+				position = position + panopoly.getBoard().getNumLocations();
+				earn(200);
+			}
+
 		}
 	}
 	

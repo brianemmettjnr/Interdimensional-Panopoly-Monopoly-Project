@@ -26,11 +26,12 @@ public class Panopoly
 		return this.board;
 	}
 	
-	private void roll()
+	public void roll()
 	{
-		currentPlayer.move(dice.rollDice(1, 6), clockwiseMovement);
+		currentPlayer.move(dice.rollDice(2, 6), clockwiseMovement);
 		setPossibleCommands();
 		getSquareAction();
+		gui.updatePlayers();
 	}
 
 	//TO DO: COMPLETE ALL POSSIBILITIES
