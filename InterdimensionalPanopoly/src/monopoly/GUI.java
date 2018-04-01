@@ -33,7 +33,7 @@ public class GUI {
     private static JLabel selectedImage =null;
     private static int playerCount=0;
     private static ArrayList<Player> players=new ArrayList<Player>();
-	public boolean buyCommand;
+	public boolean buyCommand,rollCommand,sellCommand,redeemCommand,mortgageCommand,endCommand;
 	private static Panopoly panopoly;
     private static BufferedImage[] images = new BufferedImage[6];
     private JLabel locationWindow=new JLabel(" ",SwingConstants.CENTER);
@@ -61,6 +61,7 @@ public class GUI {
         LabelWidth=Offset;
         PlacePlayers();
         PlaceBoard();
+        setupbuttons();
         this.updatePlayers();
 
         JLabel image=new JLabel(new ImageIcon(GUI.class.getResource("ReasonsWhyBrianIsntAGraphicDesigner.png")));
@@ -78,11 +79,16 @@ public class GUI {
         locationWindow.setBorder(BorderFactory.createLineBorder(Color.black,4,true));
         locationWindow.setVerticalAlignment(JLabel.TOP);
         MainPane.add(locationWindow);
-
+        MainFrame.setVisible(true);
+        MainFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+    }
+    private void setupbuttons()
+    {
         JLabel rollButton=new JLabel("Roll");
         MainPane.add(rollButton);
         rollButton.setVisible(true);
-        rollButton.setBounds((((int)(FRAME_SIZE.getHeight()*.9))/2)-90,(((int)(FRAME_SIZE.getHeight()*.9))/2)+240,50,30);
+        rollButton.setBounds(10+
+                LabelWidth,(((int)(FRAME_SIZE.getHeight()*.9))/2)+240,LabelWidth,30);
         rollButton.setOpaque(true);
         rollButton.addMouseListener(new MouseAdapter() {
             @Override
@@ -93,7 +99,7 @@ public class GUI {
         JLabel buybutton=new JLabel("Buy");
         MainPane.add(buybutton);
         buybutton.setVisible(true);
-        buybutton.setBounds((((int)(FRAME_SIZE.getHeight()*.9))/2)-40,(((int)(FRAME_SIZE.getHeight()*.9))/2)+240,50,30);
+        buybutton.setBounds(10+LabelWidth*2,(((int)(FRAME_SIZE.getHeight()*.9))/2)+240,LabelWidth,30);
         buybutton.setOpaque(true);
         buybutton.addMouseListener(new MouseAdapter() {
             @Override
@@ -103,11 +109,18 @@ public class GUI {
                 gui.updatePlayers();
             }
         });
-
-        MainFrame.setVisible(true);
-        MainFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        JLabel endturn=new JLabel("End Turn");
+        MainPane.add(endturn);
+        endturn.setVisible(true);
+        endturn.setBounds(10+LabelWidth*3,(((int)(FRAME_SIZE.getHeight()*.9))/2)+240,LabelWidth,30);
+        endturn.setOpaque(true);
+        endturn.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                panopoly.nextPlayer();
+            }
+        });
     }
-
     private void PlacePlayers()
     {
         int i=0;
