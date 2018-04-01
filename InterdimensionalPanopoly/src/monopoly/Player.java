@@ -7,8 +7,6 @@ import interfaces.Ownable;
 import interfaces.Playable;
 import interfaces.Rentable;
 
-import javax.swing.*;
-
 public class Player implements Playable {
 	
 	private static final int STARTING_BALANCE = 1500;
@@ -19,13 +17,12 @@ public class Player implements Playable {
 	private ArrayList<Rentable> properties = new ArrayList<Rentable>();
 	private int position;
 	private int imageIndex=0;
-	private JLabel icon=new JLabel();
 	private Panopoly panopoly;
 	
 	public Player(String name, int imageIndex, int playerIndex,Panopoly panopoly)
 	{
 		this.panopoly=panopoly;
-		this.playerIndex=playerIndex;
+		this.playerIndex = playerIndex;
 		this.imageIndex=imageIndex;
 		this.name = name;
 		balance = STARTING_BALANCE;
@@ -36,10 +33,6 @@ public class Player implements Playable {
 	public String getIdentifier() 
 	{
 		return name;
-	}
-
-	public JLabel getIcon() {
-		return icon;
 	}
 
 	public int getPosition()
@@ -162,5 +155,9 @@ public class Player implements Playable {
 		}
 		
 		return utilities;
+	}
+
+	public int getPlayerIndex() {
+		return playerIndex;
 	}
 }

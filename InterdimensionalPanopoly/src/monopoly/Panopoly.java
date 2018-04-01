@@ -47,7 +47,8 @@ public class Panopoly
 		
 	}
 	
-	private void setPossibleCommands()
+	//buy, roll, drawCard, endTurn
+	public void setPossibleCommands()
 	{
 		Locatable square = board.getLocation(currentPlayer.getPosition());
 		
@@ -56,12 +57,23 @@ public class Panopoly
 			gui.buyCommand = true;
 		
 	}
+	
+	//redeem, mortgage, build, demolish
+	public void setPossiblePropertyCommands()
+	{
+		
+	}
 
 	public void createGUI() 
 	{
 		players = GUI.getPlayersArray();
 		currentPlayer = players.get(0);
 		gui = new GUI(board.getNumLocations());
+	}
+	
+	public void nextPlayer()
+	{
+		currentPlayer = players.get((players.indexOf(currentPlayer)+1)%players.size());
 	}
 
 	public Player getCurrentPlayer() {
