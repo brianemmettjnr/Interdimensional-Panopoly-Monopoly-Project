@@ -11,6 +11,7 @@ package base;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import java.util.Random;
+import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.Vector;
 import javax.swing.JFrame;
@@ -22,6 +23,7 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Hashtable;
 
 //Use the knowledge-base(s) of famous people (real and fictional) to generate apt comparisons
@@ -53,6 +55,8 @@ public class PersonOfInterest
 
 	
 	private static Vector allPeople				 = null;
+	private static Vector allPeople2			= null;
+	
 	private static Vector fictionalPeople			 = null;
 	private static Vector realPeople				 = null;
 	private static Vector men						 = null;
@@ -69,7 +73,10 @@ public class PersonOfInterest
 	private static Vector fictionalworldsMarvel  = null;
 	private static Vector fictionalworldsLOTR    = null;
 	private static Vector fictionalworldsSimpsons = null;
-	private static Vector checkers;
+	private static Vector<String> checkers			= null;
+	private static Vector threeplus					=null;	
+	private static Vector twoonly				= null;
+	
 
 	
 	public PersonOfInterest(String kbDirectory)
@@ -94,12 +101,10 @@ public class PersonOfInterest
 		ALL_QUALITIES = NOC.getInvertedField("Negative Talking Points", ALL_QUALITIES);*/
 		NOC1		  = new KnowledgeBaseModule(knowledgeDir + "Veale's The NOC List.txt", 3);
 		NOC2		  = new KnowledgeBaseModule(knowledgeDir + "Veale's The NOC List.txt", 5);
-		WORLDS        = new KnowledgeBaseModule(knowledgeDir + "Veale's fictional worlds.txt", 0);
+		WORLDS        = new KnowledgeBaseModule(knowledgeDir + "Veale's domains.txt", 0);
 
-		
-		allPeople       = NOC.getAllFrames();
-		
-		fictionalPeople = NOC.getAllKeysWithFieldValue("Fictive Status", "fictional");
+				
+	
 		realPeople      = NOC.difference(allPeople, fictionalPeople);
 		men			    = NOC.getAllKeysWithFieldValue("Gender", "male");
 		women			= NOC.getAllKeysWithFieldValue("Gender", "female");
@@ -109,16 +114,43 @@ public class PersonOfInterest
 		notfathers 		= NOC.getAllKeysWithoutFieldValue("Category", "Father");
 		mothers			= NOC.getAllKeysWithFieldValue("Category", "Mother");
 		notmothers		= NOC.getAllKeysWithoutFieldValue("Category", "Mother");
-		fictionalworldsDC = NOC1.getAllKeysWithFieldValue("Domains", "DC Comics");
-		fictionalworldsSW = NOC2.getAllKeysWithFieldValue("Domains", "Star Wars");
-		realworldAmPol 	  = NOC1.getAllKeysWithFieldValue("Domains", "American politics");
-		fictionalworldsMarvel = NOC1.getAllKeysWithFieldValue("Domains", "Marvel Comics");
-		fictionalworldsLOTR   = NOC1.getAllKeysWithFieldValue("Creator", "J. R. R. Tolkien");
-		fictionalworldsSimpsons = NOC1.getAllKeysWithFieldValue("Domains", "The Simpsons");
-		checkers = WORLDS.getAllKeys("Fictional World"); 
+		checkers = WORLDS.getAllKeys("Specific Domains"); 
+		
+		ArrayList<String> locations = new ArrayList<String>();
+		Set<String> removes = new HashSet<>();
+		
+		for(int q = 0; q <= checkers.size()-1; q++)
+		{
+			String world = (String) checkers.get(q);
+			allPeople = NOC1.getAllKeysWithFieldValue("Domains", world);
+			int rands = DICE.nextInt(3)+1;
+			if(allPeople.size() >= 3)
+			{
+				//System.out.println(allPeople); // gets all property based on domains where num properties >= 3
+				
+				for(int z = 0; z < rands; z++)
+				{
+					int n = DICE.nextInt(allPeople.size());
+					locations.add((String) allPeople.get(n));
+					allPeople.remove(n);
+				}
+			}
+		}	
+		
+		removes.addAll(locations);
+		locations.clear();
+		locations.addAll(removes); // removes duplicates
+		locations.remove(0);
+		System.out.println(locations);
+		
+/*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+		locations is the full ArrayList of locations, with no duplicates start from random start area each time, have between 137-153 individual properties
+		all properties have a shared world with at least 2 other properties for colour groups 
+		
+*////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		
 		
-			
 	}
 		
 	public static void main(String[] args)
@@ -127,9 +159,9 @@ public class PersonOfInterest
 		String tdir = "";	
 		
 		PersonOfInterest stereonomicon = new PersonOfInterest(kdir);
-		ArrayList<String> locations = new ArrayList<String>();
+	//	ArrayList<String> locations = new ArrayList<String>();
 		
-		
+		/*
 		int qs = DICE.nextInt(5) + 1;
 		for(int z = 0; z < qs; z++)
 		{
@@ -174,10 +206,9 @@ public class PersonOfInterest
 		
 		for(int q = 0; q < locations.size(); q++)
 		{
-			//System.out.println(locations.get(q));
-		}
+			System.out.println(locations.get(q));
+		}*/
 				
-		System.out.println(checkers);
 	}
 		/*///
 		

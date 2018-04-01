@@ -149,6 +149,35 @@ public class KnowledgeBaseModule
 		
 		return matchingKeys;
 	}
+	public Vector<String> getAllKeysWithFieldValue2(String fieldname, Vector<String> value)
+	{
+		Vector<String> matchingKeys = new Vector();
+	
+		for (int f = 0; f < fieldTables.size(); f++)
+		{
+			String name = (String)fieldNames.elementAt(f);
+			
+			if (!name.equals(fieldname)) continue;
+		
+			Hashtable field = (Hashtable)fieldTables.elementAt(f);
+			
+			Vector keys =  (Vector)field.get("*keylist*");
+			
+			if (keys == null) break;
+			
+			for (int k = 0; k < keys.size(); k++)
+			{
+				String key = (String)keys.elementAt(k);
+				
+				Vector values = (Vector)field.get(key);
+				
+				if (values != null && values.contains(value))
+					matchingKeys.add(key);
+			}
+		}
+		
+		return matchingKeys;
+	}
 	
 	public Vector<String> getAllKeys(String fieldname)
 	{
