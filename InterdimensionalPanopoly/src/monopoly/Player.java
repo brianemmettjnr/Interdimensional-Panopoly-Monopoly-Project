@@ -87,7 +87,6 @@ public class Player implements Playable {
 	public void buyProperty(Rentable property, int price)
 	{
 		pay(price);
-		
 		property.setOwner(this);
 		properties.add(property);
 	}

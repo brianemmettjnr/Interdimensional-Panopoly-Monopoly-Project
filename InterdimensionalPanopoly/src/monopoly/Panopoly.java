@@ -63,4 +63,8 @@ public class Panopoly
 		currentPlayer = players.get(0);
 		gui = new GUI(board.getNumLocations());
 	}
+
+	public Player getCurrentPlayer() {
+		return currentPlayer;
+	}
 }

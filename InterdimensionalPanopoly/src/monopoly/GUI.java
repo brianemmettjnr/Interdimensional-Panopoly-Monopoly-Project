@@ -1,5 +1,6 @@
 package monopoly;
 import interfaces.Locatable;
+import interfaces.Rentable;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -37,6 +38,7 @@ public class GUI {
     private static BufferedImage[] images = new BufferedImage[6];
     private JLabel locationWindow=new JLabel(" ",SwingConstants.CENTER);
     private JLabel latestAction=new JLabel("",SwingConstants.CENTER);
+    private GUI gui=this;
 
     public GUI(int BoardSize)
     {
@@ -86,6 +88,19 @@ public class GUI {
             @Override
             public void mouseClicked(MouseEvent e) {
                 panopoly.roll();
+            }
+        });
+        JLabel buybutton=new JLabel("Buy");
+        MainPane.add(buybutton);
+        buybutton.setVisible(true);
+        buybutton.setBounds((((int)(FRAME_SIZE.getHeight()*.9))/2)-40,(((int)(FRAME_SIZE.getHeight()*.9))/2)+240,50,30);
+        buybutton.setOpaque(true);
+        buybutton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                Rentable buyProperty= (Rentable)panopoly.getBoard().getLocation(panopoly.getCurrentPlayer().getPosition());
+                panopoly.getCurrentPlayer().buyProperty(buyProperty,buyProperty.getPrice());
+                gui.updatePlayers();
             }
         });
 
