@@ -1,7 +1,5 @@
 package monopoly;
 
-import java.awt.Dimension;
-import java.awt.Toolkit;
 import java.util.ArrayList;
 
 import interfaces.*;
@@ -10,7 +8,7 @@ public class Panopoly
 {
 	private ArrayList<Player> players;
 	private Player currentPlayer;
-	private static Board board;
+	private Board board;
 	private static GUI gui;
 	private Dice dice = new Dice();
 	private boolean clockwiseMovement = true;
@@ -28,7 +26,12 @@ public class Panopoly
 	
 	public void roll()
 	{
-		currentPlayer.move(dice.rollDice(2, 6), clockwiseMovement);
+		currentPlayer.canRoll = false;
+		currentPlayer.move(dice.rollNormalDice(), clockwiseMovement);
+		
+		if(dice.getDoubles())
+			currentPlayer.canRoll = true;
+		
 		setPossibleCommands();
 		getSquareAction();
 		gui.updatePlayers();
@@ -52,6 +55,8 @@ public class Panopoly
 	{
 		Locatable square = board.getLocation(currentPlayer.getPosition());
 		
+		if(currentPlayer.canRoll)
+			gui.rollCommand = true;
 		//unowned property
 		if(square instanceof Rentable && ((Rentable) square).getOwner() == null)
 			gui.buyCommand = true;
@@ -74,6 +79,7 @@ public class Panopoly
 	public void nextPlayer()
 	{
 		currentPlayer = players.get((players.indexOf(currentPlayer)+1)%players.size());
+		setPossibleCommands();
 	}
 
 	public Player getCurrentPlayer() {
