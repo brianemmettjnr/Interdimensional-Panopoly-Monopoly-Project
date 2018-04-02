@@ -31,8 +31,11 @@ public class GUI {
     private static JLabel selectedImage =null;
     private static int playerCount=0;
     private static ArrayList<Player> players=new ArrayList<Player>();
-	public boolean buyCommand,rollCommand,sellCommand,redeemCommand,mortgageCommand,endCommand;
-	private static Panopoly panopoly;
+	
+    public boolean buyCommand,rollCommand,sellCommand,redeemCommand,mortgageCommand,endCommand;
+	private JLabel buyButton, rollButton, endturn;
+    
+    private static Panopoly panopoly;
     private static BufferedImage[] images = new BufferedImage[6];
     private JLabel locationWindow=new JLabel(" ",SwingConstants.CENTER);
     private JLabel latestAction=new JLabel("",SwingConstants.CENTER);
@@ -81,7 +84,7 @@ public class GUI {
     }
     private void setupbuttons()
     {
-        JLabel rollButton=new JLabel("Roll");
+        rollButton=new JLabel("Roll");
         MainPane.add(rollButton);
         rollButton.setVisible(true);
         rollButton.setBounds(10+
@@ -93,20 +96,21 @@ public class GUI {
                 panopoly.roll();
             }
         });
-        JLabel buybutton=new JLabel("Buy");
-        MainPane.add(buybutton);
-        buybutton.setVisible(true);
-        buybutton.setBounds(10+LabelWidth*2,(((int)(FRAME_SIZE.getHeight()*.9))/2)+240,LabelWidth,30);
-        buybutton.setOpaque(true);
-        buybutton.addMouseListener(new MouseAdapter() {
+        buyButton=new JLabel("Buy");
+        MainPane.add(buyButton);
+        buyButton.setVisible(buyCommand);
+        buyButton.setBounds(10+LabelWidth*2,(((int)(FRAME_SIZE.getHeight()*.9))/2)+240,LabelWidth,30);
+        buyButton.setOpaque(true);
+        buyButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 Rentable buyProperty= (Rentable)panopoly.getBoard().getLocation(panopoly.getCurrentPlayer().getPosition());
                 panopoly.getCurrentPlayer().buyProperty(buyProperty,buyProperty.getPrice());
+                gui.buyCommand = false;
                 gui.updatePlayers();
             }
         });
-        JLabel endturn=new JLabel("End Turn");
+        endturn=new JLabel("End Turn");
         MainPane.add(endturn);
         endturn.setVisible(true);
         endturn.setBounds(10+LabelWidth*3,(((int)(FRAME_SIZE.getHeight()*.9))/2)+240,LabelWidth,30);
@@ -118,6 +122,15 @@ public class GUI {
             }
         });
     }
+    
+    private void setVisibleButtons()
+    {
+    	panopoly.setPossibleCommands();
+    	rollButton.setVisible(rollCommand);
+    	buyButton.setVisible(buyCommand);
+    	endturn.setVisible(endCommand);
+    }
+    
     private void PlacePlayers()
     {
         int i=0;
@@ -373,6 +386,8 @@ public class GUI {
                 player.setCurrentPlayer();
             }
         }
+        
+        setVisibleButtons();
     }
     JLayeredPane getMainPane()
     {

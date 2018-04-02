@@ -9,7 +9,7 @@ public class Panopoly
 	private ArrayList<Player> players;
 	private Player currentPlayer;
 	private Board board;
-	private static GUI gui;
+	private GUI gui;
 	private Dice dice = new Dice();
 	private boolean clockwiseMovement = true;
 	
@@ -32,9 +32,9 @@ public class Panopoly
 		if(dice.getDoubles())
 			currentPlayer.canRoll = true;
 		
-		setPossibleCommands();
+
 		getSquareAction();
-		gui.updatePlayers();
+		setPossibleCommands();
 	}
 
 	//TO DO: COMPLETE ALL POSSIBILITIES
@@ -55,12 +55,16 @@ public class Panopoly
 	{
 		Locatable square = board.getLocation(currentPlayer.getPosition());
 		
-		if(currentPlayer.canRoll)
-			gui.rollCommand = true;
+		gui.rollCommand = currentPlayer.canRoll;
 		//unowned property
 		if(square instanceof Rentable && ((Rentable) square).getOwner() == null)
 			gui.buyCommand = true;
 		
+		
+		
+		gui.endCommand = !gui.rollCommand;
+
+		gui.updatePlayers();
 	}
 	
 	//redeem, mortgage, build, demolish
@@ -80,7 +84,6 @@ public class Panopoly
 	{
 		currentPlayer = players.get((players.indexOf(currentPlayer)+1)%players.size());
 		setPossibleCommands();
-		gui.updatePlayers();
 	}
 
 	public Player getCurrentPlayer() {
