@@ -62,7 +62,6 @@ public class GUI {
         PlacePlayers();
         PlaceBoard();
         setupbuttons();
-        this.updatePlayers();
 
         JLabel image=new JLabel(new ImageIcon(GUI.class.getResource("ReasonsWhyBrianIsntAGraphicDesigner.png")));
         image.setBounds((((int)(FRAME_SIZE.getHeight()*.9))/2)-190,(((int)(FRAME_SIZE.getHeight()*.9))/2)-190,400,400);

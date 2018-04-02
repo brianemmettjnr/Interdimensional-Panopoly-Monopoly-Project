@@ -34,7 +34,7 @@ public class Panopoly
 		
 
 		getSquareAction();
-		setPossibleCommands();
+		gui.updatePlayers();
 	}
 
 	//TO DO: COMPLETE ALL POSSIBILITIES
@@ -63,8 +63,6 @@ public class Panopoly
 		
 		
 		gui.endCommand = !gui.rollCommand;
-
-		gui.updatePlayers();
 	}
 	
 	//redeem, mortgage, build, demolish
@@ -78,12 +76,14 @@ public class Panopoly
 		players = GUI.getPlayersArray();
 		currentPlayer = players.get(0);
 		gui = new GUI(board.getNumLocations());
+		gui.updatePlayers();
 	}
 	
 	public void nextPlayer()
 	{
+		currentPlayer.canRoll = true;
 		currentPlayer = players.get((players.indexOf(currentPlayer)+1)%players.size());
-		setPossibleCommands();
+		gui.updatePlayers();
 	}
 
 	public Player getCurrentPlayer() {
