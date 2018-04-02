@@ -21,10 +21,8 @@ public class GUI {
     private int BOARD_SIZE;
     private Dimension FRAME_SIZE=Toolkit.getDefaultToolkit().getScreenSize();
     private LocationLabel[] LocationLabels;
-    private JLabel[] PropertyLabels;
     private PlayerLabel[] PlayerLabels;
     private JLayeredPane MainPane;
-    private JFrame MainFrame;
     private int LabelWidth,LabelHeight;
     private static JTextField nameSpace=new JTextField();
     private LocationLabel SelectedLabel=null;
@@ -40,19 +38,18 @@ public class GUI {
     private JLabel latestAction=new JLabel("",SwingConstants.CENTER);
     private GUI gui=this;
 
-    public GUI(int BoardSize)
+    GUI(int BoardSize)
     {
         BOARD_SIZE=BoardSize;
-        MainFrame = new JFrame("Interdimensional Panopoly");
-        MainFrame.setSize(FRAME_SIZE);
-        MainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        PropertyLabels =new JLabel[BOARD_SIZE];
+        JFrame mainFrame = new JFrame("Interdimensional Panopoly");
+        mainFrame.setSize(FRAME_SIZE);
+        mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         LocationLabels=new LocationLabel[BOARD_SIZE];
         MainPane = new JLayeredPane();
         MainPane.setLayout(null);
         MainPane.setOpaque(true);
         MainPane.setBackground(Color.LIGHT_GRAY);
-        MainFrame.add(MainPane);
+        mainFrame.add(MainPane);
         PlayerLabels=new PlayerLabel[players.size()];
         int SquaresOnSide=(((BOARD_SIZE-4)/4)+2);
         int frameSize=(int)(FRAME_SIZE.getHeight()*.9);
@@ -79,8 +76,8 @@ public class GUI {
         locationWindow.setBorder(BorderFactory.createLineBorder(Color.black,4,true));
         locationWindow.setVerticalAlignment(JLabel.TOP);
         MainPane.add(locationWindow);
-        MainFrame.setVisible(true);
-        MainFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        mainFrame.setVisible(true);
+        mainFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
     private void setupbuttons()
     {
@@ -130,15 +127,8 @@ public class GUI {
             i++;
         }
     }
-    public void updatePlayers()
-    {
-        for(PlayerLabel player:PlayerLabels)
-        {
-            player.updateLabel();
-        }
-    }
 
-    public LocationLabel getLocationLabel(int index) throws ArrayIndexOutOfBoundsException{
+    LocationLabel getLocationLabel(int index) throws ArrayIndexOutOfBoundsException{
         return LocationLabels[index];
     }
     private void PlaceBoard()
@@ -154,10 +144,10 @@ public class GUI {
             NumOnBoard++;
 
         }
-        while(y<(LabelWidth*(SquaresOnSide-1)))
+        while(y<(LabelHeight*(SquaresOnSide-1)))
         {
             LocationLabels[NumOnBoard]= new LocationLabel(x,y,NumOnBoard,this,Locations.get(NumOnBoard));
-            y+=LabelWidth;
+            y+=LabelHeight;
             NumOnBoard++;
 
         }
@@ -167,14 +157,14 @@ public class GUI {
             x-=LabelWidth;
             NumOnBoard++;
         }
-        while (y>=LabelWidth)
+        while (y>=LabelHeight)
         {
             LocationLabels[NumOnBoard]= new LocationLabel(x,y,NumOnBoard,this,Locations.get(NumOnBoard));
-            y-=LabelWidth;
+            y-=LabelHeight;
             NumOnBoard++;
         }
     }
-    public static void PlayerCountGui(Panopoly panopoly1)
+    static void PlayerCountGui(Panopoly panopoly1)
     {
     	panopoly = panopoly1;
         //how many players
@@ -335,14 +325,7 @@ public class GUI {
         playerPanel.add(sendinputButton);
         playerPanel.add(nameSpace);
     }
-    public void updatePlayerBalances()
-    {
-        for(PlayerLabel label:PlayerLabels)
-        {
-            label.updateLabel();
-        }
-    }
-    public static ArrayList<Player> getPlayersArray()
+    static ArrayList<Player> getPlayersArray()
     {
         return players;
     }
@@ -350,11 +333,11 @@ public class GUI {
     {
         return  playerCount;
     }
-    public LocationLabel getSelectedLocation()
+    LocationLabel getSelectedLocation()
     {
         return SelectedLabel;
     }
-    public void setSelectedLabel(LocationLabel location)
+    void setSelectedLabel(LocationLabel location)
     {
         this.SelectedLabel=location;
         locationWindow.setOpaque(true);
@@ -380,26 +363,37 @@ public class GUI {
 
 
     }
-    public JLayeredPane getMainPane()
+    void updatePlayers()
+    {
+        for(PlayerLabel player:PlayerLabels)
+        {
+            player.updateLabel();
+            if(player.getPlayer()==panopoly.getCurrentPlayer())
+            {
+                player.setCurrentPlayer();
+            }
+        }
+    }
+    JLayeredPane getMainPane()
     {
         return MainPane;
     }
-    public int getLabelWidth()
+    int getLabelWidth()
     {
         return LabelWidth;
     }
-    public Dimension getFRAME_SIZE() {
+    Dimension getFRAME_SIZE() {
         return FRAME_SIZE;
     }
     public void updateAction(String action)
     {
         latestAction.setText(action);
     }
-    public int getBOARD_SIZE() {
+    int getBOARD_SIZE() {
         return BOARD_SIZE;
     }
 
-    public int getLabelHeight() {
+    int getLabelHeight() {
         return LabelHeight;
     }
 }

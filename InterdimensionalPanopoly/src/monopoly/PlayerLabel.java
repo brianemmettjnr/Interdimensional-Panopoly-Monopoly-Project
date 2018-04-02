@@ -63,5 +63,14 @@ public class PlayerLabel
         positionIcon.setBounds(gui.getLocationLabel(player.getPosition()).getX()+(int)(index%3*(gui.getLabelHeight()/4)),
                 gui.getLocationLabel(player.getPosition()).getY()+1+(int)(index%2*(gui.getLabelHeight()/2)),scale,scale);
         positionIcon.updateUI();
+        icon.setBorder(null);
+    }
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    public void setCurrentPlayer() {
+        icon.setBorder(BorderFactory.createLineBorder(Color.MAGENTA,2));
     }
 }
