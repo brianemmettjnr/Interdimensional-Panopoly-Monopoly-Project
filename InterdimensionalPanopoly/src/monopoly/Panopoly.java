@@ -80,6 +80,7 @@ public class Panopoly
 	{
 		currentPlayer = players.get((players.indexOf(currentPlayer)+1)%players.size());
 		setPossibleCommands();
+		gui.updatePlayers();
 	}
 
 	public Player getCurrentPlayer() {
