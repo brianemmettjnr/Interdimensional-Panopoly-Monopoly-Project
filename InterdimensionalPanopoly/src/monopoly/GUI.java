@@ -70,7 +70,7 @@ public class GUI {
 
         latestAction.setBounds((((int)(FRAME_SIZE.getHeight()*.9))/2)-190,(((int)(FRAME_SIZE.getHeight()*.9))/2)+210,400,30);
         latestAction.setVisible(true);
-        latestAction.setFont(new Font("times new roman",Font.BOLD,20));
+        latestAction.setFont(new Font("times new roman",Font.BOLD,12));
         latestAction.setForeground(Color.white);
         latestAction.setText("Welcome To Interdimensional Panopoly");
         MainPane.add(latestAction);
@@ -108,10 +108,7 @@ public class GUI {
         buyButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                Rentable buyProperty= (Rentable)panopoly.getBoard().getLocation(panopoly.getCurrentPlayer().getPosition());
-                panopoly.getCurrentPlayer().buyProperty(buyProperty,buyProperty.getPrice());
-                gui.buyCommand = false;
-                gui.updatePlayers();
+                panopoly.buyProperty((Rentable)panopoly.getBoard().getLocation(panopoly.getCurrentPlayer().getPosition()));
             }
         });
         endturn=new JLabel("End Turn");
