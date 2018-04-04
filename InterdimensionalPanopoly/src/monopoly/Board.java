@@ -31,7 +31,7 @@ public class Board
 				locations.add(new TaxableProperty("Income Tax", 200));
 			else if(i == numLocations-2)
 				locations.add(new TaxableProperty("Super Tax", 100));
-			//one in 10 chance that property is station, 3 in 10 card or 6 in 10 investment
+			//one in 8 chance that property is station, 1 in 4 card or 5 in 8 investment
 			else
 			{
 				int rnd = ThreadLocalRandom.current().nextInt(1, 8 + 1);

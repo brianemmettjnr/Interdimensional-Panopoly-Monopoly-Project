@@ -61,12 +61,17 @@ public class Panopoly
 		Locatable square = board.getLocation(currentPlayer.getPosition());
 		
 		if(square instanceof TaxableProperty)
+		{
 			currentPlayer.pay(((Taxable) square).getFlatAmount());
+			gui.updateAction(currentPlayer.getIdentifier() + " has paid " + ((Taxable) square).getFlatAmount() + " in tax.");
+		}
 		//rental property owned by another player
 		else if((square instanceof RentalProperty) && (((Rentable) square).getOwner()!=null) && (((Rentable) square).getOwner()!=currentPlayer))
 		{
-			currentPlayer.pay(((Rentable) square).getRentalAmount());
-			((Player) ((Rentable) square).getOwner()).earn(((Rentable) square).getRentalAmount());
+			int rent = ((Rentable) square).getRentalAmount();
+			currentPlayer.pay(rent);
+			((Player) ((Rentable) square).getOwner()).earn(rent);
+			gui.updateAction(currentPlayer.getIdentifier() + " has paid " + rent + " to " + ((Rentable) square).getOwner().getIdentifier());
 		}
 		
 		
