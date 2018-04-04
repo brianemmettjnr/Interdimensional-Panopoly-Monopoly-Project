@@ -24,7 +24,7 @@ public class Panopoly
 		return this.board;
 	}
 	
-	public void roll()
+	public String roll()
 	{
 		currentPlayer.canRoll = false;
 		currentPlayer.rollComplete = true;
@@ -44,15 +44,15 @@ public class Panopoly
 		
 		gui.resetCommands();
 		gui.updatePlayers();
-		gui.updateAction(msg);
+		return (msg);
 	}
 	
-	public void buyProperty(Rentable property)
+	public String buyProperty(Rentable property)
 	{
 		currentPlayer.buyProperty(property, property.getPrice());
 		gui.buyCommand = false;
-		gui.updateAction(currentPlayer.getIdentifier() + " has bought " + property.getIdentifier() + " for " + property.getPrice() + ".");
 		gui.updatePlayers();
+		return currentPlayer.getIdentifier() + " has bought " + property.getIdentifier() + " for " + property.getPrice() + ".";
 	}
 
 	//TO DO: COMPLETE ALL POSSIBILITIES
@@ -99,16 +99,14 @@ public class Panopoly
 		gui.updatePlayers();
 	}
 	
-	public void nextPlayer()
+	public String nextPlayer()
 	{
 		currentPlayer.canRoll = true;
 		currentPlayer.rollComplete = false;
 		currentPlayer = players.get((players.indexOf(currentPlayer)+1)%players.size());
-		
-		gui.updateAction(currentPlayer.getIdentifier() + "'s turn");
-		
 		gui.resetCommands();
 		gui.updatePlayers();
+		return currentPlayer.getIdentifier() + "'s turn";
 	}
 
 	public Player getCurrentPlayer() {

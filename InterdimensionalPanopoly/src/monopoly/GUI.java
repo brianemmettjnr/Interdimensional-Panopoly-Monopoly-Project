@@ -39,6 +39,7 @@ public class GUI {
     private static BufferedImage[] images = new BufferedImage[6];
     private JLabel locationWindow=new JLabel(" ",SwingConstants.CENTER);
     private JLabel latestAction=new JLabel("",SwingConstants.CENTER);
+    private JLabel secondAction=new JLabel("",SwingConstants.CENTER);
     private GUI gui=this;
 
     GUI(int BoardSize)
@@ -62,7 +63,7 @@ public class GUI {
         setupbuttons();
 
         JLabel image=new JLabel(new ImageIcon(GUI.class.getResource("ReasonsWhyBrianIsntAGraphicDesigner.png")));
-        image.setBounds((((int)(FRAME_SIZE.getHeight()*.9))/2)-190,(((int)(FRAME_SIZE.getHeight()*.9))/2)-190,400,400);
+        image.setBounds((((int)(FRAME_SIZE.getHeight()*.9))/2)-190,(((int)(FRAME_SIZE.getHeight()*.9))/2)-220,400,400);
         image.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
         MainPane.add(image);
 
@@ -73,7 +74,15 @@ public class GUI {
         latestAction.setText("Welcome To Interdimensional Panopoly");
         MainPane.add(latestAction);
 
-        locationWindow.setBounds((((int)(FRAME_SIZE.getHeight()*.9))/2)-90,(((int)(FRAME_SIZE.getHeight()*.9))/2)-180,200,380);
+        secondAction.setBounds((((int)(FRAME_SIZE.getHeight()*.9))/2)-190,(((int)(FRAME_SIZE.getHeight()*.9))/2)+180,400,30);
+        secondAction.setVisible(true);
+        secondAction.setFont(new Font("times new roman",Font.BOLD,20));
+        secondAction.setForeground(Color.white);
+        secondAction.setText("Enjoy!");
+        MainPane.add(secondAction);
+
+
+        locationWindow.setBounds((((int)(FRAME_SIZE.getHeight()*.9))/2)-90,(((int)(FRAME_SIZE.getHeight()*.9))/2)-210,200,380);
         locationWindow.setVisible(true);
         locationWindow.setBackground(Color.WHITE);
         locationWindow.setForeground(Color.BLACK);
@@ -89,7 +98,7 @@ public class GUI {
         rollButton=new JLabel("Roll");
         MainPane.add(rollButton);
         rollButton.setVisible(true);
-        rollButton.setBounds((int)((FRAME_SIZE.getHeight()*.9)/2),(((int)(FRAME_SIZE.getHeight()*.9))/2)+240,Offset,30);
+        rollButton.setBounds((int)((FRAME_SIZE.getHeight()*.9)/2)-10,(((int)(FRAME_SIZE.getHeight()*.9))/2)+240,Offset,30);
         rollButton.setOpaque(true);
         rollButton.addMouseListener(new MouseAdapter() {
             @Override
@@ -100,13 +109,13 @@ public class GUI {
         buyButton=new JLabel("Buy");
         MainPane.add(buyButton);
         buyButton.setVisible(buyCommand);
-        buyButton.setBounds((int)(FRAME_SIZE.getHeight()*.9)/2,(((int)(FRAME_SIZE.getHeight()*.9))/2)+270,Offset,30);
+        buyButton.setBounds((int)(FRAME_SIZE.getHeight()*.9)/2-10,(((int)(FRAME_SIZE.getHeight()*.9))/2)+270,Offset,30);
         buyButton.setOpaque(true);
         buyButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 Rentable buyProperty= (Rentable)panopoly.getBoard().getLocation(panopoly.getCurrentPlayer().getPosition());
-                gui.updateAction(panopoly.getCurrentPlayer().buyProperty(buyProperty,buyProperty.getPrice()));
+                gui.updateAction(panopoly.buyProperty(buyProperty));
                 gui.buyCommand = false;
                 gui.updatePlayers();
             }
@@ -114,7 +123,7 @@ public class GUI {
         endturn=new JLabel("End Turn");
         MainPane.add(endturn);
         endturn.setVisible(false);
-        endturn.setBounds((int)((FRAME_SIZE.getHeight()*.9)/2),(((int)(FRAME_SIZE.getHeight()*.9))/2)+240,Offset,30);
+        endturn.setBounds((int)((FRAME_SIZE.getHeight()*.9)/2)-10,(((int)(FRAME_SIZE.getHeight()*.9))/2)+240,Offset,30);
         endturn.setOpaque(true);
         endturn.addMouseListener(new MouseAdapter() {
             @Override
@@ -411,6 +420,7 @@ public class GUI {
 
     public void updateAction(String action)
     {
+        secondAction.setText(latestAction.getText());
         latestAction.setText(action);
     }
 
