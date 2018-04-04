@@ -5,7 +5,6 @@ import interfaces.Cardable;
 
 public class Chance extends NamedLocation implements Cardable
 {
-
 	public Chance() 
 	{
 		super("Chance");
