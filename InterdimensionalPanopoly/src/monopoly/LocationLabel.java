@@ -60,7 +60,7 @@ public class LocationLabel
 
             }
         });
-            label.setBounds(x, y, gui.getLabelHeight(), gui.getLabelWidth());
+            label.setBounds(x, y, gui.getOffset(), gui.getOffset());
         label.setBorder(BorderColour);
         gui.getMainPane().add(label,7);
         label.setOpaque(true);

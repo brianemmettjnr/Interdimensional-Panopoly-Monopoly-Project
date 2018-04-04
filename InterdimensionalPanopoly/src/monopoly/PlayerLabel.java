@@ -53,7 +53,7 @@ public class PlayerLabel
         Graphics g = bi.createGraphics();
         icon.paintIcon(null, g, 0,0);
         g.dispose();
-        scale=(int)(gui.getLabelWidth()*.5);
+        scale=(int)(gui.getOffset()*.5);
         ImageIcon newIcon =new ImageIcon(bi.getScaledInstance(scale,scale,1));
         positionIcon= new JLabel(newIcon);
         positionIcon.setBounds(1,1,scale,scale);
@@ -62,8 +62,8 @@ public class PlayerLabel
     public void updateLabel()
     {
         balance.setText("$"+player.getBalance());
-        positionIcon.setBounds(gui.getLocationLabel(player.getPosition()).getX()+(int)(index%3*(gui.getLabelHeight()/4)),
-                gui.getLocationLabel(player.getPosition()).getY()+1+(int)(index%2*(gui.getLabelHeight()/2)),scale,scale);
+        positionIcon.setBounds(gui.getLocationLabel(player.getPosition()).getX()+(int)(index%3*(gui.getOffset()/4)),
+                gui.getLocationLabel(player.getPosition()).getY()+1+(int)(index%2*(gui.getOffset()/2)),scale,scale);
         positionIcon.updateUI();
         icon.setBorder(null);
     }
