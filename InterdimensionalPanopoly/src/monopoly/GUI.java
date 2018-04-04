@@ -133,6 +133,13 @@ public class GUI {
     	endturn.setVisible(endCommand);
     }
     
+    public void resetCommands()
+    {
+    	rollCommand = false;
+    	buyCommand = false;
+    	endCommand = false;
+    }
+    
     private void PlacePlayers()
     {
         int i=0;

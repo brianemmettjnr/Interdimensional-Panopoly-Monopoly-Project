@@ -37,17 +37,6 @@ public class PersonOfInterest
 	// Various modules of the knowledge-base
 	
 	private KnowledgeBaseModule NOC          = null;
-/*	private KnowledgeBaseModule CATEGORIES   = null;
-	private KnowledgeBaseModule CLOTHES      = null;
-	private KnowledgeBaseModule CREATIONS    = null;
-	private KnowledgeBaseModule DOMAINS      = null;
-	private KnowledgeBaseModule VEHICLES     = null;
-	private KnowledgeBaseModule WEAPONS	     = null;
-	private KnowledgeBaseModule PLACES       = null;
-	private KnowledgeBaseModule SUPERLATIVES = null;
-	private KnowledgeBaseModule COMPARATIVES = null;
-	private KnowledgeBaseModule ANTONYMS	 = null;
-	private KnowledgeBaseModule PAST_PERFECTS= null;*/
 	private KnowledgeBaseModule NOC1          = null;
 	private KnowledgeBaseModule NOC2          = null;
 	private KnowledgeBaseModule WORLDS       = null;
@@ -67,44 +56,18 @@ public class PersonOfInterest
 	private static Vector notmothers			= null;
 	private static Vector insideusa    			= null;
 	private static Vector outsideusa				= null;
-	private static Vector fictionalworldsDC 		= null;
-	private static Vector fictionalworldsSW		= null;
-	private static Vector realworldAmPol		= null;
-	private static Vector fictionalworldsMarvel  = null;
-	private static Vector fictionalworldsLOTR    = null;
-	private static Vector fictionalworldsSimpsons = null;
 	private static Vector<String> checkers			= null;
-	private static Vector threeplus					=null;	
-	private static Vector twoonly				= null;
+
 	
 
 	
-	public PersonOfInterest(String kbDirectory)
+	public PersonOfInterest()
 	{
-		knowledgeDir = kbDirectory;
 		
-		NOC           = new KnowledgeBaseModule(knowledgeDir + "Veale's The NOC List.txt", 0);
-		/*CATEGORIES    = new KnowledgeBaseModule(knowledgeDir + "Veale's Category Hierarchy.txt", 0);
-		CLOTHES       = new KnowledgeBaseModule(knowledgeDir + "Veale's clothing line.txt", 1);  // 1 is the column number of the key value
-		CREATIONS     = new KnowledgeBaseModule(knowledgeDir + "Veale's creations.txt", 0);
-		DOMAINS       = new KnowledgeBaseModule(knowledgeDir + "Veale's domains.txt", 0);
-		VEHICLES      = new KnowledgeBaseModule(knowledgeDir + "Veale's vehicle fleet.txt", 1);  // 1 is the column number of the key value
-		WEAPONS	      = new KnowledgeBaseModule(knowledgeDir + "Veale's weapon arsenal.txt", 1);  // 1 is the column number of the key value
-		PLACES        = new KnowledgeBaseModule(knowledgeDir + "Veale's place elements.txt", 0);		
-		SUPERLATIVES  = new KnowledgeBaseModule(knowledgeDir + "superlatives.txt", 0);
-		COMPARATIVES  = new KnowledgeBaseModule(knowledgeDir + "comparatives.txt", 0);
-		ANTONYMS	  = new KnowledgeBaseModule(knowledgeDir + "antonyms.txt", 0);
-		PAST_PERFECTS = new KnowledgeBaseModule(knowledgeDir + "past perfects.txt", 0);
-		POS_QUALITIES = NOC.getInvertedField("Positive Talking Points");
-		NEG_QUALITIES = NOC.getInvertedField("Negative Talking Points");
-		ALL_QUALITIES = NOC.getInvertedField("Positive Talking Points");
-		ALL_QUALITIES = NOC.getInvertedField("Negative Talking Points", ALL_QUALITIES);*/
-		NOC1		  = new KnowledgeBaseModule(knowledgeDir + "Veale's The NOC List.txt", 3);
-		NOC2		  = new KnowledgeBaseModule(knowledgeDir + "Veale's The NOC List.txt", 5);
-		WORLDS        = new KnowledgeBaseModule(knowledgeDir + "Veale's domains.txt", 0);
+		NOC1		  = new KnowledgeBaseModule("./Soft Eng 3/CianCode/Veale's The NOC List.txt", 3);
+		NOC2		  = new KnowledgeBaseModule("./Soft Eng 3/CianCode/Veale's The NOC List.txt", 5);
+		WORLDS        = new KnowledgeBaseModule("./Soft Eng 3/CianCode/Veale's domains.txt", 0);
 
-				
-	
 		realPeople      = NOC.difference(allPeople, fictionalPeople);
 		men			    = NOC.getAllKeysWithFieldValue("Gender", "male");
 		women			= NOC.getAllKeysWithFieldValue("Gender", "female");
@@ -142,25 +105,24 @@ public class PersonOfInterest
 		locations.addAll(removes); // removes duplicates
 		locations.remove(0);
 		System.out.println(locations);
-		
-/*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-		locations is the full ArrayList of locations, with no duplicates start from random start area each time, have between 137-153 individual properties
-		all properties have a shared world with at least 2 other properties for colour groups 
-		
-*////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		//
-		
+				
 	}
-		
+	
+	public ArrayList<String> placenames (ArrayList<String> locations)
+	{
+		ArrayList<String> places = new ArrayList<String>();
+		places.addAll(locations);
+		return places;
+	}
+	
+	
 	public static void main(String[] args)
 	{
-		String kdir = "";
-		String tdir = "";	
+
 		
-		PersonOfInterest stereonomicon = new PersonOfInterest(kdir);
+		PersonOfInterest stereonomicon = new PersonOfInterest();
 	
-		int qs = DICE.nextInt(8)+1;
+		/*int qs = DICE.nextInt(8)+1;
 		
 		if(qs == 1)
 		{
@@ -252,7 +214,7 @@ public class PersonOfInterest
 			}
 			int n = DICE.nextInt(mothers.size());
 			System.out.println(mothers.get(n));
-		}	
+		}	*/
 	}
 		
 }	
