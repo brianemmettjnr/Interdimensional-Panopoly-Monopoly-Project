@@ -28,14 +28,30 @@ public class Panopoly
 	{
 		currentPlayer.canRoll = false;
 		currentPlayer.rollComplete = true;
-		currentPlayer.move(dice.rollNormalDice(), clockwiseMovement);
+		int movePositions = dice.rollNormalDice();
+		
+		String msg = currentPlayer.getIdentifier() + " has rolled " + movePositions + ". ";
+		
+		currentPlayer.move(movePositions, clockwiseMovement);
 		
 		if(dice.getDoubles())
+		{
 			currentPlayer.canRoll = true;
+			msg += currentPlayer.getIdentifier() + " has rolled doubles and can roll again.";
+		}
 		
 		getSquareAction();
 		
 		gui.resetCommands();
+		gui.updatePlayers();
+		gui.updateAction(msg);
+	}
+	
+	public void buyProperty(Rentable property)
+	{
+		currentPlayer.buyProperty(property, property.getPrice());
+		gui.buyCommand = false;
+		gui.updateAction(currentPlayer.getIdentifier() + " has bought " + property.getIdentifier() + " for " + property.getPrice() + ".");
 		gui.updatePlayers();
 	}
 
@@ -65,9 +81,7 @@ public class Panopoly
 		//unowned property and player has rolled at least once
 		if(square instanceof Rentable && ((Rentable) square).getOwner() == null && currentPlayer.rollComplete)
 			gui.buyCommand = true;
-		
-		
-		
+				
 		gui.endCommand = !gui.rollCommand;
 	}
 	
@@ -91,8 +105,9 @@ public class Panopoly
 		currentPlayer.rollComplete = false;
 		currentPlayer = players.get((players.indexOf(currentPlayer)+1)%players.size());
 		
-		gui.resetCommands();
+		gui.updateAction(currentPlayer.getIdentifier() + "'s turn");
 		
+		gui.resetCommands();
 		gui.updatePlayers();
 	}
 

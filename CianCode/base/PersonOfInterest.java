@@ -32,7 +32,7 @@ public class PersonOfInterest
 {
 	static Random DICE = new Random();
 	
-	private String knowledgeDir	= null;   // directory where knowledge-base(s) can be found
+
 	
 	// Various modules of the knowledge-base
 	
@@ -40,22 +40,9 @@ public class PersonOfInterest
 	private KnowledgeBaseModule NOC1          = null;
 	private KnowledgeBaseModule NOC2          = null;
 	private KnowledgeBaseModule WORLDS       = null;
-
-
 	
 	private static Vector allPeople				 = null;
 	private static Vector allPeople2			= null;
-	
-	private static Vector fictionalPeople			 = null;
-	private static Vector realPeople				 = null;
-	private static Vector men						 = null;
-	private static Vector women					 = null;
-	private static Vector fathers				= null;
-	private static Vector notfathers			= null;
-	private static Vector mothers				= null;
-	private static Vector notmothers			= null;
-	private static Vector insideusa    			= null;
-	private static Vector outsideusa				= null;
 	private static Vector<String> checkers			= null;
 
 	
@@ -67,16 +54,6 @@ public class PersonOfInterest
 		NOC1		  = new KnowledgeBaseModule("./Soft Eng 3/CianCode/Veale's The NOC List.txt", 3);
 		NOC2		  = new KnowledgeBaseModule("./Soft Eng 3/CianCode/Veale's The NOC List.txt", 5);
 		WORLDS        = new KnowledgeBaseModule("./Soft Eng 3/CianCode/Veale's domains.txt", 0);
-
-		realPeople      = NOC.difference(allPeople, fictionalPeople);
-		men			    = NOC.getAllKeysWithFieldValue("Gender", "male");
-		women			= NOC.getAllKeysWithFieldValue("Gender", "female");
-		insideusa 		= NOC.getAllKeysWithFieldValue("Address 3", "USA");
-		outsideusa		= NOC.getAllKeysWithoutFieldValue("Address 3", "USA");
-		fathers 		= NOC.getAllKeysWithFieldValue("Category", "Father");
-		notfathers 		= NOC.getAllKeysWithoutFieldValue("Category", "Father");
-		mothers			= NOC.getAllKeysWithFieldValue("Category", "Mother");
-		notmothers		= NOC.getAllKeysWithoutFieldValue("Category", "Mother");
 		checkers = WORLDS.getAllKeys("Specific Domains"); 
 		
 		ArrayList<String> locations = new ArrayList<String>();
@@ -118,103 +95,7 @@ public class PersonOfInterest
 	
 	public static void main(String[] args)
 	{
-
-		
 		PersonOfInterest stereonomicon = new PersonOfInterest();
-	
-		/*int qs = DICE.nextInt(8)+1;
-		
-		if(qs == 1)
-		{
-			System.out.println("Which of the following is fictitious?");
-			
-			for(int z = 0; z < 3; z++)
-			{
-				int n = DICE.nextInt(realPeople.size());
-				System.out.println(realPeople.get(n));
-			}
-			int n = DICE.nextInt(fictionalPeople.size());
-			System.out.println(fictionalPeople.get(n));
-		}
-		
-		else if(qs == 2)
-		{
-			System.out.println("Which of the following is a real person?");
-			
-			for(int z = 0; z < 3; z++)
-			{
-				int n = DICE.nextInt(fictionalPeople.size());
-				System.out.println(fictionalPeople.get(n));
-			}
-			int n = DICE.nextInt(realPeople.size());
-			System.out.println(realPeople.get(n));
-		}
-		else if(qs == 3)
-		{
-			System.out.println("Which of the following does not call America home?");
-			for(int z = 0; z < 3; z++)
-			{
-				int n = DICE.nextInt(insideusa.size());
-				System.out.println(insideusa.get(n));
-			}
-			int n = DICE.nextInt(outsideusa.size());
-			System.out.println(outsideusa.get(n));
-		}
-		else if(qs == 4)
-		{
-			System.out.println("Which of the following resides in America?");
-			for(int z = 0; z < 3; z++)
-			{
-				int n = DICE.nextInt(outsideusa.size());
-				System.out.println(outsideusa.get(n));
-			}
-			int n = DICE.nextInt(insideusa.size());
-			System.out.println(insideusa.get(n));
-		}
-		else if(qs == 5)
-		{
-			System.out.println("Which of the following is a father?");
-			for(int z = 0; z < 3; z++)
-			{
-				int n = DICE.nextInt(notfathers.size());
-				System.out.println(notfathers.get(n));
-			}
-			int n = DICE.nextInt(fathers.size());
-			System.out.println(fathers.get(n));
-		}
-		else if(qs == 6)
-		{
-			System.out.println("Which of the following is not a father?");
-			for(int z = 0; z < 3; z++)
-			{
-				int n = DICE.nextInt(fathers.size());
-				System.out.println(fathers.get(n));
-			}
-			int n = DICE.nextInt(notfathers.size());
-			System.out.println(notfathers.get(n));
-		}
-		else if(qs == 7)
-		{
-			System.out.println("Which of the following is not a mother?");
-			for(int z = 0; z < 3; z++)
-			{
-				int n = DICE.nextInt(mothers.size());
-				System.out.println(mothers.get(n));
-			}
-			int n = DICE.nextInt(notmothers.size());
-			System.out.println(notmothers.get(n));
-		}
-		else if(qs == 8)
-		{
-			System.out.println("Which of the following is a mother?"); // very few categorised as numbers
-			for(int z = 0; z < 3; z++)
-			{
-				int n = DICE.nextInt(notmothers.size());
-				System.out.println(notmothers.get(n));
-			}
-			int n = DICE.nextInt(mothers.size());
-			System.out.println(mothers.get(n));
-		}	*/
 	}
 		
 }	
