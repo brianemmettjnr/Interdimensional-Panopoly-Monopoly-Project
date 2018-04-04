@@ -55,7 +55,7 @@ public class Panopoly
 		gui.updatePlayers();
 	}
 
-	//TO DO: COMPLETE ALL POSSIBILITIES
+	//TO DO: DRAW CARD
 	private void getSquareAction() 
 	{
 		Locatable square = board.getLocation(currentPlayer.getPosition());
