@@ -6,6 +6,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 
+import static java.awt.Color.green;
+
 public class PlayerLabel
 {
     private final int scale;
@@ -71,6 +73,6 @@ public class PlayerLabel
     }
 
     public void setCurrentPlayer() {
-        icon.setBorder(BorderFactory.createLineBorder(Color.MAGENTA,2));
+        icon.setBorder(BorderFactory.createLineBorder(green.brighter(),3));
     }
 }

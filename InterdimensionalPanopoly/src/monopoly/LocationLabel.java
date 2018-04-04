@@ -9,6 +9,7 @@ import java.awt.event.MouseEvent;
 
 import static java.awt.Color.BLACK;
 import static java.awt.Color.MAGENTA;
+import static java.awt.Color.green;
 
 public class LocationLabel
 {
@@ -42,13 +43,13 @@ public class LocationLabel
                 if(gui.getSelectedLocation()==null)
                 {
                     gui.setSelectedLabel(thisLocation);
-                    thisLocation.getLabel().setBorder(BorderFactory.createLineBorder(MAGENTA, 2));
+                    thisLocation.getLabel().setBorder(BorderFactory.createLineBorder(green, 2));
                     gui.updatePlayers();
                 }
                 else if (thisLocation != gui.getSelectedLocation()) {
                     gui.getSelectedLocation().getLabel().setBorder(BorderColour);
                     gui.setSelectedLabel(thisLocation);
-                    thisLocation.getLabel().setBorder(BorderFactory.createLineBorder(MAGENTA, 2));
+                    thisLocation.getLabel().setBorder(BorderFactory.createLineBorder(Color.green, 2));
                     gui.updatePlayers();
                 } else
                 {
@@ -64,7 +65,7 @@ public class LocationLabel
         gui.getMainPane().add(label,7);
         label.setOpaque(true);
         label.setBackground(Color.white);
-        label.setFont(new Font("Serif", Font.BOLD, 18 - (gui.getBOARD_SIZE() / 6)));
+        label.setFont(new Font("Serif", Font.BOLD, 18 - (gui.getBOARD_SIZE() / 5)));
         Class Comparitor = location.getClass();
         //I WOULD MAKE THIS A SWITCH STATEMENT BUT APPARENTLY THEY CANT ACCEPT CLASSES AS ARGUMENTS??????
         if (Comparitor == Chance.class)
