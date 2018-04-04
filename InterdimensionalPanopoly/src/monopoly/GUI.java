@@ -32,7 +32,7 @@ public class GUI {
     private static int playerCount=0;
     private static ArrayList<Player> players=new ArrayList<Player>();
 	
-    public boolean buyCommand,rollCommand,sellCommand,redeemCommand,mortgageCommand,endCommand;
+    boolean buyCommand,rollCommand,sellCommand,redeemCommand,mortgageCommand,endCommand;
 	private JLabel buyButton, rollButton, endturn;
     
     private static Panopoly panopoly;
@@ -51,7 +51,7 @@ public class GUI {
         MainPane = new JLayeredPane();
         MainPane.setLayout(null);
         MainPane.setOpaque(true);
-        MainPane.setBackground(Color.LIGHT_GRAY);
+        MainPane.setBackground(Color.red.darker());
         mainFrame.add(MainPane);
         PlayerLabels=new PlayerLabel[players.size()];
         int SquaresOnSide=(((BOARD_SIZE-4)/4)+2);
@@ -65,10 +65,14 @@ public class GUI {
 
         JLabel image=new JLabel(new ImageIcon(GUI.class.getResource("ReasonsWhyBrianIsntAGraphicDesigner.png")));
         image.setBounds((((int)(FRAME_SIZE.getHeight()*.9))/2)-190,(((int)(FRAME_SIZE.getHeight()*.9))/2)-190,400,400);
+        image.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
         MainPane.add(image);
 
-        latestAction.setBounds((((int)(FRAME_SIZE.getHeight()*.9))/2)-90,(((int)(FRAME_SIZE.getHeight()*.9))/2)+210,200,30);
+        latestAction.setBounds((((int)(FRAME_SIZE.getHeight()*.9))/2)-190,(((int)(FRAME_SIZE.getHeight()*.9))/2)+210,400,30);
         latestAction.setVisible(true);
+        latestAction.setFont(new Font("times new roman",Font.BOLD,20));
+        latestAction.setForeground(Color.white);
+        latestAction.setText("Welcome To Interdimensional Panopoly");
         MainPane.add(latestAction);
 
         locationWindow.setBounds((((int)(FRAME_SIZE.getHeight()*.9))/2)-90,(((int)(FRAME_SIZE.getHeight()*.9))/2)-180,200,380);
@@ -81,6 +85,7 @@ public class GUI {
         mainFrame.setVisible(true);
         mainFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
+
     private void setupbuttons()
     {
         rollButton=new JLabel("Roll");
@@ -143,6 +148,7 @@ public class GUI {
     LocationLabel getLocationLabel(int index) throws ArrayIndexOutOfBoundsException{
         return LocationLabels[index];
     }
+
     private void PlaceBoard()
     {
         ArrayList<Locatable> Locations=panopoly.getBoard().getLocations();
@@ -176,6 +182,7 @@ public class GUI {
             NumOnBoard++;
         }
     }
+
     static void PlayerCountGui(Panopoly panopoly1)
     {
     	panopoly = panopoly1;
@@ -337,18 +344,17 @@ public class GUI {
         playerPanel.add(sendinputButton);
         playerPanel.add(nameSpace);
     }
+
     static ArrayList<Player> getPlayersArray()
     {
         return players;
     }
-    public int getPlayerCount()
-    {
-        return  playerCount;
-    }
+
     LocationLabel getSelectedLocation()
     {
         return SelectedLabel;
     }
+
     void setSelectedLabel(LocationLabel location)
     {
         this.SelectedLabel=location;
@@ -375,6 +381,7 @@ public class GUI {
 
 
     }
+
     void updatePlayers()
     {
         for(PlayerLabel player:PlayerLabels)
@@ -388,21 +395,26 @@ public class GUI {
         
         setVisibleButtons();
     }
+
     JLayeredPane getMainPane()
     {
         return MainPane;
     }
+
     int getLabelWidth()
     {
         return LabelWidth;
     }
+
     Dimension getFRAME_SIZE() {
         return FRAME_SIZE;
     }
+
     public void updateAction(String action)
     {
         latestAction.setText(action);
     }
+
     int getBOARD_SIZE() {
         return BOARD_SIZE;
     }
