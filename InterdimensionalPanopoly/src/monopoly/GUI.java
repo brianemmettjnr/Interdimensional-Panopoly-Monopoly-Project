@@ -89,38 +89,37 @@ public class GUI {
         rollButton=new JLabel("Roll");
         MainPane.add(rollButton);
         rollButton.setVisible(true);
-        rollButton.setBounds(10+
-                Offset,(((int)(FRAME_SIZE.getHeight()*.9))/2)+240,Offset,30);
+        rollButton.setBounds((int)((FRAME_SIZE.getHeight()*.9)/2),(((int)(FRAME_SIZE.getHeight()*.9))/2)+240,Offset,30);
         rollButton.setOpaque(true);
         rollButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                panopoly.roll();
+                gui.updateAction(panopoly.roll());
             }
         });
         buyButton=new JLabel("Buy");
         MainPane.add(buyButton);
         buyButton.setVisible(buyCommand);
-        buyButton.setBounds(10+Offset*2,(((int)(FRAME_SIZE.getHeight()*.9))/2)+240,Offset,30);
+        buyButton.setBounds((int)(FRAME_SIZE.getHeight()*.9)/2,(((int)(FRAME_SIZE.getHeight()*.9))/2)+270,Offset,30);
         buyButton.setOpaque(true);
         buyButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 Rentable buyProperty= (Rentable)panopoly.getBoard().getLocation(panopoly.getCurrentPlayer().getPosition());
-                panopoly.getCurrentPlayer().buyProperty(buyProperty,buyProperty.getPrice());
+                gui.updateAction(panopoly.getCurrentPlayer().buyProperty(buyProperty,buyProperty.getPrice()));
                 gui.buyCommand = false;
                 gui.updatePlayers();
             }
         });
         endturn=new JLabel("End Turn");
         MainPane.add(endturn);
-        endturn.setVisible(true);
-        endturn.setBounds(10+Offset*3,(((int)(FRAME_SIZE.getHeight()*.9))/2)+240,Offset,30);
+        endturn.setVisible(false);
+        endturn.setBounds((int)((FRAME_SIZE.getHeight()*.9)/2),(((int)(FRAME_SIZE.getHeight()*.9))/2)+240,Offset,30);
         endturn.setOpaque(true);
         endturn.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                panopoly.nextPlayer();
+                gui.updateAction(panopoly.nextPlayer());
             }
         });
     }
@@ -130,7 +129,7 @@ public class GUI {
     	panopoly.setPossibleCommands();
     	rollButton.setVisible(rollCommand);
     	buyButton.setVisible(buyCommand);
-    	endturn.setVisible(endCommand);
+    	endturn.setVisible(!rollCommand);
     }
     
     public void resetCommands()
