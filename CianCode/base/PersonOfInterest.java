@@ -1,5 +1,7 @@
 package base;
 
+import java.io.FileNotFoundException;
+
 //-----------------------------------------------------------------------------------------------//
 	//-----------------------------------------------------------------------------------------------//
 	//  Please excuse lack of comments atm, JFrame are yet to be implemented and questions are just 		//
@@ -48,12 +50,13 @@ public class PersonOfInterest
 	
 
 	
-	public PersonOfInterest()
+	public PersonOfInterest() throws FileNotFoundException
 	{
 		
 		NOC1		  = new KnowledgeBaseModule("./Soft Eng 3/CianCode/Veale's The NOC List.txt", 3);
 		NOC2		  = new KnowledgeBaseModule("./Soft Eng 3/CianCode/Veale's The NOC List.txt", 5);
 		WORLDS        = new KnowledgeBaseModule("./Soft Eng 3/CianCode/Veale's domains.txt", 0);
+
 		checkers = WORLDS.getAllKeys("Specific Domains"); 
 		
 		ArrayList<String> locations = new ArrayList<String>();
@@ -65,9 +68,7 @@ public class PersonOfInterest
 			allPeople = NOC1.getAllKeysWithFieldValue("Domains", world);
 			int rands = DICE.nextInt(3)+1;
 			if(allPeople.size() >= 3)
-			{
-				//System.out.println(allPeople); // gets all property based on domains where num properties >= 3
-				
+			{		
 				for(int z = 0; z < rands; z++)
 				{
 					int n = DICE.nextInt(allPeople.size());
@@ -93,9 +94,10 @@ public class PersonOfInterest
 	}
 	
 	
-	public static void main(String[] args)
+	public static void main(String[] args) throws FileNotFoundException
 	{
-		PersonOfInterest stereonomicon = new PersonOfInterest();
+		PersonOfInterest ps = new PersonOfInterest();	
+		System.out.println("Hello");
 	}
 		
 }	
