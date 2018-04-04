@@ -64,10 +64,9 @@ public class PersonOfInterest
 	public PersonOfInterest()
 	{
 		
-		NOC           = new KnowledgeBaseModule("Veale's The NOC List.txt",0);
-		NOC1		  = new KnowledgeBaseModule("C:\\Users\\Cian\\Desktop\\COMP SCI\\Soft Eng 3\\CianCode\\Veale's The NOC List.txt", 3);
-	/*	NOC2		  = new KnowledgeBaseModule(knowledgeDir + "Veale's The NOC List.txt", 5);*/
-		WORLDS        = new KnowledgeBaseModule("C:\\Users\\Cian\\Desktop\\COMP SCI\\Soft Eng 3\\CianCode\\Veale's domains.txt", 0);
+		NOC1		  = new KnowledgeBaseModule("./Soft Eng 3/CianCode/Veale's The NOC List.txt", 3);
+		NOC2		  = new KnowledgeBaseModule("./Soft Eng 3/CianCode/Veale's The NOC List.txt", 5);
+		WORLDS        = new KnowledgeBaseModule("./Soft Eng 3/CianCode/Veale's domains.txt", 0);
 
 		realPeople      = NOC.difference(allPeople, fictionalPeople);
 		men			    = NOC.getAllKeysWithFieldValue("Gender", "male");
@@ -119,7 +118,7 @@ public class PersonOfInterest
 	
 	public static void main(String[] args)
 	{
-		String kdir = "//Soft Eng 3//CianCode//";
+
 		
 		PersonOfInterest stereonomicon = new PersonOfInterest();
 	
