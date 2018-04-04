@@ -23,7 +23,7 @@ public class GUI {
     private LocationLabel[] LocationLabels;
     private PlayerLabel[] PlayerLabels;
     private JLayeredPane MainPane;
-    private int LabelWidth,LabelHeight;
+    private int Offset;
     private static JTextField nameSpace=new JTextField();
     private LocationLabel SelectedLabel=null;
     private static String[] characters={"boat","car","dog","hat","iron","thimble"};
@@ -56,9 +56,7 @@ public class GUI {
         PlayerLabels=new PlayerLabel[players.size()];
         int SquaresOnSide=(((BOARD_SIZE-4)/4)+2);
         int frameSize=(int)(FRAME_SIZE.getHeight()*.9);
-        int Offset=(frameSize)/SquaresOnSide;
-        LabelHeight=Offset;
-        LabelWidth=Offset;
+        Offset=(frameSize)/SquaresOnSide;
         PlacePlayers();
         PlaceBoard();
         setupbuttons();
@@ -92,7 +90,7 @@ public class GUI {
         MainPane.add(rollButton);
         rollButton.setVisible(true);
         rollButton.setBounds(10+
-                LabelWidth,(((int)(FRAME_SIZE.getHeight()*.9))/2)+240,LabelWidth,30);
+                Offset,(((int)(FRAME_SIZE.getHeight()*.9))/2)+240,Offset,30);
         rollButton.setOpaque(true);
         rollButton.addMouseListener(new MouseAdapter() {
             @Override
@@ -103,7 +101,7 @@ public class GUI {
         buyButton=new JLabel("Buy");
         MainPane.add(buyButton);
         buyButton.setVisible(buyCommand);
-        buyButton.setBounds(10+LabelWidth*2,(((int)(FRAME_SIZE.getHeight()*.9))/2)+240,LabelWidth,30);
+        buyButton.setBounds(10+Offset*2,(((int)(FRAME_SIZE.getHeight()*.9))/2)+240,Offset,30);
         buyButton.setOpaque(true);
         buyButton.addMouseListener(new MouseAdapter() {
             @Override
@@ -117,7 +115,7 @@ public class GUI {
         endturn=new JLabel("End Turn");
         MainPane.add(endturn);
         endturn.setVisible(true);
-        endturn.setBounds(10+LabelWidth*3,(((int)(FRAME_SIZE.getHeight()*.9))/2)+240,LabelWidth,30);
+        endturn.setBounds(10+Offset*3,(((int)(FRAME_SIZE.getHeight()*.9))/2)+240,Offset,30);
         endturn.setOpaque(true);
         endturn.addMouseListener(new MouseAdapter() {
             @Override
@@ -155,30 +153,30 @@ public class GUI {
         int x=10,y=10;
         int SquaresOnSide=(((BOARD_SIZE-4)/4)+2);
         int NumOnBoard=0;
-        while (x<LabelWidth*(SquaresOnSide-1))
+        while (x<Offset*(SquaresOnSide-1))
         {
             LocationLabels[NumOnBoard]= new LocationLabel(x,y,NumOnBoard,this,Locations.get(NumOnBoard));
-            x+=LabelWidth;
+            x+=Offset;
             NumOnBoard++;
 
         }
-        while(y<(LabelHeight*(SquaresOnSide-1)))
+        while(y<(Offset*(SquaresOnSide-1)))
         {
             LocationLabels[NumOnBoard]= new LocationLabel(x,y,NumOnBoard,this,Locations.get(NumOnBoard));
-            y+=LabelHeight;
+            y+=Offset;
             NumOnBoard++;
 
         }
-        while (x>=LabelWidth)
+        while (x>=Offset)
         {
             LocationLabels[NumOnBoard]= new LocationLabel(x,y,NumOnBoard,this,Locations.get(NumOnBoard));
-            x-=LabelWidth;
+            x-=Offset;
             NumOnBoard++;
         }
-        while (y>=LabelHeight)
+        while (y>=Offset)
         {
             LocationLabels[NumOnBoard]= new LocationLabel(x,y,NumOnBoard,this,Locations.get(NumOnBoard));
-            y-=LabelHeight;
+            y-=Offset;
             NumOnBoard++;
         }
     }
@@ -401,11 +399,6 @@ public class GUI {
         return MainPane;
     }
 
-    int getLabelWidth()
-    {
-        return LabelWidth;
-    }
-
     Dimension getFRAME_SIZE() {
         return FRAME_SIZE;
     }
@@ -419,7 +412,8 @@ public class GUI {
         return BOARD_SIZE;
     }
 
-    int getLabelHeight() {
-        return LabelHeight;
+    int getOffset()
+    {
+        return  Offset;
     }
 }
