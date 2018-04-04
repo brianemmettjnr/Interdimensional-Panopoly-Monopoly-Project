@@ -46,7 +46,11 @@ public class Panopoly
 			currentPlayer.pay(((Taxable) square).getFlatAmount());
 		//rental property owned by another player
 		else if((square instanceof RentalProperty) && (((Rentable) square).getOwner()!=null) && (((Rentable) square).getOwner()!=currentPlayer))
+		{
 			currentPlayer.pay(((Rentable) square).getRentalAmount());
+			((Player) ((Rentable) square).getOwner()).earn(((Rentable) square).getRentalAmount());
+		}
+		
 		
 	}
 	
