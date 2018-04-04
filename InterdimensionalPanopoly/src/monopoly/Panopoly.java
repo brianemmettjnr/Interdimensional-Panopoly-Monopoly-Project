@@ -44,7 +44,8 @@ public class Panopoly
 		
 		gui.resetCommands();
 		gui.updatePlayers();
-		return (msg);
+		
+		return msg;
 	}
 	
 	public String buyProperty(Rentable property)
@@ -52,6 +53,7 @@ public class Panopoly
 		currentPlayer.buyProperty(property, property.getPrice());
 		gui.buyCommand = false;
 		gui.updatePlayers();
+		
 		return currentPlayer.getIdentifier() + " has bought " + property.getIdentifier() + " for " + property.getPrice() + ".";
 	}
 
@@ -91,9 +93,10 @@ public class Panopoly
 	}
 	
 	//redeem, mortgage, build, demolish
-	public void setPossiblePropertyCommands()
+	public void setPossiblePropertyCommands(Locatable square)
 	{
-		
+		//if(square instanceof InvestmentProperty)
+			//gui.buildCommand = true;
 	}
 
 	public void createGUI() 
@@ -109,8 +112,10 @@ public class Panopoly
 		currentPlayer.canRoll = true;
 		currentPlayer.rollComplete = false;
 		currentPlayer = players.get((players.indexOf(currentPlayer)+1)%players.size());
+		
 		gui.resetCommands();
 		gui.updatePlayers();
+		
 		return currentPlayer.getIdentifier() + "'s turn";
 	}
 
