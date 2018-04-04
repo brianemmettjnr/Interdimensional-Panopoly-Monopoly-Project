@@ -19,6 +19,7 @@ public class Player implements Playable {
 	private int imageIndex=0;
 	private Panopoly panopoly;
 	public boolean canRoll = true;
+	public boolean rollComplete = false;
 	
 	public Player(String name, int imageIndex, int playerIndex,Panopoly panopoly)
 	{
