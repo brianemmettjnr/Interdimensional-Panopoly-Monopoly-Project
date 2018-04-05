@@ -42,9 +42,9 @@ public class PersonOfInterest
 	public PersonOfInterest()
 	{
 		
-		NOC1		  = new KnowledgeBaseModule("./Soft Eng 3/CianCode/Veale's The NOC List.txt", 3);
-		NOC2		  = new KnowledgeBaseModule("./Soft Eng 3/CianCode/Veale's The NOC List.txt", 5);
-		WORLDS        = new KnowledgeBaseModule("./Soft Eng 3/CianCode/Veale's domains.txt", 0);
+		NOC1		  = new KnowledgeBaseModule("C:\\Users\\Cian\\Desktop\\COMP SCI\\Soft Eng 3\\CianCode\\Veale's The NOC List.txt", 3);
+		NOC2		  = new KnowledgeBaseModule("C:\\Users\\Cian\\Desktop\\COMP SCI\\Soft Eng 3\\CianCode\\Veale's The NOC List.txt", 5);
+		WORLDS        = new KnowledgeBaseModule("C:\\Users\\Cian\\Desktop\\COMP SCI\\Soft Eng 3\\CianCode\\Veale's domains.txt", 0);
 
 		checkers = WORLDS.getAllKeys("Specific Domains"); 
 
@@ -69,7 +69,6 @@ public class PersonOfInterest
 		locations.clear();
 		locations.addAll(removes); // removes duplicates
 		locations.remove(0);
-		System.out.println(locations);
 				
 	}
 	
@@ -84,10 +83,7 @@ public class PersonOfInterest
 	public static void main(String[] args)
 	{
 		PersonOfInterest ps = new PersonOfInterest();	
-		System.out.println(allPeople.size());
-		
-		ps.placenames(places);
-		
+		System.out.println(locations);
 	}
 		
 }	
