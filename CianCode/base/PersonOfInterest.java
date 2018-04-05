@@ -40,8 +40,8 @@ public class PersonOfInterest
 	public PersonOfInterest()
 	{
 		
-		NOC1		  = new KnowledgeBaseModule("C:\\Users\\Cian\\Desktop\\COMP SCI\\Soft Eng 3\\CianCode\\Veale's The NOC List.txt", 3);
-		WORLDS        = new KnowledgeBaseModule("C:\\Users\\Cian\\Desktop\\COMP SCI\\Soft Eng 3\\CianCode\\Veale's domains.txt", 0);
+		NOC1		  = new KnowledgeBaseModule("Veale's The NOC List.txt", 3);
+		WORLDS        = new KnowledgeBaseModule("Veale's domains.txt", 0);
 
 		checkers = WORLDS.getAllKeys("Specific Domains"); 
 
