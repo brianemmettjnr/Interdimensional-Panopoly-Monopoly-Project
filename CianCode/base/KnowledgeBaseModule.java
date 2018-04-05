@@ -143,7 +143,7 @@ public class KnowledgeBaseModule
 				Vector values = (Vector)field.get(key);
 				
 				if (values != null && values.contains(value))
-					matchingKeys.add(key);
+					matchingKeys.add(key +" " + "(" +value +")");
 			}
 		}
 		
@@ -286,7 +286,7 @@ public class KnowledgeBaseModule
 		if (value == null) 
 			return matchingKeys;
 		else
-			value = value.intern();
+			value = value.intern(); 
 		
 		for (int f = 0; f < fieldTables.size(); f++)
 		{
