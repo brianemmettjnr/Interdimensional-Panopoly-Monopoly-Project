@@ -25,12 +25,10 @@ public class PersonOfInterest
 {
 	static Random DICE = new Random();
 	
-	private KnowledgeBaseModule NOC          = null;
 	private KnowledgeBaseModule NOC1          = null;
-	private KnowledgeBaseModule NOC2          = null;
 	private KnowledgeBaseModule WORLDS       = null;
 	
-	private static Vector allPeople				 = null;
+	private static Vector<String> allPeople				 = null;
 	private static Vector<String> checkers			= null;
 	static ArrayList<String> locations = new ArrayList<String>();
 	Set<String> removes = new HashSet<>();
@@ -43,7 +41,6 @@ public class PersonOfInterest
 	{
 		
 		NOC1		  = new KnowledgeBaseModule("C:\\Users\\Cian\\Desktop\\COMP SCI\\Soft Eng 3\\CianCode\\Veale's The NOC List.txt", 3);
-		NOC2		  = new KnowledgeBaseModule("C:\\Users\\Cian\\Desktop\\COMP SCI\\Soft Eng 3\\CianCode\\Veale's The NOC List.txt", 5);
 		WORLDS        = new KnowledgeBaseModule("C:\\Users\\Cian\\Desktop\\COMP SCI\\Soft Eng 3\\CianCode\\Veale's domains.txt", 0);
 
 		checkers = WORLDS.getAllKeys("Specific Domains"); 
@@ -53,8 +50,8 @@ public class PersonOfInterest
 		{
 			String world = (String) checkers.get(q);
 			allPeople = NOC1.getAllKeysWithFieldValue("Domains", world);
-			int rands = DICE.nextInt(3)+1;
-			if(allPeople.size() >= 3)
+			int rands = DICE.nextInt(2)+1; // change to get number of in world properties 
+			if(allPeople.size() >= 2)	// must match number in () line above
 			{		
 				for(int z = 0; z < rands; z++)
 				{
