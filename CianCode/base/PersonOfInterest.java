@@ -1,15 +1,6 @@
 package base;
 
 import java.io.FileNotFoundException;
-
-//-----------------------------------------------------------------------------------------------//
-	//-----------------------------------------------------------------------------------------------//
-	//  Please excuse lack of comments atm, JFrame are yet to be implemented and questions are just 		//
-	//	examples, beyond PersonOfIntrest class still a lot of useless methods I need to clean up	//
-	// 	will get on that over next few days, run from this class and see results, any input welcome		//												
-	//-----------------------------------------------------------------------------------------------//
-	//-----------------------------------------------------------------------------------------------//
-
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import java.util.Random;
@@ -28,15 +19,11 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Hashtable;
 
-//Use the knowledge-base(s) of famous people (real and fictional) to generate apt comparisons
+
 
 public class PersonOfInterest
 {
 	static Random DICE = new Random();
-	
-
-	
-	// Various modules of the knowledge-base
 	
 	private KnowledgeBaseModule NOC          = null;
 	private KnowledgeBaseModule NOC1          = null;
@@ -44,13 +31,15 @@ public class PersonOfInterest
 	private KnowledgeBaseModule WORLDS       = null;
 	
 	private static Vector allPeople				 = null;
-	private static Vector allPeople2			= null;
 	private static Vector<String> checkers			= null;
+	static ArrayList<String> locations = new ArrayList<String>();
+	Set<String> removes = new HashSet<>();
+	static ArrayList<String> places = new ArrayList<String>();
 
 	
 
 	
-	public PersonOfInterest() throws FileNotFoundException
+	public PersonOfInterest()
 	{
 		
 		NOC1		  = new KnowledgeBaseModule("./Soft Eng 3/CianCode/Veale's The NOC List.txt", 3);
@@ -58,9 +47,7 @@ public class PersonOfInterest
 		WORLDS        = new KnowledgeBaseModule("./Soft Eng 3/CianCode/Veale's domains.txt", 0);
 
 		checkers = WORLDS.getAllKeys("Specific Domains"); 
-		
-		ArrayList<String> locations = new ArrayList<String>();
-		Set<String> removes = new HashSet<>();
+
 		
 		for(int q = 0; q <= checkers.size()-1; q++)
 		{
@@ -94,10 +81,13 @@ public class PersonOfInterest
 	}
 	
 	
-	public static void main(String[] args) throws FileNotFoundException
+	public static void main(String[] args)
 	{
 		PersonOfInterest ps = new PersonOfInterest();	
-		System.out.println("Hello");
+		System.out.println(allPeople.size());
+		
+		ps.placenames(places);
+		
 	}
 		
 }	
