@@ -143,7 +143,9 @@ public class KnowledgeBaseModule
 				Vector values = (Vector)field.get(key);
 				
 				if (values != null && values.contains(value))
+				{
 					matchingKeys.add(key +" " + "(" +value +")");
+				}
 			}
 		}
 		
