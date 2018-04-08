@@ -16,7 +16,7 @@ import java.util.ArrayList;
 
 import static java.awt.Color.*;
 
-public class GUI {
+class GUI {
 
     private int BOARD_SIZE;
     private Dimension FRAME_SIZE=Toolkit.getDefaultToolkit().getScreenSize();
