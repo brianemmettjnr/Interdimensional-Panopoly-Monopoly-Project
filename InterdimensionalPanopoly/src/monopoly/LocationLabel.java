@@ -11,7 +11,7 @@ import static java.awt.Color.BLACK;
 import static java.awt.Color.MAGENTA;
 import static java.awt.Color.green;
 
-public class LocationLabel
+class LocationLabel
 {
     private GUI gui;
     private Border BorderColour=BorderFactory.createLineBorder(BLACK, 2);
@@ -19,10 +19,11 @@ public class LocationLabel
     private Locatable location;
     private LocationLabel thisLocation =this;
 
-    public LocationLabel(int x, int y, int NumOnBoard, GUI guiObj, Locatable location) {
+    LocationLabel(int x, int y, int NumOnBoard, GUI guiObj, Locatable location) {
         this.location = location;
         gui = guiObj;
-        label = new JLabel("<html><p>" + location.getIdentifier().replace(" ", "<br>") + "</p></html>", SwingConstants.CENTER);
+        String name=location.getIdentifier().replace(" ","<br>");
+        label = new JLabel("<html><p1><body style='width: "+gui.getOffset()+"px'>"+ name + "</body></p1></html>", SwingConstants.CENTER);
 //        label.addMouseListener(new MouseAdapter() {
 //            @Override
 //            public void mouseEntered(MouseEvent e) {
@@ -61,11 +62,12 @@ public class LocationLabel
             }
         });
             label.setBounds(x, y, gui.getOffset(), gui.getOffset());
+        label.setMaximumSize(label.getSize());
         label.setBorder(BorderColour);
         gui.getMainPane().add(label,7);
         label.setOpaque(true);
         label.setBackground(Color.white);
-        label.setFont(new Font("Serif", Font.BOLD, 18 - (gui.getBOARD_SIZE() / 5)));
+        label.setFont(new Font("Serif", Font.BOLD, 18 - (gui.getBOARD_SIZE()/8)));
         Class Comparitor = location.getClass();
         //I WOULD MAKE THIS A SWITCH STATEMENT BUT APPARENTLY THEY CANT ACCEPT CLASSES AS ARGUMENTS??????
         if (Comparitor == Chance.class)
@@ -75,20 +77,20 @@ public class LocationLabel
         else if(Comparitor == Station.class)
             label.setForeground(Color.GRAY);
     }
-    public int getX()
+    int getX()
     {
         return label.getX();
     }
-    public int getY()
+    int getY()
     {
         return label.getY();
     }
 
-    public Locatable getLocation() {
+    Locatable getLocation() {
         return location;
     }
 
-    public JLabel getLabel() {
+    private JLabel getLabel() {
         return label;
     }
 }

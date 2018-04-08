@@ -30,7 +30,7 @@ public class GUI {
     private static int selectedpictureIndex=-1;
     private static JLabel selectedImage =null;
     private static int playerCount=0;
-    private static ArrayList<Player> players=new ArrayList<Player>();
+    private static ArrayList<Player> players=new ArrayList<>();
 	
     boolean buyCommand,rollCommand,sellCommand,redeemCommand,mortgageCommand,endCommand;
 	private JLabel buyButton, rollButton, endturn;
@@ -52,7 +52,7 @@ public class GUI {
         MainPane = new JLayeredPane();
         MainPane.setLayout(null);
         MainPane.setOpaque(true);
-        MainPane.setBackground(Color.red.darker());
+        MainPane.setBackground(Color.red.darker().darker());
         mainFrame.add(MainPane);
         PlayerLabels=new PlayerLabel[players.size()];
         int SquaresOnSide=(((BOARD_SIZE-4)/4)+2);
@@ -141,7 +141,7 @@ public class GUI {
     	endturn.setVisible(!rollCommand);
     }
     
-    public void resetCommands()
+    void resetCommands()
     {
     	rollCommand = false;
     	buyCommand = false;
@@ -199,6 +199,8 @@ public class GUI {
     static void PlayerCountGui(Panopoly panopoly1)
     {
     	panopoly = panopoly1;
+
+    	/*
         //how many players
         JFrame playerFrame= new JFrame("Interdimensional Panopoly");
         JPanel playerPanel=new JPanel();
@@ -253,6 +255,8 @@ public class GUI {
         playerFrame.setResizable(false);
         image.setBounds(-10,0,400,100);//this isnt relative yet okay jeez
         playerPanel.add(image);
+        */
+        GUI.PlayerNameGUI();
     }
 
     private static void PlayerNameGUI() {
@@ -267,6 +271,7 @@ public class GUI {
             }
 
         }
+        /*
         JFrame playerFrame= new JFrame("Interdimensional Panopoly");
         JPanel playerPanel=new JPanel();
         playerFrame.setBounds(300,300,636,270);
@@ -356,6 +361,14 @@ public class GUI {
         });
         playerPanel.add(sendinputButton);
         playerPanel.add(nameSpace);
+        */
+        players.add(new Player("Brian",0,0,panopoly));
+        players.add(new Player("Chloe",1,1,panopoly));
+        players.add(new Player("Cian",2,2,panopoly));
+        players.add(new Player("Mossy",3,3,panopoly));
+        players.add(new Player("Tony",4,4,panopoly));
+        players.add(new Player("Christ",5,5,panopoly));
+        panopoly.createGUI();
     }
 
     static ArrayList<Player> getPlayersArray()
@@ -418,7 +431,7 @@ public class GUI {
         return FRAME_SIZE;
     }
 
-    public void updateAction(String action)
+   void updateAction(String action)
     {
         secondAction.setText(latestAction.getText());
         latestAction.setText(action);
