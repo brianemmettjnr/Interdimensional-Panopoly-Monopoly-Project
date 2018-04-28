@@ -52,7 +52,7 @@ class LocationLabel
         gui.getMainPane().add(label,7);
         label.setOpaque(true);
         label.setBackground(Color.white);
-        label.setFont(new Font("Serif", Font.BOLD, 18 - (gui.getBOARD_SIZE()/5)));
+        label.setFont(new Font("Courier", Font.BOLD, 18 - (gui.getBOARD_SIZE()/4)));
         if (location instanceof Chance)
            label.setForeground(Color.red);
         else if(location instanceof CommunityChest)
