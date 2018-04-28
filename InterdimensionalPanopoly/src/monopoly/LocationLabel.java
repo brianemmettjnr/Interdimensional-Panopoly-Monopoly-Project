@@ -21,8 +21,9 @@ class LocationLabel
         this.location = location;
         gui = guiObj;
         String html=this.getHTML();
-        String name="<html>"+location.getIdentifier().replace(" ","<br>"+"</html>");
-        label = new JLabel(name, SwingConstants.CENTER);
+        String name=location.getIdentifier().replace(" ","\n");
+        String text="<html><center><p1><body style='width: "+gui.getOffset()+"px'>"+ name + "</center></body></p1></html>";
+        label = new JLabel(text, SwingConstants.CENTER);
 //        label.addMouseListener(new MouseAdapter() {
 //            @Override
 //            public void mouseEntered(MouseEvent e) {
@@ -51,7 +52,7 @@ class LocationLabel
         gui.getMainPane().add(label,7);
         label.setOpaque(true);
         label.setBackground(Color.white);
-        label.setFont(new Font("Serif", Font.BOLD, 18 - (gui.getBOARD_SIZE()/8)));
+        label.setFont(new Font("Serif", Font.BOLD, 18 - (gui.getBOARD_SIZE()/5)));
         if (location instanceof Chance)
            label.setForeground(Color.red);
         else if(location instanceof CommunityChest)
