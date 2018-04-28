@@ -95,7 +95,7 @@ class LocationLabel
         return label;
     }
 
-    public String getHTML() {
+    String getHTML() {
         String name=location.getIdentifier().replace(" ","<br>");
         String HTML="<html>"+"<body style='width: 100%'><center>";
         HTML+=name + "<br>";
@@ -115,8 +115,13 @@ class LocationLabel
                 HTML+="Houses: "+improver.getNumHouses()+"<br>";
                 HTML+="Hotels: "+improver.getNumHotels()+"<br>";
                 HTML+="Building cost: $"+improver.getBuildPrice()+"<br>";
+                HTML+="Rent for staying: $"+((InvestmentProperty) location).getRentalAmount()+"<br>";
             }
         }
-        return HTML+="</center></body></html>";
+        else if(location instanceof TaxableProperty)
+        {
+            HTML+="Tax: $"+((TaxableProperty) location).getFlatAmount()+"<br>";
+        }
+        return HTML+"</center></body></html>";
     }
 }

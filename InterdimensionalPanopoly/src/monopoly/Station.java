@@ -1,7 +1,10 @@
 package monopoly;
 
+import java.awt.*;
+
 public class Station extends RentalProperty
 {
+	public Color color=Color.gray;
 	private static Group Stations = new Group("Stations");
 	private Dice dice = new Dice();
 	
