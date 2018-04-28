@@ -470,7 +470,7 @@ class GUI {
                 }
                 if(location.getLocation() instanceof InvestmentProperty)
                 {
-
+                	
                 }
             }
             locationWindow.setText(location.getHTML());
