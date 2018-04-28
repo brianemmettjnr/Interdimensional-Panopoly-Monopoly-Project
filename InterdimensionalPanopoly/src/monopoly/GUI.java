@@ -27,11 +27,12 @@ class GUI {
     private static String[] characters={"boat","car","dog","hat","iron","thimble"};
     private static int selectedpictureIndex=-1;
     private static JLabel selectedImage =null;
+    private JLabel image;
     private static int playerCount=0;
     private static ArrayList<Player> players=new ArrayList<>();
 	
-    boolean buyCommand,rollCommand,sellCommand,redeemCommand,mortgageCommand,endCommand;
-	private JLabel buyButton, rollButton, endturn;
+    boolean buyCommand,rollCommand,endCommand;
+	private JLabel buyButton, rollButton, endturn,mortgageButton,redeemButton;
     
     private static Panopoly panopoly;
     private static BufferedImage[] images = new BufferedImage[6];
@@ -60,7 +61,7 @@ class GUI {
         PlaceBoard();
         setupbuttons();
 
-        JLabel image=new JLabel(new ImageIcon(GUI.class.getResource("Logo.png")));
+        image=new JLabel(new ImageIcon(GUI.class.getResource("Logo.png")));
         image.setBounds((((int)(FRAME_SIZE.getHeight()*.9))/2)-190,(((int)(FRAME_SIZE.getHeight()*.9))/2)-220,400,400);
         image.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
         MainPane.add(image);
@@ -129,25 +130,31 @@ class GUI {
                 gui.updateAction(panopoly.nextPlayer());
             }
         });
-        endturn.addKeyListener(new KeyListener() {
+        mortgageButton=new JLabel("Mortgage");
+        MainPane.add(mortgageButton);
+        mortgageButton.setVisible(false);
+        mortgageButton.setBounds(((int)(FRAME_SIZE.getHeight()*.9)/2)-190,(((int)(FRAME_SIZE.getHeight()*.9))/2)-100,Offset,30);
+        mortgageButton.setOpaque(true);
+        mortgageButton.addMouseListener(new MouseAdapter() {
             @Override
-            public void keyTyped(KeyEvent e) {
-
-            }
-
-            @Override
-            public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_ENTER&&endCommand) {
-                    gui.updateAction(panopoly.nextPlayer());
-                }
-            }
-
-
-            @Override
-            public void keyReleased(KeyEvent e) {
-
+            public void mouseClicked(MouseEvent e) {
+                RentalProperty mort=(RentalProperty)getSelectedLocation().getLocation();
+                gui.updateAction(mort.mortgage());
             }
         });
+        redeemButton=new JLabel("Redeem");
+        MainPane.add(redeemButton);
+        redeemButton.setVisible(false);
+        redeemButton.setBounds(((int)(FRAME_SIZE.getHeight()*.9)/2)-190,(((int)(FRAME_SIZE.getHeight()*.9))/2)+-100,Offset,30);
+        redeemButton.setOpaque(true);
+        redeemButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                RentalProperty redeem=(RentalProperty)getSelectedLocation().getLocation();
+                gui.updateAction(redeem.redeem());
+            }
+        });
+
     }
     
     private void setVisibleButtons()
@@ -410,14 +417,32 @@ class GUI {
     void setSelectedLabel(LocationLabel location)
     {
         this.SelectedLabel=location;
+
         locationWindow.setOpaque(true);
         if(location==null)
         {
+            image.setVisible(true);
             locationWindow.setText(" ");
             locationWindow.setOpaque(false);
+            mortgageButton.setVisible(false);
+            redeemButton.setVisible(false);
         }
         else
         {
+            image.setVisible(false);
+            if (location.getLocation() instanceof RentalProperty) {
+                RentalProperty mortgageCheck = (RentalProperty) location.getLocation();
+                if (mortgageCheck.getOwner() == panopoly.getCurrentPlayer())
+                {
+                    redeemButton.setVisible(mortgageCheck.isMortgaged());
+                    mortgageButton.setVisible(!mortgageCheck.isMortgaged());
+                }
+                else
+                {
+                    mortgageButton.setVisible(false);
+                    redeemButton.setVisible(false);
+                }
+            }
             locationWindow.setText(location.getHTML());
         }
 
@@ -452,6 +477,7 @@ class GUI {
     {
         secondAction.setText(latestAction.getText());
         latestAction.setText(action);
+        setSelectedLabel(getSelectedLocation());
     }
 
     int getBOARD_SIZE() {

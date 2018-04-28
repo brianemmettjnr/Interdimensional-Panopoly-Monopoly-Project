@@ -36,15 +36,17 @@ public abstract class RentalProperty extends PrivateProperty implements Rentable
 	}
 
 	@Override
-	public void mortgage() 
+	public String mortgage()
 	{
 		mortgaged = true;
+		return "";
 	}
 
 	@Override
-	public void redeem() 
+	public String redeem()
 	{
 		mortgaged = false;
+		return "";
 	}
 
 	@Override
