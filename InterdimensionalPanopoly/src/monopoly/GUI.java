@@ -29,7 +29,7 @@ class GUI {
     private static ArrayList<Player> players=new ArrayList<>();
 	
     boolean buyCommand,rollCommand,endCommand;
-	private JLabel buyButton, rollButton, endturn,mortgageButton, redeembutton,buildButton,demoButton;
+	private JLabel buyButton, rollButton, endturn,mortgageButton, redeemButton,buildButton,demoButton;
     
     private static Panopoly panopoly;
     private static BufferedImage[] images = new BufferedImage[6];
@@ -140,19 +140,19 @@ class GUI {
                 gui.updateAction(mort.mortgage());
             }
         });
-        redeembutton =new JLabel("Redeem");
-        MainPane.add(redeembutton);
-        redeembutton.setVisible(false);
-        redeembutton.setBounds(((int)(FRAME_SIZE.getHeight()*.9)/2)-190,(((int)(FRAME_SIZE.getHeight()*.9))/2)+-100,Offset,30);
-        redeembutton.setOpaque(true);
-        redeembutton.addMouseListener(new MouseAdapter() {
+        redeemButton =new JLabel("Redeem");
+        MainPane.add(redeemButton);
+        redeemButton.setVisible(false);
+        redeemButton.setBounds(((int)(FRAME_SIZE.getHeight()*.9)/2)-190,(((int)(FRAME_SIZE.getHeight()*.9))/2)+-100,Offset,30);
+        redeemButton.setOpaque(true);
+        redeemButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 RentalProperty redeem=(RentalProperty)getSelectedLocation().getLocation();
                 gui.updateAction(redeem.redeem());
             }
         });
-        buildButton =new JLabel("Redeem");
+        buildButton =new JLabel("Build");
         MainPane.add(buildButton);
         buildButton.setVisible(false);
         buildButton.setBounds(((int)(FRAME_SIZE.getHeight()*.9)/2)+190,(((int)(FRAME_SIZE.getHeight()*.9))/2)-85,Offset,30);
@@ -164,7 +164,7 @@ class GUI {
                 gui.updateAction(panopoly.buildUnit(builder));
             }
         });
-        demoButton =new JLabel("Redeem");
+        demoButton =new JLabel("Demolish");
         MainPane.add(demoButton);
         demoButton.setVisible(false);
         demoButton.setBounds(((int)(FRAME_SIZE.getHeight()*.9)/2)+190,(((int)(FRAME_SIZE.getHeight()*.9))/2)-115,Offset,30);
@@ -439,8 +439,10 @@ class GUI {
 
     void setSelectedLabel(LocationLabel location)
     {
+        if(!(this.SelectedLabel==null))
+            this.SelectedLabel.getLabel().setBorder(BorderFactory.createLineBorder(Color.BLACK,2));
         this.SelectedLabel=location;
-
+        this.SelectedLabel.getLabel().setBorder(BorderFactory.createLineBorder(Color.green.darker(),2));
         locationWindow.setOpaque(true);
         if(location==null)
         {
@@ -448,7 +450,7 @@ class GUI {
             locationWindow.setText(" ");
             locationWindow.setOpaque(false);
             mortgageButton.setVisible(false);
-            redeembutton.setVisible(false);
+            redeemButton.setVisible(false);
             buildButton.setVisible(false);
             demoButton.setVisible(false);
         }
@@ -460,13 +462,13 @@ class GUI {
                 RentalProperty mortgageCheck = (RentalProperty) location.getLocation();
                 if (mortgageCheck.getOwner() == panopoly.getCurrentPlayer())
                 {
-                    redeembutton.setVisible(mortgageCheck.isMortgaged());
+                    redeemButton.setVisible(mortgageCheck.isMortgaged());
                     mortgageButton.setVisible(!mortgageCheck.isMortgaged());
                 }
                 else
                 {
                     mortgageButton.setVisible(false);
-                    redeembutton.setVisible(false);
+                    redeemButton.setVisible(false);
                 }
                 if(location.getLocation() instanceof InvestmentProperty)
                 {
@@ -490,7 +492,6 @@ class GUI {
                 player.setCurrentPlayer();
             }
         }
-        //setSelectedLabel(getLocationLabel(panopoly.getCurrentPlayer().getPosition()));
         setVisibleButtons();
     }
 

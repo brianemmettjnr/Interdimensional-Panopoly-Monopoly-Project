@@ -42,22 +42,7 @@ class LocationLabel
         label.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if(gui.getSelectedLocation()==null)
-                {
-                    gui.setSelectedLabel(thisLocation);
-                    thisLocation.getLabel().setBorder(BorderFactory.createLineBorder(green, 2));
-                    gui.updatePlayers();
-                }
-                else if (thisLocation != gui.getSelectedLocation()) {
-                    gui.getSelectedLocation().getLabel().setBorder(BorderColour);
-                    gui.setSelectedLabel(thisLocation);
-                    thisLocation.getLabel().setBorder(BorderFactory.createLineBorder(Color.green, 2));
-                    gui.updatePlayers();
-                } else
-                {
-                    gui.getSelectedLocation().getLabel().setBorder(BorderColour);
-                    gui.setSelectedLabel(null);//return an empty jlabel, not sure how to approach
-                }
+                gui.setSelectedLabel(thisLocation);
                 gui.updatePlayers();
 
             }
@@ -91,7 +76,7 @@ class LocationLabel
         return location;
     }
 
-    private JLabel getLabel() {
+    JLabel getLabel() {
         return label;
     }
 
