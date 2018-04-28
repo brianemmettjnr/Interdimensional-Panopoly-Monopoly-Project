@@ -81,6 +81,24 @@ public class Panopoly
 			return currentPlayer.getIdentifier() + " has demolished a house on " + property.getIdentifier() + ".";
 	}
 
+	public String mortgage(RentalProperty mortgageProperty) 
+	{
+		mortgageProperty.mortgage();
+		
+		currentPlayer.earn(mortgageProperty.getMortgageAmount());
+		
+		return currentPlayer.getIdentifier() + " has mortgaged " + mortgageProperty.getIdentifier() + " for " + mortgageProperty.getMortgageAmount() + ".";
+	}
+	
+	public String redeem(RentalProperty redeemProperty) 
+	{
+		redeemProperty.redeem();
+		
+		currentPlayer.pay(redeemProperty.getRedeemAmount());
+		
+		return currentPlayer.getIdentifier() + " has redeemed " + redeemProperty.getIdentifier() + " for " + redeemProperty.getRedeemAmount() + ".";
+	}
+
 	//TO DO: DRAW CARD
 	private void getSquareAction() 
 	{
@@ -115,13 +133,6 @@ public class Panopoly
 				
 		gui.endCommand = !gui.rollCommand;
 	}
-	
-	//redeem, mortgage, build, demolish
-	public void setPossiblePropertyCommands(Locatable square)
-	{
-		//if(square instanceof InvestmentProperty)
-			//gui.buildCommand = true;
-	}
 
 	public void createGUI() 
 	{
@@ -143,7 +154,8 @@ public class Panopoly
 		return currentPlayer.getIdentifier() + "'s turn";
 	}
 
-	public Player getCurrentPlayer() {
+	public Player getCurrentPlayer() 
+	{
 		return currentPlayer;
 	}
 }

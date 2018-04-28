@@ -25,6 +25,14 @@ public class InvestmentProperty extends RentalProperty implements Improvable{
 	{
 		return rent[getNumHouses() + (getNumHotels()*5)];
 	}
+	
+	public boolean hasBuildings()
+	{
+		if(getNumHouses() + getNumHotels() != 0)
+			return true;
+		else
+			return false;
+	}
 
 	@Override
 	public int getNumHouses() {

@@ -28,6 +28,11 @@ public abstract class RentalProperty extends PrivateProperty implements Rentable
 		return mortgage;
 	}
 
+	public int getRedeemAmount()
+	{
+		return (int) (mortgage*1.1);
+	}
+	
 	//returns if property is currently mortgaged
 	@Override
 	public boolean isMortgaged() 
@@ -36,17 +41,15 @@ public abstract class RentalProperty extends PrivateProperty implements Rentable
 	}
 
 	@Override
-	public String mortgage()
+	public void mortgage()
 	{
 		mortgaged = true;
-		return "";
 	}
 
 	@Override
-	public String redeem()
+	public void redeem()
 	{
 		mortgaged = false;
-		return "";
 	}
 
 	@Override
