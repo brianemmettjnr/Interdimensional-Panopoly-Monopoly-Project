@@ -1,4 +1,5 @@
 package monopoly;
+import interfaces.Groupable;
 import interfaces.Locatable;
 import interfaces.Rentable;
 
@@ -114,7 +115,7 @@ class GUI {
                 Rentable buyProperty= (Rentable)panopoly.getBoard().getLocation(panopoly.getCurrentPlayer().getPosition());
                 gui.updateAction(panopoly.buyProperty(buyProperty));
                 gui.buyCommand = false;
-                gui.updatePlayers();
+                gui.updateGUI();
             }
         });
         endturn=new JLabel("End Turn");
@@ -137,7 +138,7 @@ class GUI {
             @Override
             public void mouseClicked(MouseEvent e) {
                 RentalProperty mort=(RentalProperty)getSelectedLocation().getLocation();
-                gui.updateAction(mort.mortgage());
+                gui.updateAction(panopoly.mortgage(mort));
             }
         });
         redeemButton =new JLabel("Redeem");
@@ -149,7 +150,7 @@ class GUI {
             @Override
             public void mouseClicked(MouseEvent e) {
                 RentalProperty redeem=(RentalProperty)getSelectedLocation().getLocation();
-                gui.updateAction(redeem.redeem());
+                gui.updateAction(panopoly.redeem(redeem));
             }
         });
         buildButton =new JLabel("Build");
@@ -464,11 +465,18 @@ class GUI {
             image.setVisible(false);
             if (location.getLocation() instanceof RentalProperty)
             {
-                RentalProperty mortgageCheck = (RentalProperty) location.getLocation();
-                if (mortgageCheck.getOwner() == panopoly.getCurrentPlayer())
+                RentalProperty locationCheck = (RentalProperty) location.getLocation();
+                if (locationCheck.getOwner() == panopoly.getCurrentPlayer())
                 {
-                    redeemButton.setVisible(mortgageCheck.isMortgaged());
-                    mortgageButton.setVisible(!mortgageCheck.isMortgaged());
+                    Boolean mortgageable=true;
+
+                    if(locationCheck instanceof InvestmentProperty)
+                    {
+                        mortgageable = !((InvestmentProperty) locationCheck).hasBuildings();
+                    }
+
+                    redeemButton.setVisible(locationCheck.isMortgaged());
+                    mortgageButton.setVisible(!locationCheck.isMortgaged() && mortgageable);
                 }
                 else
                 {
@@ -477,7 +485,21 @@ class GUI {
                 }
                 if(location.getLocation() instanceof InvestmentProperty)
                 {
-
+                    InvestmentProperty investment=(InvestmentProperty)location.getLocation();
+                    if(locationCheck.getOwner()==panopoly.getCurrentPlayer())
+                    {
+                        Boolean buildable=true;//((Player)investment.getOwner()).ownsGroup(locationCheck.getGroup());
+                        for(Groupable groupLocation:locationCheck.getGroup().getMembers())
+                        {
+                            if(((InvestmentProperty)groupLocation).isMortgaged()||((InvestmentProperty) groupLocation).getNumBuildings()<investment.getNumBuildings())
+                            {
+                                buildable=false;
+                                break;
+                            }
+                        }
+                        demoButton.setVisible((investment.hasBuildings()));
+                        buildButton.setVisible(buildable&&investment.hotels==0&&investment.getOwner().getBalance()>=investment.buildPrice);
+                    }
                 }
             }
             locationWindow.setText(location.getHTML());
@@ -487,7 +509,7 @@ class GUI {
 
     }
 
-    void updatePlayers()
+    void updateGUI()
     {
         for(PlayerLabel player:PlayerLabels)
         {
@@ -516,6 +538,7 @@ class GUI {
         LocationLabel label=getSelectedLocation();
         setSelectedLabel(label);
         setSelectedLabel(label);
+        updateGUI();
     }
 
     int getBOARD_SIZE() {

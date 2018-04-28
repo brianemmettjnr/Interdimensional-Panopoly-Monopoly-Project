@@ -43,7 +43,10 @@ public class InvestmentProperty extends RentalProperty implements Improvable{
 	public int getNumHotels() {
 		return hotels;
 	}
-
+	@Override
+	public int getNumBuildings(){
+		return 5*hotels+houses;
+	}
 	//build houses one by one
 	@Override
 	public void build() {
@@ -75,5 +78,4 @@ public class InvestmentProperty extends RentalProperty implements Improvable{
 			houses += 4;
 		}
 	}
-
 }

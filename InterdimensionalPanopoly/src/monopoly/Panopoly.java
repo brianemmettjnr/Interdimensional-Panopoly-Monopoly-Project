@@ -43,7 +43,7 @@ public class Panopoly
 		getSquareAction();
 		
 		gui.resetCommands();
-		gui.updatePlayers();
+		gui.updateGUI();
 		
 		return msg;
 	}
@@ -52,7 +52,7 @@ public class Panopoly
 	{
 		currentPlayer.buyProperty(property, property.getPrice());
 		gui.buyCommand = false;
-		gui.updatePlayers();
+		gui.updateGUI();
 		
 		return currentPlayer.getIdentifier() + " has bought " + property.getIdentifier() + " for " + property.getPrice() + ".";
 	}
@@ -139,7 +139,7 @@ public class Panopoly
 		players = GUI.getPlayersArray();
 		currentPlayer = players.get(0);
 		gui = new GUI(board.getNumLocations());
-		gui.updatePlayers();
+		gui.updateGUI();
 	}
 	
 	public String nextPlayer()
@@ -149,7 +149,7 @@ public class Panopoly
 		currentPlayer = players.get((players.indexOf(currentPlayer)+1)%players.size());
 		
 		gui.resetCommands();
-		gui.updatePlayers();
+		gui.updateGUI();
 		
 		return currentPlayer.getIdentifier() + "'s turn";
 	}

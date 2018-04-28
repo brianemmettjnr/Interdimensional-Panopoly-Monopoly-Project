@@ -8,8 +8,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import static java.awt.Color.BLACK;
-import static java.awt.Color.MAGENTA;
-import static java.awt.Color.green;
 
 class LocationLabel
 {
@@ -30,20 +28,20 @@ class LocationLabel
 //            public void mouseEntered(MouseEvent e) {
 //                if (finalLabel.getBorder() != BorderFactory.createLineBorder(MAGENTA, 2))
 //                    finalLabel.setBorder(BorderFactory.createLineBorder(black, 3));
-//                gui.updatePlayers();
+//                gui.updateGUI();
 //            }
 //        });
         label.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseExited(MouseEvent e) {
-                gui.updatePlayers();
+                gui.updateGUI();
             }
         });
         label.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 gui.setSelectedLabel(thisLocation);
-                gui.updatePlayers();
+                gui.updateGUI();
 
             }
         });
