@@ -137,8 +137,8 @@ class GUI {
         mortgageButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                RentalProperty mort=(RentalProperty)getSelectedLocation().getLocation();
-                gui.updateAction(panopoly.mortgage(mort));
+                RentalProperty mortgageProperty = (RentalProperty)getSelectedLocation().getLocation();
+                gui.updateAction(panopoly.mortgage(mortgageProperty));
             }
         });
         redeemButton =new JLabel("Redeem");
@@ -479,11 +479,7 @@ class GUI {
                             &&locationCheck.getRedeemAmount()>=locationCheck.getOwner().getBalance());
                     mortgageButton.setVisible(!locationCheck.isMortgaged() && mortgageable);
                 }
-                else
-                {
-                    mortgageButton.setVisible(false);
-                    redeemButton.setVisible(false);
-                }
+                
                 if(location.getLocation() instanceof InvestmentProperty)
                 {
                     InvestmentProperty investment=(InvestmentProperty)location.getLocation();
@@ -502,6 +498,12 @@ class GUI {
                         buildButton.setVisible(buildable&&investment.hotels==0&&investment.getOwner().getBalance()>=investment.buildPrice);
                     }
                 }
+            }
+
+            else
+            {
+                mortgageButton.setVisible(false);
+                redeemButton.setVisible(false);
             }
             locationWindow.setText(location.getHTML());
         }
