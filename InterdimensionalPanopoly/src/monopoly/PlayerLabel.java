@@ -73,6 +73,6 @@ public class PlayerLabel
     }
 
     public void setCurrentPlayer() {
-        icon.setBorder(BorderFactory.createLineBorder(green.brighter(),3));
+        icon.setBorder(BorderFactory.createLineBorder(green.darker(),3));
     }
 }

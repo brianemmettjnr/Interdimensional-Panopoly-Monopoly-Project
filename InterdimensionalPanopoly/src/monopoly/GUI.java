@@ -439,13 +439,15 @@ class GUI {
 
     void setSelectedLabel(LocationLabel location)
     {
-        if(!(this.SelectedLabel==null))
-            this.SelectedLabel.getLabel().setBorder(BorderFactory.createLineBorder(Color.BLACK,2));
-        this.SelectedLabel=location;
-        this.SelectedLabel.getLabel().setBorder(BorderFactory.createLineBorder(Color.green.darker(),2));
-        locationWindow.setOpaque(true);
-        if(location==null)
+        if(this.SelectedLabel!=null)
         {
+            this.SelectedLabel.getLabel().setBorder(BorderFactory.createLineBorder(Color.BLACK,2));
+
+        }
+
+        if(location==null||this.SelectedLabel==location)
+        {
+            this.SelectedLabel=null;
             image.setVisible(true);
             locationWindow.setText(" ");
             locationWindow.setOpaque(false);
@@ -456,6 +458,9 @@ class GUI {
         }
         else
         {
+            this.SelectedLabel=location;
+            this.SelectedLabel.getLabel().setBorder(BorderFactory.createLineBorder(Color.green.darker(),2));
+            locationWindow.setOpaque(true);
             image.setVisible(false);
             if (location.getLocation() instanceof RentalProperty)
             {
@@ -508,7 +513,9 @@ class GUI {
     {
         secondAction.setText(latestAction.getText());
         latestAction.setText(action);
-        setSelectedLabel(getSelectedLocation());
+        LocationLabel label=getSelectedLocation();
+        setSelectedLabel(label);
+        setSelectedLabel(label);
     }
 
     int getBOARD_SIZE() {
