@@ -16,7 +16,6 @@ class LocationLabel
     private JLabel label=new JLabel();
     private Locatable location;
     private LocationLabel thisLocation =this;
-
     LocationLabel(int x, int y, int NumOnBoard, GUI guiObj, Locatable location) {
         this.location = location;
         gui = guiObj;
@@ -52,7 +51,16 @@ class LocationLabel
         gui.getMainPane().add(label,7);
         label.setOpaque(true);
         label.setBackground(Color.white);
-        label.setFont(new Font("Courier", Font.BOLD, 18 - (gui.getBOARD_SIZE()/4)));
+        label.setFont(new Font("Courier", Font.BOLD,  20));
+
+        int size = 20;
+
+        while(label.getFontMetrics(new Font("Courier", Font.BOLD,  size)).stringWidth("Investment ") > gui.getOffset())
+        {
+            size--;
+            label.setFont(new Font("Courier", Font.BOLD,  size));
+        }
+
         if (location instanceof Chance)
            label.setForeground(Color.red);
         else if(location instanceof CommunityChest)
