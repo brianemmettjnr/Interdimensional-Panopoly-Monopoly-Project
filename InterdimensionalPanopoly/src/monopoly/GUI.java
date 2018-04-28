@@ -136,8 +136,8 @@ class GUI {
         mortgageButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                RentalProperty mort=(RentalProperty)getSelectedLocation().getLocation();
-                gui.updateAction(mort.mortgage());
+                RentalProperty mortgageProperty = (RentalProperty)getSelectedLocation().getLocation();
+                gui.updateAction(panopoly.mortgage(mortgageProperty));
             }
         });
         redeemButton =new JLabel("Redeem");
@@ -148,8 +148,8 @@ class GUI {
         redeemButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                RentalProperty redeem=(RentalProperty)getSelectedLocation().getLocation();
-                gui.updateAction(redeem.redeem());
+                RentalProperty redeemProperty = (RentalProperty)getSelectedLocation().getLocation();
+                gui.updateAction(panopoly.redeem(redeemProperty));
             }
         });
         buildButton =new JLabel("Build");
@@ -506,9 +506,10 @@ class GUI {
 
    void updateAction(String action)
     {
-        secondAction.setText(latestAction.getText());
-        latestAction.setText(action);
-        setSelectedLabel(getSelectedLocation());
+	   updatePlayers();
+	   secondAction.setText(latestAction.getText());
+	   latestAction.setText(action);
+       setSelectedLabel(getSelectedLocation());
     }
 
     int getBOARD_SIZE() {
