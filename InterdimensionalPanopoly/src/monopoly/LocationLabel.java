@@ -1,5 +1,5 @@
 package monopoly;
-import interfaces.Locatable;
+import interfaces.*;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -22,8 +22,9 @@ class LocationLabel
     LocationLabel(int x, int y, int NumOnBoard, GUI guiObj, Locatable location) {
         this.location = location;
         gui = guiObj;
-        String name=location.getIdentifier().replace(" ","<br>");
-        label = new JLabel("<html><p1><body style='width: "+gui.getOffset()+"px'>"+ name + "</body></p1></html>", SwingConstants.CENTER);
+        String html=this.getHTML();
+        String name="<html>"+location.getIdentifier().replace(" ","<br>"+"</html>");
+        label = new JLabel(name, SwingConstants.CENTER);
 //        label.addMouseListener(new MouseAdapter() {
 //            @Override
 //            public void mouseEntered(MouseEvent e) {
@@ -68,14 +69,14 @@ class LocationLabel
         label.setOpaque(true);
         label.setBackground(Color.white);
         label.setFont(new Font("Serif", Font.BOLD, 18 - (gui.getBOARD_SIZE()/8)));
-        Class Comparitor = location.getClass();
-        //I WOULD MAKE THIS A SWITCH STATEMENT BUT APPARENTLY THEY CANT ACCEPT CLASSES AS ARGUMENTS??????
-        if (Comparitor == Chance.class)
+        if (location instanceof Chance)
            label.setForeground(Color.red);
-        else if(Comparitor == CommunityChest.class)
+        else if(location instanceof CommunityChest)
             label.setForeground(Color.BLUE);
-        else if(Comparitor == Station.class)
+        else if(location instanceof Station)
             label.setForeground(Color.GRAY);
+        else if(location instanceof Utility)
+            label.setForeground(Color.cyan.darker());
     }
     int getX()
     {
@@ -92,5 +93,30 @@ class LocationLabel
 
     private JLabel getLabel() {
         return label;
+    }
+
+    public String getHTML() {
+        String name=location.getIdentifier().replace(" ","<br>");
+        String HTML="<html>"+"<body style='width: 100%'><center>";
+        HTML+=name + "<br>";
+        if(location instanceof RentalProperty)
+        {
+            Rentable rentable=((Rentable) location);
+            Player owner= (Player) rentable.getOwner();
+            if(owner==null) {
+                HTML +="Unowned" + "<br>";
+                HTML +="For sale for: $" + rentable.getPrice() + "<br>";
+            }
+            else
+                HTML+="Owned by: "+owner.getIdentifier()+"<br>";
+            if(location instanceof InvestmentProperty)
+            {
+                Improvable improver=(Improvable) location;
+                HTML+="Houses: "+improver.getNumHouses()+"<br>";
+                HTML+="Hotels: "+improver.getNumHotels()+"<br>";
+                HTML+="Building cost: $"+improver.getBuildPrice()+"<br>";
+            }
+        }
+        return HTML+="</center></body></html>";
     }
 }

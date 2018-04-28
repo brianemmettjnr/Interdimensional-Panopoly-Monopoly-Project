@@ -7,9 +7,7 @@ import javax.swing.*;
 import javax.swing.border.Border;
 
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -62,7 +60,7 @@ class GUI {
         PlaceBoard();
         setupbuttons();
 
-        JLabel image=new JLabel(new ImageIcon(GUI.class.getResource("ReasonsWhyBrianIsntAGraphicDesigner.png")));
+        JLabel image=new JLabel(new ImageIcon(GUI.class.getResource("Logo.png")));
         image.setBounds((((int)(FRAME_SIZE.getHeight()*.9))/2)-190,(((int)(FRAME_SIZE.getHeight()*.9))/2)-220,400,400);
         image.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
         MainPane.add(image);
@@ -86,7 +84,7 @@ class GUI {
         locationWindow.setVisible(true);
         locationWindow.setBackground(Color.WHITE);
         locationWindow.setForeground(Color.BLACK);
-        locationWindow.setBorder(BorderFactory.createLineBorder(Color.black,4,true));
+        locationWindow.setBorder(BorderFactory.createLineBorder(Color.black,4));
         locationWindow.setVerticalAlignment(JLabel.TOP);
         MainPane.add(locationWindow);
         mainFrame.setVisible(true);
@@ -109,7 +107,7 @@ class GUI {
         buyButton=new JLabel("Buy");
         MainPane.add(buyButton);
         buyButton.setVisible(buyCommand);
-        buyButton.setBounds((int)(FRAME_SIZE.getHeight()*.9)/2-10,(((int)(FRAME_SIZE.getHeight()*.9))/2)+270,Offset,30);
+        buyButton.setBounds((int)(FRAME_SIZE.getHeight()*.9)/2-getOffset()-10,(((int)(FRAME_SIZE.getHeight()*.9))/2)+240,Offset,30);
         buyButton.setOpaque(true);
         buyButton.addMouseListener(new MouseAdapter() {
             @Override
@@ -129,6 +127,25 @@ class GUI {
             @Override
             public void mouseClicked(MouseEvent e) {
                 gui.updateAction(panopoly.nextPlayer());
+            }
+        });
+        endturn.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER&&endCommand) {
+                    gui.updateAction(panopoly.nextPlayer());
+                }
+            }
+
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+
             }
         });
     }
@@ -158,10 +175,19 @@ class GUI {
         }
     }
 
-    LocationLabel getLocationLabel(int index) throws ArrayIndexOutOfBoundsException{
+    LocationLabel getLocationLabel(Locatable location) throws ArrayIndexOutOfBoundsException
+    {
+        for(LocationLabel local:LocationLabels)
+        {
+            if(local.getLocation()==location)
+                return local;
+        }
+        return null;
+    }
+    LocationLabel getLocationLabel(int index)throws ArrayIndexOutOfBoundsException
+    {
         return LocationLabels[index];
     }
-
     private void PlaceBoard()
     {
         ArrayList<Locatable> Locations=panopoly.getBoard().getLocations();
@@ -392,16 +418,7 @@ class GUI {
         }
         else
         {
-            Class Comparitor = location.getLocation().getClass();
-            String colour="";
-            //I WOULD MAKE THIS A SWITCH STATEMENT BUT APPARENTLY THEY CANT ACCEPT CLASSES AS ARGUMENTS??????
-            if (Comparitor == Chance.class)
-                colour="red";
-            else if(Comparitor == CommunityChest.class)
-                colour="blue";
-            else if(Comparitor == Station.class)
-                colour="gray";
-            locationWindow.setText("<html><font color=\""+colour+"\">"+SelectedLabel.getLocation().getIdentifier()+"</font><br>"+"</html>");
+            locationWindow.setText(location.getHTML());
         }
 
 
@@ -418,7 +435,7 @@ class GUI {
                 player.setCurrentPlayer();
             }
         }
-        
+        //setSelectedLabel(getLocationLabel(panopoly.getCurrentPlayer().getPosition()));
         setVisibleButtons();
     }
 

@@ -53,7 +53,7 @@ public class PlayerLabel
         Graphics g = bi.createGraphics();
         icon.paintIcon(null, g, 0,0);
         g.dispose();
-        scale=(int)(gui.getOffset()*.5);
+        scale=(int)((gui.getOffset())*.5);
         ImageIcon newIcon =new ImageIcon(bi.getScaledInstance(scale,scale,1));
         positionIcon= new JLabel(newIcon);
         positionIcon.setBounds(1,1,scale,scale);
