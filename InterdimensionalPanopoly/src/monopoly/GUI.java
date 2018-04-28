@@ -4,15 +4,12 @@ import interfaces.Rentable;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.swing.border.Border;
 
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
-
-import static java.awt.Color.*;
 
 class GUI {
 
@@ -32,7 +29,7 @@ class GUI {
     private static ArrayList<Player> players=new ArrayList<>();
 	
     boolean buyCommand,rollCommand,endCommand;
-	private JLabel buyButton, rollButton, endturn,mortgageButton,redeemButton;
+	private JLabel buyButton, rollButton, endturn,mortgageButton, redeembutton,buildButton,demoButton;
     
     private static Panopoly panopoly;
     private static BufferedImage[] images = new BufferedImage[6];
@@ -143,18 +140,43 @@ class GUI {
                 gui.updateAction(mort.mortgage());
             }
         });
-        redeemButton=new JLabel("Redeem");
-        MainPane.add(redeemButton);
-        redeemButton.setVisible(false);
-        redeemButton.setBounds(((int)(FRAME_SIZE.getHeight()*.9)/2)-190,(((int)(FRAME_SIZE.getHeight()*.9))/2)+-100,Offset,30);
-        redeemButton.setOpaque(true);
-        redeemButton.addMouseListener(new MouseAdapter() {
+        redeembutton =new JLabel("Redeem");
+        MainPane.add(redeembutton);
+        redeembutton.setVisible(false);
+        redeembutton.setBounds(((int)(FRAME_SIZE.getHeight()*.9)/2)-190,(((int)(FRAME_SIZE.getHeight()*.9))/2)+-100,Offset,30);
+        redeembutton.setOpaque(true);
+        redeembutton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 RentalProperty redeem=(RentalProperty)getSelectedLocation().getLocation();
                 gui.updateAction(redeem.redeem());
             }
         });
+        buildButton =new JLabel("Redeem");
+        MainPane.add(buildButton);
+        buildButton.setVisible(false);
+        buildButton.setBounds(((int)(FRAME_SIZE.getHeight()*.9)/2)+190,(((int)(FRAME_SIZE.getHeight()*.9))/2)-85,Offset,30);
+        buildButton.setOpaque(true);
+        buildButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                InvestmentProperty builder=(InvestmentProperty) getSelectedLocation().getLocation();
+                gui.updateAction(panopoly.buildUnit(builder));
+            }
+        });
+        demoButton =new JLabel("Redeem");
+        MainPane.add(demoButton);
+        demoButton.setVisible(false);
+        demoButton.setBounds(((int)(FRAME_SIZE.getHeight()*.9)/2)+190,(((int)(FRAME_SIZE.getHeight()*.9))/2)-115,Offset,30);
+        demoButton.setOpaque(true);
+        demoButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                InvestmentProperty breaker=(InvestmentProperty) getSelectedLocation().getLocation();
+                gui.updateAction(panopoly.demolishUnit(breaker));
+            }
+        });
+
 
     }
     
@@ -426,22 +448,29 @@ class GUI {
             locationWindow.setText(" ");
             locationWindow.setOpaque(false);
             mortgageButton.setVisible(false);
-            redeemButton.setVisible(false);
+            redeembutton.setVisible(false);
+            buildButton.setVisible(false);
+            demoButton.setVisible(false);
         }
         else
         {
             image.setVisible(false);
-            if (location.getLocation() instanceof RentalProperty) {
+            if (location.getLocation() instanceof RentalProperty)
+            {
                 RentalProperty mortgageCheck = (RentalProperty) location.getLocation();
                 if (mortgageCheck.getOwner() == panopoly.getCurrentPlayer())
                 {
-                    redeemButton.setVisible(mortgageCheck.isMortgaged());
+                    redeembutton.setVisible(mortgageCheck.isMortgaged());
                     mortgageButton.setVisible(!mortgageCheck.isMortgaged());
                 }
                 else
                 {
                     mortgageButton.setVisible(false);
-                    redeemButton.setVisible(false);
+                    redeembutton.setVisible(false);
+                }
+                if(location.getLocation() instanceof InvestmentProperty)
+                {
+
                 }
             }
             locationWindow.setText(location.getHTML());
