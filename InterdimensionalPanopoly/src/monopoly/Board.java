@@ -15,6 +15,8 @@ public class Board
 	
 	Board(int numLocations)
 	{
+		int priceIncrease = 44/ numLocations;
+		
 		//Fill in locations for board - hard-coded Named Locations/Tax and Utilities
 		for(int i = 0; i < numLocations; i++)
 		{
@@ -48,8 +50,8 @@ public class Board
 				{
 					int price = generatePrice();
 					locations.add(new InvestmentProperty("Investment", price, generateRentArray(price), (price/2), 10, brown));
-					minPrice += 10;
-					maxPrice += 15;
+					minPrice += priceIncrease * 10;
+					maxPrice += priceIncrease * 15;
 				}
 			}
 		}

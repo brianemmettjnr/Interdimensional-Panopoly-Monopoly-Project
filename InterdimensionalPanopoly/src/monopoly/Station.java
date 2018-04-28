@@ -16,10 +16,6 @@ public class Station extends RentalProperty
 	@Override
 	public int getRentalAmount() 
 	{
-		if(getOwner() != null)
-			return (int) (Math.pow(2, ((((Player) getOwner()).ownedStations())-1)) * 25);
-		
-		else
-			return 0;
+		return (int) (Math.pow(2, ((((Player) getOwner()).ownedStations())-1)) * 25);
 	}
 }
