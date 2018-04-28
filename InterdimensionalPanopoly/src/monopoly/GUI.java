@@ -186,7 +186,7 @@ class GUI {
     	panopoly.setPossibleCommands();
     	rollButton.setVisible(rollCommand);
     	buyButton.setVisible(buyCommand);
-    	endturn.setVisible(!rollCommand);
+    	endturn.setVisible(endCommand);
     }
     
     void resetCommands()
@@ -538,6 +538,7 @@ class GUI {
         LocationLabel label=getSelectedLocation();
         setSelectedLabel(label);
         setSelectedLabel(label);
+        panopoly.setPossibleCommands();
         updateGUI();
     }
 

@@ -110,9 +110,15 @@ public class Panopoly
 			gui.updateAction(currentPlayer.getIdentifier() + " has paid " + ((Taxable) square).getFlatAmount() + " in tax.");
 		}
 		//rental property owned by another player
-		else if((square instanceof RentalProperty) && (((Rentable) square).getOwner()!=null) && (((Rentable) square).getOwner()!=currentPlayer))
+		else if((square instanceof RentalProperty) && (((Rentable) square).getOwner()!=null) && (((Rentable) square).getOwner()!=currentPlayer) && !(((RentalProperty) square).isMortgaged()))
 		{
 			int rent = ((Rentable) square).getRentalAmount();
+			
+			if(!(currentPlayer.hasProperty() || currentPlayer.getBalance() >= rent))
+			{
+				rent = currentPlayer.getBalance();
+			}
+			
 			currentPlayer.pay(rent);
 			((Player) ((Rentable) square).getOwner()).earn(rent);
 			gui.updateAction(currentPlayer.getIdentifier() + " has paid " + rent + " to " + ((Rentable) square).getOwner().getIdentifier());
@@ -131,7 +137,7 @@ public class Panopoly
 		if(square instanceof Rentable && ((Rentable) square).getOwner() == null && currentPlayer.rollComplete)
 			gui.buyCommand = true;
 				
-		gui.endCommand = !gui.rollCommand;
+		gui.endCommand = (!gui.rollCommand && currentPlayer.getBalance() >= 0);
 	}
 
 	public void createGUI() 

@@ -9,7 +9,7 @@ import interfaces.Rentable;
 
 public class Player implements Playable {
 	
-	private static final int STARTING_BALANCE = 1500;
+	private static final int STARTING_BALANCE = 200;
 	private int playerIndex;
 
 	private String name;
@@ -95,6 +95,7 @@ public class Player implements Playable {
 		newOwner.buyProperty(property, sellPrice);
 	}
 
+	//If game ends early - get winner by net worth
 	@Override
 	public int getNetWorth() 
 	{
@@ -127,6 +128,11 @@ public class Player implements Playable {
 		}
 		
 		return isGroupOwner;
+	}
+	
+	public boolean hasProperty()
+	{
+		return !properties.isEmpty();
 	}
 	
 	public int ownedStations()
