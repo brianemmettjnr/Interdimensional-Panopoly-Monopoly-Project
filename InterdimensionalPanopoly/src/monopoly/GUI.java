@@ -475,7 +475,8 @@ class GUI {
                         mortgageable = !((InvestmentProperty) locationCheck).hasBuildings();
                     }
 
-                    redeemButton.setVisible(locationCheck.isMortgaged());
+                    redeemButton.setVisible(locationCheck.isMortgaged()
+                            &&locationCheck.getRedeemAmount()>=locationCheck.getOwner().getBalance());
                     mortgageButton.setVisible(!locationCheck.isMortgaged() && mortgageable);
                 }
                 else
