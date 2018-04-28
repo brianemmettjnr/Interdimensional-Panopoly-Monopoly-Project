@@ -8,6 +8,7 @@ public class InvestmentProperty extends RentalProperty implements Improvable{
 	
 	//0 houses and hotels at beginning
 	int houses = 0, hotels = 0, buildPrice;
+	final static int MAX_UNITS = 5;
 
 	public InvestmentProperty(String name, int price, int[] rent, int mortgage, int buildPrice, Group group) 
 	{
@@ -42,7 +43,7 @@ public class InvestmentProperty extends RentalProperty implements Improvable{
 		houses++;
 			
 		//once 5 houses are built, remove them and build hotel - allow multiple hotels
-		if(houses == 5)
+		if(houses == MAX_UNITS)
 		{
 			houses = 0;
 			hotels++;

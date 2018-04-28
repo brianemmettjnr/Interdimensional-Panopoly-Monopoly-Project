@@ -56,6 +56,30 @@ public class Panopoly
 		
 		return currentPlayer.getIdentifier() + " has bought " + property.getIdentifier() + " for " + property.getPrice() + ".";
 	}
+	
+	public String buildUnit(InvestmentProperty property)
+	{
+		property.build();
+		
+		currentPlayer.pay(property.buildPrice);
+		
+		if(property.getNumHotels() == 1)
+			return currentPlayer.getIdentifier() + " has built a hotel on " + property.getIdentifier() + ".";
+		else
+			return currentPlayer.getIdentifier() + " has built a house on " + property.getIdentifier() + ".";
+	}
+	
+	public String demolishUnit(InvestmentProperty property)
+	{
+		property.demolish();
+		
+		currentPlayer.earn(property.buildPrice / 2);
+		
+		if(property.getNumHouses() == InvestmentProperty.MAX_UNITS - 1)
+			return currentPlayer.getIdentifier() + " has demolished a hotel on " + property.getIdentifier() + ".";
+		else
+			return currentPlayer.getIdentifier() + " has demolished a house on " + property.getIdentifier() + ".";
+	}
 
 	//TO DO: DRAW CARD
 	private void getSquareAction() 

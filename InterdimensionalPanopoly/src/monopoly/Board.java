@@ -40,7 +40,7 @@ public class Board
 			else
 			{
 				int rnd = ThreadLocalRandom.current().nextInt(1, 8 + 1);
-				if(rnd == 1)
+				if(rnd == 1) 
 					locations.add(new Station("Surname Station"));
 				else if(rnd == 2)
 					locations.add(new Chance());
