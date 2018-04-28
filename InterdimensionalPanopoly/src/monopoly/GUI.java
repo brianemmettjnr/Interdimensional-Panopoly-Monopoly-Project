@@ -103,6 +103,7 @@ class GUI {
             @Override
             public void mouseClicked(MouseEvent e) {
                 gui.updateAction(panopoly.roll());
+                setSelectedLabel(getLocationLabel(panopoly.getCurrentPlayer().getPosition()));
             }
         });
         buyButton=new JLabel("Buy");
