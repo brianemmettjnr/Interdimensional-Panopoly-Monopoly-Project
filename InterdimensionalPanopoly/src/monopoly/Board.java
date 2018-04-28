@@ -10,6 +10,9 @@ public class Board
 	private ArrayList<Locatable> locations = new ArrayList<Locatable>();
 	private Group brown = new Group("brown");
 	
+	private int minPrice = 50;
+	private int maxPrice = 100;
+	
 	Board(int numLocations)
 	{
 		//Fill in locations for board - hard-coded Named Locations/Tax and Utilities
@@ -42,7 +45,12 @@ public class Board
 				else if(rnd == 3)
 					locations.add(new CommunityChest());
 				else
-					locations.add(new InvestmentProperty("Investment", 200, new int[] {1, 2}, 100, 10, brown));
+				{
+					int price = generatePrice();
+					locations.add(new InvestmentProperty("Investment", price, generateRentArray(price), (price/2), 10, brown));
+					minPrice += 10;
+					maxPrice += 15;
+				}
 			}
 		}
 	}
@@ -68,6 +76,19 @@ public class Board
 	{
 		//TODO generate property names?
 		return null;
+	}
+	
+	public int generatePrice()
+	{
+		return maxPrice;
+		
+	}
+	
+	public int[] generateRentArray(int price)
+	{
+		int rent = price/10;
+		int[] array = {rent, (int) (rent*1.1), (int) (rent*1.2), (int) (rent*1.3), (int) (rent*1.4), (int) (rent*1.5)};
+		return array;
 	}
 	
 	public int getNumLocations()
