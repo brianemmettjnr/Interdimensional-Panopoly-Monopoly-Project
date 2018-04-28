@@ -80,14 +80,23 @@ public class Board
 	
 	public int generatePrice()
 	{
-		return maxPrice;
+		return ThreadLocalRandom.current().nextInt(minPrice, maxPrice + 1);
 		
 	}
 	
+	//REFERENCE: http://www.jdawiseman.com/papers/trivia/monopoly-rents.html
 	public int[] generateRentArray(int price)
 	{
-		int rent = price/10;
-		int[] array = {rent, (int) (rent*1.1), (int) (rent*1.2), (int) (rent*1.3), (int) (rent*1.4), (int) (rent*1.5)};
+		int rent = price/10 - 4;
+		int oneHouseRent = (price/2) - 20;
+
+		int[] array = {rent, oneHouseRent, 3*oneHouseRent, 6*oneHouseRent, 210 + 7*oneHouseRent, 300 + 5*oneHouseRent};
+		
+		if(price >= 150)
+		{
+			array[5] += 300;
+		}
+		
 		return array;
 	}
 	

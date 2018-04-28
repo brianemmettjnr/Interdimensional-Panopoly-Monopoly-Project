@@ -13,6 +13,9 @@ public class Utility extends RentalProperty
 	@Override
 	public int getRentalAmount() 
 	{
-		return rent[((Player)getOwner()).ownedUtilities() - 1] * dice.rollDice(1, 6);
+		if(getOwner() != null)
+			return rent[((Player)getOwner()).ownedUtilities() - 1] * dice.rollDice(1, 6);
+		else
+			return 0;
 	}
 }

@@ -6,7 +6,7 @@ import interfaces.Groupable;
 import interfaces.Mortgageable;
 import interfaces.Rentable;
 
-public class RentalProperty extends PrivateProperty implements Rentable, Mortgageable, Groupable
+public abstract class RentalProperty extends PrivateProperty implements Rentable, Mortgageable, Groupable
 {
 	protected int[] rent;
 	private int mortgage;
@@ -26,13 +26,6 @@ public class RentalProperty extends PrivateProperty implements Rentable, Mortgag
 	public int getMortgageAmount() 
 	{
 		return mortgage;
-	}
-
-	@Override
-	public int getRentalAmount() 
-	{
-		//TODO: fix for stations + utilities
-		return rent[0];
 	}
 
 	//returns if property is currently mortgaged
