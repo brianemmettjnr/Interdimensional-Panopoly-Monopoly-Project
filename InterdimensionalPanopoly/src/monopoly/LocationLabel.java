@@ -55,7 +55,7 @@ class LocationLabel
 
         int size = 20;
 
-        while(label.getFontMetrics(new Font("Courier", Font.BOLD,  size)).stringWidth("Investment ") > gui.getOffset())
+        while(label.getFontMetrics(new Font("Courier", Font.BOLD,  size)).stringWidth("Investment") > gui.getOffset())
         {
             size--;
             label.setFont(new Font("Courier", Font.BOLD,  size));
