@@ -107,15 +107,18 @@ class LocationLabel
                 HTML +="Unowned" + "<br>";
                 HTML +="For sale for: $" + rentable.getPrice() + "<br>";
             }
-            else
-                HTML+="Owned by: "+owner.getIdentifier()+"<br>";
+            else {
+                HTML += "Owned by: " + owner.getIdentifier() + "<br>";
+                HTML += "Rent: $" + rentable.getRentalAmount() + "<br>";
+                if(((RentalProperty) location).isMortgaged())
+                    HTML += "Site is currently Mortgaged<br>";
+            }
             if(location instanceof InvestmentProperty)
             {
                 Improvable improver=(Improvable) location;
                 HTML+="Houses: "+improver.getNumHouses()+"<br>";
                 HTML+="Hotels: "+improver.getNumHotels()+"<br>";
                 HTML+="Building cost: $"+improver.getBuildPrice()+"<br>";
-                HTML+="Rent for staying: $"+((InvestmentProperty) location).getRentalAmount()+"<br>";
             }
         }
         else if(location instanceof TaxableProperty)
