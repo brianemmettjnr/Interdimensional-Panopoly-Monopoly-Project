@@ -86,11 +86,11 @@ class GUI {
         mainFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
 
-    public static void setPlayers(ArrayList<Player> players) {
+     static void setPlayers(ArrayList<Player> players) {
         GUI.players = players;
     }
 
-    public static void setPanopoly(Panopoly panopoly) {
+     static void setPanopoly(Panopoly panopoly) {
         GUI.panopoly = panopoly;
     }
 
@@ -311,7 +311,18 @@ class GUI {
                         demoButton.setVisible((investment.hasBuildings()));
                         buildButton.setVisible(buildable&&investment.hotels==0&&investment.getOwner().getBalance()>=investment.buildPrice);
                     }
+                    else
+                    {
+                        demoButton.setVisible(false);
+                        buildButton.setVisible(false);
+                    }
                 }
+                else
+                {
+                    demoButton.setVisible(false);
+                    buildButton.setVisible(false);
+                }
+
             }
 
             else
