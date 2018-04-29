@@ -29,8 +29,8 @@ class GUI {
     private static int playerCount=0;
     private static ArrayList<Player> players=new ArrayList<>();
 	
-    boolean buyCommand,rollCommand,endCommand;
-	private JLabel buyButton, rollButton, endturn,mortgageButton, redeemButton,buildButton,demoButton;
+    boolean rollCommand,endCommand;
+	private JLabel buyButton, rollButton, endturn, mortgageButton, redeemButton,buildButton,demoButton;
     
     private static Panopoly panopoly;
     private static BufferedImage[] images = new BufferedImage[6];
@@ -101,12 +101,14 @@ class GUI {
             @Override
             public void mouseClicked(MouseEvent e) {
                 gui.updateAction(panopoly.roll());
-                setSelectedLabel(getLocationLabel(panopoly.getCurrentPlayer().getPosition()));
+                if(getSelectedLocation()!=getLocationLabel(panopoly.getCurrentPlayer().getPosition())) {
+                    setSelectedLabel(getLocationLabel(panopoly.getCurrentPlayer().getPosition()));
+                }
             }
         });
         buyButton=new JLabel("Buy");
         MainPane.add(buyButton);
-        buyButton.setVisible(buyCommand);
+        buyButton.setVisible(false);
         buyButton.setBounds((int)(FRAME_SIZE.getHeight()*.9)/2-getOffset()-10,(((int)(FRAME_SIZE.getHeight()*.9))/2)+240,Offset,30);
         buyButton.setOpaque(true);
         buyButton.addMouseListener(new MouseAdapter() {
@@ -114,7 +116,6 @@ class GUI {
             public void mouseClicked(MouseEvent e) {
                 Rentable buyProperty= (Rentable)panopoly.getBoard().getLocation(panopoly.getCurrentPlayer().getPosition());
                 gui.updateAction(panopoly.buyProperty(buyProperty));
-                gui.buyCommand = false;
                 gui.updateGUI();
             }
         });
@@ -185,14 +186,12 @@ class GUI {
     {
     	panopoly.setPossibleCommands();
     	rollButton.setVisible(rollCommand);
-    	buyButton.setVisible(buyCommand);
     	endturn.setVisible(endCommand);
     }
     
     void resetCommands()
     {
     	rollCommand = false;
-    	buyCommand = false;
     	endCommand = false;
     }
     
@@ -433,13 +432,17 @@ class GUI {
         return players;
     }
 
-    LocationLabel getSelectedLocation()
+    private LocationLabel getSelectedLocation()
     {
         return SelectedLabel;
     }
 
     void setSelectedLabel(LocationLabel location)
     {
+        for(LocationLabel label:gui.getLocationLabels())
+        {
+            label.resetBorder();
+        }
         if(this.SelectedLabel!=null)
         {
             this.SelectedLabel.getLabel().setBorder(BorderFactory.createLineBorder(Color.BLACK,2));
@@ -452,6 +455,7 @@ class GUI {
             image.setVisible(true);
             locationWindow.setText(" ");
             locationWindow.setOpaque(false);
+            buyButton.setVisible(false);
             mortgageButton.setVisible(false);
             redeemButton.setVisible(false);
             buildButton.setVisible(false);
@@ -476,10 +480,16 @@ class GUI {
                     }
 
                     redeemButton.setVisible(locationCheck.isMortgaged()
-                            &&locationCheck.getRedeemAmount()>=locationCheck.getOwner().getBalance());
+                            &&locationCheck.getRedeemAmount()<=panopoly.getCurrentPlayer().getBalance());
                     mortgageButton.setVisible(!locationCheck.isMortgaged() && mortgageable);
                 }
-                
+                else
+                {
+                    buyButton.setVisible(locationCheck.getOwner()==null&&locationCheck.getPrice()<=panopoly.getCurrentPlayer().getBalance()
+                            &&panopoly.getCurrentPlayer().getPosition()==location.getIndex());
+                    mortgageButton.setVisible(false);
+                    redeemButton.setVisible(false);
+                }
                 if(location.getLocation() instanceof InvestmentProperty)
                 {
                     InvestmentProperty investment=(InvestmentProperty)location.getLocation();
@@ -552,5 +562,17 @@ class GUI {
     int getOffset()
     {
         return  Offset;
+    }
+
+    public LocationLabel[] getLocationLabels() {
+        return LocationLabels;
+    }
+    public Panopoly getPanopoly()
+    {
+        return panopoly;
+    }
+
+    public static ArrayList<Player> getPlayers() {
+        return players;
     }
 }

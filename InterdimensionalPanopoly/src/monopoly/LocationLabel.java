@@ -16,8 +16,10 @@ class LocationLabel
     private JLabel label=new JLabel();
     private Locatable location;
     private LocationLabel thisLocation =this;
+    private int index;
     LocationLabel(int x, int y, int NumOnBoard, GUI guiObj, Locatable location) {
         this.location = location;
+        index=NumOnBoard;
         gui = guiObj;
         String html=this.getHTML();
         String name=location.getIdentifier().replace(" ","\n");
@@ -103,7 +105,8 @@ class LocationLabel
                 HTML += "Owned by: " + owner.getIdentifier() + "<br>";
                 HTML += "Rent: $" + rentable.getRentalAmount() + "<br>";
                 if(((RentalProperty) location).isMortgaged())
-                    HTML += "Site is currently Mortgaged<br>";
+                    HTML += "Site is currently Mortgaged<br>Cost to Redeem: $"+((RentalProperty) location).getRedeemAmount()+"<br>";
+
             }
             if(location instanceof InvestmentProperty)
             {
@@ -117,6 +120,35 @@ class LocationLabel
         {
             HTML+="Tax: $"+((TaxableProperty) location).getFlatAmount()+"<br>";
         }
+        boolean playerOnTile=false;
+        for(Player player:GUI.getPlayers())
+        {
+            if (player.getPosition()==this.index)
+            {
+                if(!playerOnTile)
+                {
+                    HTML+="Players on Tile:<br>";
+                    playerOnTile=true;
+                }
+                HTML+=player.getIdentifier()+"<br>";
+            }
+        }
         return HTML+"</center></body></html>";
+    }
+    public void setTempBorder(Border newBorder)
+    {
+        label.setBorder(newBorder);
+    }
+    public Border getBorder()
+    {
+        return label.getBorder();
+    }
+    public void resetBorder()
+    {
+        label.setBorder(BorderColour);
+    }
+
+    public int getIndex() {
+        return index;
     }
 }

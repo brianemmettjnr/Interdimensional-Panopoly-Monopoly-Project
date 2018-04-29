@@ -51,7 +51,6 @@ public class Panopoly
 	public String buyProperty(Rentable property)
 	{
 		currentPlayer.buyProperty(property, property.getPrice());
-		gui.buyCommand = false;
 		gui.updateGUI();
 		
 		return currentPlayer.getIdentifier() + " has bought " + property.getIdentifier() + " for " + property.getPrice() + ".";
@@ -134,9 +133,6 @@ public class Panopoly
 		
 		gui.rollCommand = currentPlayer.canRoll;
 		//unowned property and player has rolled at least once
-		if(square instanceof Rentable && ((Rentable) square).getOwner() == null && currentPlayer.rollComplete)
-			gui.buyCommand = true;
-				
 		gui.endCommand = (!gui.rollCommand && currentPlayer.getBalance() >= 0);
 	}
 
