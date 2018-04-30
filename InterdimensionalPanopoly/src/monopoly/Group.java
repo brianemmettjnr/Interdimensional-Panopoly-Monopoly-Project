@@ -2,6 +2,7 @@ package monopoly;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.concurrent.ThreadLocalRandom;
 
 import interfaces.Groupable;
 import interfaces.Identifiable;
@@ -35,9 +36,6 @@ public class Group implements Identifiable
 	}
 
     public Color getColor() {
-		int value=0;
-		if(members.get(0) instanceof InvestmentProperty)
-			value=((InvestmentProperty) members.get(0)).getPrice();
-        return new Color((value/2)%255,(2*value/2)%255,(3*value/2)%255);
-    }
+        return new Color(ThreadLocalRandom.current().nextInt(0, 255 + 1),ThreadLocalRandom.current().nextInt(0, 255 + 1)
+				,ThreadLocalRandom.current().nextInt(0, 255 + 1)); }
 }
