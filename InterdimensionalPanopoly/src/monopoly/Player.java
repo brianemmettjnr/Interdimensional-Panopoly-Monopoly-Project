@@ -65,7 +65,10 @@ public class Player implements Playable {
 			}
 			
 			if(panopoly.getBoard().getLocation(position).getIdentifier() == "Go to Jail")
+			{
 				sendToJail();
+				panopoly.gui.updateAction(getIdentifier() + " landed on Go to Jail and been sent to Jail");
+			}
 		}
 		
 		else

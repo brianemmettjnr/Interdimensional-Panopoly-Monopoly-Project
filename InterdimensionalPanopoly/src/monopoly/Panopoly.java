@@ -9,7 +9,7 @@ public class Panopoly
 	private ArrayList<Player> players;
 	private Player currentPlayer;
 	private Board board;
-	private GUI gui;
+	public GUI gui;
 	private Dice dice = new Dice();
 	private boolean clockwiseMovement = true;
 	
