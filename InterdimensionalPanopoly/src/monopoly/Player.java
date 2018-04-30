@@ -18,8 +18,9 @@ public class Player implements Playable {
 	private int position;
 	private int imageIndex=0;
 	private Panopoly panopoly;
-	 boolean canRoll = true;
-	 boolean rollComplete = false;
+	boolean canRoll = true;
+	boolean rollComplete = false;
+	private boolean inJail = false;
 	
 	public Player(String name, int imageIndex, int playerIndex,Panopoly panopoly)
 	{
@@ -60,6 +61,12 @@ public class Player implements Playable {
 				passedGO = true;
 				earn(200);
 			}
+			
+			if(panopoly.getBoard().getLocation(position).getIdentifier() == "Go to Jail")
+			{
+				position = panopoly.getBoard().getJailLocation();
+				inJail = true;
+			}
 		}
 		
 		else
@@ -75,6 +82,16 @@ public class Player implements Playable {
 		}
 		
 		return passedGO;
+	}
+	
+	public boolean isInJail()
+	{
+		return inJail;
+	}
+	
+	public void releaseFromJail()
+	{
+		inJail = false;
 	}
 	
 	 void pay(int payment)

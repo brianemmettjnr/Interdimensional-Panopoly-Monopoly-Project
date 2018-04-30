@@ -184,6 +184,9 @@ public class Panopoly
 	{
 		Locatable square = board.getLocation(currentPlayer.getPosition());
 		
+		if(currentPlayer.isInJail())
+			currentPlayer.canRoll = false;
+		
 		gui.rollCommand = currentPlayer.canRoll;
 		//unowned property and player has rolled at least once
 		gui.endCommand = (!gui.rollCommand && currentPlayer.getBalance() >= 0);

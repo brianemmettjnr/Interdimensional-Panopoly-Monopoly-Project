@@ -106,4 +106,9 @@ public class Board
 	{
 		return locations.size();
 	}
+	
+	public int getJailLocation()
+	{
+		return getNumLocations()/4;
+	}
 }
