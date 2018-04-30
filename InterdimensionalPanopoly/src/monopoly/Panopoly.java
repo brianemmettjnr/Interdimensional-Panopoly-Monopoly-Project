@@ -32,7 +32,8 @@ public class Panopoly
 		
 		String msg = currentPlayer.getIdentifier() + " has rolled " + movePositions + ". ";
 		
-		currentPlayer.move(movePositions, clockwiseMovement);
+		if (currentPlayer.move(movePositions, clockwiseMovement))
+			 gui.updateAction(currentPlayer.getIdentifier() + " has passed GO and earned 200.");
 		
 		if(dice.getDoubles())
 		{
@@ -98,6 +99,16 @@ public class Panopoly
 		
 		return currentPlayer.getIdentifier() + " has redeemed " + redeemProperty.getIdentifier() + " for " + redeemProperty.getRedeemAmount() + ".";
 	}
+	
+	public void leaveGame()
+	{
+		int index = players.indexOf(currentPlayer);
+		players.remove(currentPlayer);
+		currentPlayer = players.get(index % players.size());
+		
+		if(players.size() == 1)
+			gui.updateAction("You've Won");
+	}
 
 	//TO DO: DRAW CARD
 	private void getSquareAction() 
@@ -123,7 +134,8 @@ public class Panopoly
 			((Player) ((Rentable) square).getOwner()).earn(rent);
 			gui.updateAction(currentPlayer.getIdentifier() + " has paid " + rent + " to " + ((Rentable) square).getOwner().getIdentifier());
 		}
-		
+		else if (square instanceof Chance || square instanceof CommunityChest)
+			leaveGame();
 		
 	}
 	
