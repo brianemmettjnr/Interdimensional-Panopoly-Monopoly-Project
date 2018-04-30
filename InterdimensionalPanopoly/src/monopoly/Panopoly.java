@@ -190,11 +190,17 @@ public class Panopoly
 	public void setPossibleCommands()
 	{		
 		if(currentPlayer.isInJail())
-			currentPlayer.canRoll = false;
+		{
+			gui.rollCommand = false;
+			gui.endCommand = false;
+		}
 		
-		gui.rollCommand = currentPlayer.canRoll;
-		//unowned property and player has rolled at least once
-		gui.endCommand = (!gui.rollCommand && currentPlayer.getBalance() >= 0);
+		else
+		{
+			gui.rollCommand = currentPlayer.canRoll;
+			//unowned property and player has rolled at least once
+			gui.endCommand = (!gui.rollCommand && currentPlayer.getBalance() >= 0);
+		}
 	}
 
 	public void createGUI(ArrayList<Player> playerArray)
