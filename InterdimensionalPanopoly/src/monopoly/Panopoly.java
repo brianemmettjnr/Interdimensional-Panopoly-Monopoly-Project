@@ -142,10 +142,10 @@ public class Panopoly
 		else
 		{
 			String draw = "Draw between ";
-			for(Player p: winners)
-				draw += p.getIdentifier() + ", ";
-			//remove last comma
-			draw = draw.substring(0, draw.length() - 2) + ".";
+			for(int i = 0; i < winners.size() - 2; i++)
+				draw += winners.get(i).getIdentifier() + ", ";
+			
+			draw += "and " + winners.get(winners.size() - 1) + ".";
 			gui.updateAction(draw);
 		}
 	}
