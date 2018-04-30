@@ -102,9 +102,9 @@ public class Panopoly
 	public void leaveGame()
 	{
 		gui.updateAction(currentPlayer.getIdentifier() + " has left the game.");
-		gui.leaveGame(currentPlayer);
 		int index = players.indexOf(currentPlayer);
 		players.remove(currentPlayer);
+		gui.leaveGame(currentPlayer);
 		currentPlayer = players.get(index % players.size());
 		
 		if(players.size() == 1)
@@ -177,9 +177,7 @@ public class Panopoly
 			((Player) ((Rentable) square).getOwner()).earn(rent);
 			gui.updateAction(currentPlayer.getIdentifier() + " has paid " + rent + " to " + ((Rentable) square).getOwner().getIdentifier());
 		}
-		else if (square instanceof Chance || square instanceof CommunityChest)
-			leaveGame();
-		
+				
 	}
 	
 	//buy, roll, drawCard, endTurn
