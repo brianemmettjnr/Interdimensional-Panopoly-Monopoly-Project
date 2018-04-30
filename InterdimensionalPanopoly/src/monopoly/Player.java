@@ -50,9 +50,10 @@ public class Player implements Playable {
 		return imageIndex;
 	}
 
-	public boolean move(int squares, boolean clockwise)
+	public String move(int squares, boolean clockwise)
 	{
 		boolean passedGO = false;
+		String ret = "";
 		
 		if(clockwise)
 		{
@@ -60,14 +61,14 @@ public class Player implements Playable {
 			//if they pass GO
 			if(position>=panopoly.getBoard().getNumLocations()) {
 				position = position - panopoly.getBoard().getNumLocations();
-				passedGO = true;
+				ret += "\n" + getIdentifier() + " has passed GO and earned 200.";
 				earn(200);
 			}
 			
 			if(panopoly.getBoard().getLocation(position).getIdentifier() == "Go to Jail")
 			{
 				sendToJail();
-				panopoly.gui.updateAction(getIdentifier() + " landed on Go to Jail and been sent to Jail");
+				ret += "\n" + getIdentifier() + " has landed on Go to Jail and been sent to Jail";
 			}
 		}
 		
@@ -77,13 +78,13 @@ public class Player implements Playable {
 			//if they pass GO
 			if(position<0) {
 				position = position + panopoly.getBoard().getNumLocations();
-				passedGO = true;
+				ret += getIdentifier() + " has passed GO and earned 200.";
 				earn(200);
 			}
 
 		}
 		
-		return passedGO;
+		return ret;
 	}
 	
 	public boolean isInJail()
