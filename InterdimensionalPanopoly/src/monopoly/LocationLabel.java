@@ -138,7 +138,7 @@ class LocationLabel
             HTML+="Tax: $"+((TaxableProperty) location).getFlatAmount()+"<br>";
         }
         boolean playerOnTile=false;
-        for(Player player:GUI.getPlayers())
+        for(Player player:gui.getPlayers())
         {
             if (player.getPosition()==this.index)
             {

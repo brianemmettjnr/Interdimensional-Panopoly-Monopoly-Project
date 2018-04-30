@@ -15,6 +15,7 @@ import java.util.ArrayList;
 class GUI {
 
     private final int SquaresOnSide;
+    private final JFrame mainFrame;
     private int BOARD_SIZE;
     private Dimension FRAME_SIZE=Toolkit.getDefaultToolkit().getScreenSize();
     private LocationLabel[] LocationLabels;
@@ -24,20 +25,20 @@ class GUI {
     private LocationLabel SelectedLabel=null;
     static String[] characters={"boat","car","dog","hat","iron","thimble"};
     private JLabel image;
-    private static ArrayList<Player> players=new ArrayList<>();
+    private ArrayList<Player> players=new ArrayList<>();
 	
     boolean rollCommand,endCommand;
 	private GUIButton helpButton,buyButton, rollButton, endturn, mortgageButton,
             leaveButton, redeemButton,buildButton,demoButton,quitButton;
     
-    private static Panopoly panopoly;
+    private Panopoly panopoly;
     static BufferedImage[] images = new BufferedImage[6];
     private JLabel locationWindow=new JLabel(" ",SwingConstants.CENTER);
     private JLabel latestAction=new JLabel("",SwingConstants.CENTER);
     private JLabel secondAction=new JLabel("",SwingConstants.CENTER);
     private GUI gui=this;
 
-    GUI(int BoardSize)
+    GUI(int BoardSize,Panopoly panopoly,ArrayList<Player> players)
     {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); }
@@ -45,8 +46,10 @@ class GUI {
             catch (InstantiationException e) { e.printStackTrace(); }
             catch (IllegalAccessException e) { e.printStackTrace(); }
             catch (UnsupportedLookAndFeelException e) { e.printStackTrace(); }
+        this.setPanopoly(panopoly);
+        this.setPlayers(players);
         BOARD_SIZE=BoardSize;
-        JFrame mainFrame = new JFrame("Interdimensional Panopoly");
+        mainFrame = new JFrame("Interdimensional Panopoly");
         mainFrame.setSize(FRAME_SIZE);
         mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         LocationLabels=new LocationLabel[BOARD_SIZE];
@@ -94,12 +97,12 @@ class GUI {
         mainFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
 
-    static void setPlayers(ArrayList<Player> players) {
-        GUI.players = players;
+    void setPlayers(ArrayList<Player> players) {
+        this.players = players;
     }
 
-    static void setPanopoly(Panopoly panopoly) {
-        GUI.panopoly = panopoly;
+    void setPanopoly(Panopoly panopoly) {
+        this.panopoly = panopoly;
     }
 
     private void setupbuttons()
@@ -180,7 +183,7 @@ class GUI {
                         panopoly.leaveGame();
                     }
                 },this);
-        quitButton =new GUIButton("Quit",(int)(10+(Offset*((SquaresOnSide-1)/2.0)))+Offset,(((int)(FRAME_SIZE.getHeight()*.9))/2)+240,
+        quitButton =new GUIButton("Quit",(int)(10+(Offset*((SquaresOnSide-1)/2.0)))+Offset*2,(((int)(FRAME_SIZE.getHeight()*.9))/2)+240,
                 new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
@@ -275,11 +278,6 @@ class GUI {
             NumOnBoard++;
         }
     }
-    static ArrayList<Player> getPlayersArray()
-    {
-        return players;
-    }
-
     private LocationLabel getSelectedLocation()
     {
         return SelectedLabel;
@@ -428,7 +426,42 @@ class GUI {
      private LocationLabel[] getLocationLabels() {
         return LocationLabels;
     }
-     static ArrayList<Player> getPlayers() {
+    ArrayList<Player> getPlayers() {
         return players;
     }
+    public void endGame()
+    {
+        JFrame playerFrame= new JFrame("Interdimensional Panopoly");
+        JPanel playerPanel=new JPanel();
+        playerFrame.setBounds(300,300,636,270);
+        playerFrame.add(playerPanel);
+        playerPanel.setOpaque(true);
+        playerPanel.setBackground(Color.DARK_GRAY);
+        playerFrame.setVisible(true);
+        JButton newGame =new JButton("New Game?");
+        newGame.setSize(100,50);
+        playerPanel.add(newGame);
+
+        newGame.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                mainFrame.dispose();
+                playerFrame.dispose();
+                Main.createPanopoly();
+            }
+        });
+        JButton endGame =new JButton("End Game?");
+        endGame.setSize(100,50);
+        playerPanel.add(endGame);
+
+        endGame.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                mainFrame.dispose();
+                playerFrame.dispose();
+            }
+        });
+
+    }
+    
 }
