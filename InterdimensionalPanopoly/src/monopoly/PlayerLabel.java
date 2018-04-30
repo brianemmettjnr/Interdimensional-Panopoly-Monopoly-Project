@@ -97,7 +97,7 @@ public class PlayerLabel
         positionIcon.updateUI();
         positionIcon.setBounds(gui.getLocationLabel(player.getPosition()).getX()+(index%3*(gui.getOffset()/4)),
                 gui.getLocationLabel(player.getPosition()).getY()+1+(index%2*(gui.getOffset()/2)),scale,scale);
-        icon.setBorder(null);
+        icon.setBorder(border);
     }
 
     public Player getPlayer() {
@@ -117,5 +117,9 @@ public class PlayerLabel
 
     public void setCurrentPlayer() {
         icon.setBorder(BorderFactory.createLineBorder(green.darker(),3));
+    }
+
+    public void setBorder(Border border) {
+        this.border = border;
     }
 }

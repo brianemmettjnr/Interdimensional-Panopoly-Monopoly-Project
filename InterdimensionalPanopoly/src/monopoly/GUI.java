@@ -5,6 +5,7 @@ import interfaces.Rentable;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.border.Border;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -36,16 +37,11 @@ class GUI {
     private JLabel locationWindow=new JLabel(" ",SwingConstants.CENTER);
     private JLabel latestAction=new JLabel("",SwingConstants.CENTER);
     private JLabel secondAction=new JLabel("",SwingConstants.CENTER);
+    private JLabel thirdAction=new JLabel("",SwingConstants.CENTER);
     private GUI gui=this;
 
     GUI(int BoardSize,Panopoly panopoly,ArrayList<Player> players)
     {
-        try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); }
-            catch (ClassNotFoundException e) { e.printStackTrace(); }
-            catch (InstantiationException e) { e.printStackTrace(); }
-            catch (IllegalAccessException e) { e.printStackTrace(); }
-            catch (UnsupportedLookAndFeelException e) { e.printStackTrace(); }
         this.setPanopoly(panopoly);
         this.setPlayers(players);
         BOARD_SIZE=BoardSize;
@@ -67,7 +63,7 @@ class GUI {
         setupbuttons();
 
         image=new JLabel(new ImageIcon(GUI.class.getResource("Logo.png")));
-        image.setBounds((((int)(FRAME_SIZE.getHeight()*.9))/2)-190,(((int)(FRAME_SIZE.getHeight()*.9))/2)-220,400,400);
+        image.setBounds((((int)(FRAME_SIZE.getHeight()*.9))/2)-190,(((int)(FRAME_SIZE.getHeight()*.9))/2)-240,400,400);
         image.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
         MainPane.add(image);
 
@@ -85,8 +81,14 @@ class GUI {
         secondAction.setText("Enjoy!");
         MainPane.add(secondAction);
 
+        thirdAction.setBounds(10+Offset,(((int)(FRAME_SIZE.getHeight()*.9))/2)+150,Offset*(SquaresOnSide-2),30);
+        thirdAction.setVisible(true);
+        thirdAction.setFont(new Font("times new roman",Font.BOLD,20));
+        thirdAction.setForeground(Color.white);
+        thirdAction.setText("");
+        MainPane.add(thirdAction);
 
-        locationWindow.setBounds((((int)(FRAME_SIZE.getHeight()*.9))/2)-90,(((int)(FRAME_SIZE.getHeight()*.9))/2)-210,200,380);
+        locationWindow.setBounds((((int)(FRAME_SIZE.getHeight()*.9))/2)-90,(((int)(FRAME_SIZE.getHeight()*.9))/2)-240,200,380);
         locationWindow.setVisible(true);
         locationWindow.setBackground(Color.WHITE);
         locationWindow.setForeground(Color.BLACK);
@@ -199,9 +201,14 @@ class GUI {
     	panopoly.setPossibleCommands();
     	rollButton.setVisible(rollCommand);
     	endturn.setVisible(endCommand);
+    	if (panopoly.getCurrentPlayer().isInJail())
+        {
+            setSelectedLabel(getLocationLabel(panopoly.getCurrentPlayer().getPosition()));
+        }
         leaveButton.setVisible(!rollCommand&&!endCommand);
     }
-    
+
+
     void resetCommands()
     {
     	rollCommand = false;
@@ -390,6 +397,13 @@ class GUI {
             {
                 player.setCurrentPlayer();
             }
+            if(player.getPlayer().isInJail())
+            {
+                //add more here
+                player.setBorder(BorderFactory.createBevelBorder(1));
+            }
+            else
+                player.setBorder(null);
         }
         setVisibleButtons();
     }
@@ -405,8 +419,19 @@ class GUI {
 
    void updateAction(String action)
     {
-        secondAction.setText(latestAction.getText());
-        latestAction.setText(action);
+        String[] lines;
+        if(action.contains("\n"))
+        {
+            lines = action.split("\n");
+            thirdAction.setText(latestAction.getText());
+            secondAction.setText(lines[0]);
+            latestAction.setText(lines[1]);
+        }
+        else{
+            thirdAction.setText(secondAction.getText());
+            secondAction.setText(latestAction.getText());
+            latestAction.setText(action);
+        }
         LocationLabel label=getSelectedLocation();
         setSelectedLabel(label);
         setSelectedLabel(label);

@@ -61,8 +61,8 @@ class LocationLabel
         gui.getMainPane().add(label,7);
         label.setOpaque(true);
         label.setBackground(Color.white);
-
         int size = 20;
+        label.setFont(new Font("Courier", Font.BOLD,  size));
 
         while(label.getFontMetrics(new Font("Courier", Font.BOLD,  size)).stringWidth("investment") > gui.getOffset())
         {
@@ -97,7 +97,8 @@ class LocationLabel
         return label;
     }
 
-    String getHTML() {
+    String getHTML()
+    {
         String name=location.getIdentifier().replace(" ","<br>");
         String color="";
         if (location instanceof Chance)
