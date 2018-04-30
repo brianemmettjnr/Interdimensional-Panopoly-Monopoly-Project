@@ -64,7 +64,7 @@ class LocationLabel
 
         int size = 20;
 
-        while(label.getFontMetrics(new Font("Courier", Font.BOLD,  size)).stringWidth("really really long name") > gui.getOffset())
+        while(label.getFontMetrics(new Font("Courier", Font.BOLD,  size)).stringWidth("investmente") > gui.getOffset())
         {
             size--;
             label.setFont(new Font("Courier", Font.BOLD,  size));
@@ -78,6 +78,7 @@ class LocationLabel
             label.setForeground(Color.GRAY);
         else if(location instanceof Utility)
             label.setForeground(Color.cyan.darker());
+
     }
     int getX()
     {
@@ -98,8 +99,17 @@ class LocationLabel
 
     String getHTML() {
         String name=location.getIdentifier().replace(" ","<br>");
-        String HTML="<html>"+"<body style='width: 100%'><center>";
-        HTML+=name + "<br>";
+        String color="";
+        if (location instanceof Chance)
+            color="red";
+        else if(location instanceof CommunityChest)
+            color="blue";
+        else if(location instanceof Station)
+            color="gray";
+        else if(location instanceof Utility)
+            color="#008b8b";
+        String HTML="<html>"+"<body style='width: 100%'><center><font size='16' color='"+color+"'>";
+        HTML+=name + "</font><br>";
         if(location instanceof RentalProperty)
         {
             Rentable rentable=((Rentable) location);
