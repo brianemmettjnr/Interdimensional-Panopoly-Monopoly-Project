@@ -68,14 +68,14 @@ class GUI {
         image.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
         MainPane.add(image);
 
-        latestAction.setBounds((((int)(FRAME_SIZE.getHeight()*.9))/2)-190,(((int)(FRAME_SIZE.getHeight()*.9))/2)+210,400,30);
+        latestAction.setBounds(10+Offset,(((int)(FRAME_SIZE.getHeight()*.9))/2)+210,Offset*(SquaresOnSide-2),30);
         latestAction.setVisible(true);
         latestAction.setFont(new Font("times new roman",Font.BOLD,20));
         latestAction.setForeground(Color.white);
         latestAction.setText("Welcome To Interdimensional Panopoly");
         MainPane.add(latestAction);
 
-        secondAction.setBounds((((int)(FRAME_SIZE.getHeight()*.9))/2)-190,(((int)(FRAME_SIZE.getHeight()*.9))/2)+180,400,30);
+        secondAction.setBounds(10+Offset,(((int)(FRAME_SIZE.getHeight()*.9))/2)+180,Offset*(SquaresOnSide-2),30);
         secondAction.setVisible(true);
         secondAction.setFont(new Font("times new roman",Font.BOLD,20));
         secondAction.setForeground(Color.white);
