@@ -30,7 +30,7 @@ public class Panopoly
 		currentPlayer.rollComplete = true;
 		int movePositions = dice.rollNormalDice();
 		
-		String msg = currentPlayer.getIdentifier() + " has rolled " + movePositions + ".\n";
+		String msg = currentPlayer.getIdentifier() + " has rolled " + movePositions + ".";
 		
 		if (currentPlayer.move(movePositions, clockwiseMovement))
 			 gui.updateAction(currentPlayer.getIdentifier() + " has passed GO and earned 200.");
@@ -38,7 +38,7 @@ public class Panopoly
 		if(dice.getDoubles())
 		{
 			currentPlayer.canRoll = true;
-			msg += currentPlayer.getIdentifier() + " has rolled doubles and can roll again.";
+			msg += "\n"+currentPlayer.getIdentifier() + " has rolled doubles and can roll again.";
 			currentPlayer.doubles++;
 			
 			if(currentPlayer.doubles == 3)

@@ -419,11 +419,12 @@ class GUI {
 
    void updateAction(String action)
     {
-        String[] lines;
+        String[] lines=null;
         if(action.contains("\n"))
         {
             lines = action.split("\n");
             thirdAction.setText(latestAction.getText());
+            System.out.println(action);
             secondAction.setText(lines[0]);
             latestAction.setText(lines[1]);
         }
