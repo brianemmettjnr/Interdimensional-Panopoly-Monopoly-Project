@@ -3,18 +3,16 @@ import interfaces.Groupable;
 import interfaces.Locatable;
 import interfaces.Rentable;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.ArrayList;
 
 class GUI {
 
-    private final int SquaresOnSide;
+    private final int squaresOnSide;
     private int BOARD_SIZE;
     private Dimension FRAME_SIZE=Toolkit.getDefaultToolkit().getScreenSize();
     private LocationLabel[] LocationLabels;
@@ -25,10 +23,10 @@ class GUI {
     static String[] characters={"boat","car","dog","hat","iron","thimble"};
     private JLabel image;
     private static ArrayList<Player> players=new ArrayList<>();
-	
+
     boolean rollCommand,endCommand;
 	private GUIButton buyButton, rollButton, endturn, mortgageButton, redeemButton,buildButton,demoButton;
-    
+
     private static Panopoly panopoly;
     static BufferedImage[] images = new BufferedImage[6];
     private JLabel locationWindow=new JLabel(" ",SwingConstants.CENTER);
@@ -55,9 +53,9 @@ class GUI {
         MainPane.setBackground(Color.red.darker().darker());
         mainFrame.add(MainPane);
         PlayerLabels=new PlayerLabel[players.size()];
-        SquaresOnSide=(((BOARD_SIZE-4)/4)+2);
+        squaresOnSide =(((BOARD_SIZE-4)/4)+2);
         int frameSize=(int)(FRAME_SIZE.getHeight()*.9);
-        Offset=(frameSize)/SquaresOnSide;
+        Offset=(frameSize)/(squaresOnSide +2);
         PlacePlayers();
         PlaceBoard();
         setupbuttons();
@@ -103,7 +101,7 @@ class GUI {
 
     private void setupbuttons()
     {
-        rollButton=new GUIButton("Roll",(int)(10+(Offset*((SquaresOnSide-1)/2.0))),(((int)(FRAME_SIZE.getHeight()*.9))/2)+240,
+        rollButton=new GUIButton("Roll",(int)(10+(Offset*((squaresOnSide -1)/2.0))),(((int)(FRAME_SIZE.getHeight()*.9))/2)+240,
         new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -114,7 +112,7 @@ class GUI {
             }
         },this);
 
-        buyButton=new GUIButton("Buy",(int)(10+(Offset*((SquaresOnSide-1)/2.0))),Offset+20,
+        buyButton=new GUIButton("Buy",(int)(10+(Offset*((squaresOnSide -1)/2.0))),Offset*2+20,
                 new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
@@ -124,7 +122,7 @@ class GUI {
                     }
                 },this);
 
-        endturn=new GUIButton("End",(int)(10+(Offset*((SquaresOnSide-1)/2.0))),(((int)(FRAME_SIZE.getHeight()*.9))/2)+240,
+        endturn=new GUIButton("End",(int)(10+(Offset*((squaresOnSide -1)/2.0))),(((int)(FRAME_SIZE.getHeight()*.9))/2)+240,
                 new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
@@ -168,20 +166,20 @@ class GUI {
                 },this);
 
     }
-    
+
     private void setVisibleButtons()
     {
     	panopoly.setPossibleCommands();
     	rollButton.setVisible(rollCommand);
     	endturn.setVisible(endCommand);
     }
-    
+
     void resetCommands()
     {
     	rollCommand = false;
     	endCommand = false;
     }
-    
+
     private void PlacePlayers()
     {
         int i=0;
@@ -211,27 +209,40 @@ class GUI {
         int x=10,y=10;
         int SquaresOnSide=(((BOARD_SIZE-4)/4)+2);
         int NumOnBoard=0;
-        while (x<Offset*(SquaresOnSide-1))
+        LocationLabels[NumOnBoard]= new LocationLabel(x,y,NumOnBoard,this,Locations.get(NumOnBoard));
+        x+=Offset*2;
+        NumOnBoard++;
+        while (x<Offset*(SquaresOnSide))
         {
             LocationLabels[NumOnBoard]= new LocationLabel(x,y,NumOnBoard,this,Locations.get(NumOnBoard));
             x+=Offset;
             NumOnBoard++;
 
         }
-        while(y<(Offset*(SquaresOnSide-1)))
+        LocationLabels[NumOnBoard]= new LocationLabel(x,y,NumOnBoard,this,Locations.get(NumOnBoard));
+        y+=Offset*2;
+        NumOnBoard++;
+        while(y<(Offset*(SquaresOnSide)))
         {
             LocationLabels[NumOnBoard]= new LocationLabel(x,y,NumOnBoard,this,Locations.get(NumOnBoard));
             y+=Offset;
             NumOnBoard++;
 
         }
-        while (x>=Offset)
+        LocationLabels[NumOnBoard]= new LocationLabel(x,y,NumOnBoard,this,Locations.get(NumOnBoard));
+        x-=Offset;
+        NumOnBoard++;
+        while (x>=Offset*2)
         {
             LocationLabels[NumOnBoard]= new LocationLabel(x,y,NumOnBoard,this,Locations.get(NumOnBoard));
             x-=Offset;
             NumOnBoard++;
         }
-        while (y>=Offset)
+        x-=Offset;
+        LocationLabels[NumOnBoard]= new LocationLabel(x,y,NumOnBoard,this,Locations.get(NumOnBoard));
+        y-=Offset;
+        NumOnBoard++;
+        while (y>=Offset*2)
         {
             LocationLabels[NumOnBoard]= new LocationLabel(x,y,NumOnBoard,this,Locations.get(NumOnBoard));
             y-=Offset;
@@ -393,5 +404,9 @@ class GUI {
     }
      static ArrayList<Player> getPlayers() {
         return players;
+    }
+
+    public int getSquaresOnSide() {
+        return squaresOnSide;
     }
 }
