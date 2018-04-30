@@ -31,6 +31,8 @@ class GUI {
     boolean rollCommand,endCommand;
 	private GUIButton helpButton,buyButton, rollButton, endturn, mortgageButton,
             leaveButton, redeemButton,buildButton,demoButton,quitButton;
+
+	private GUIButton[] answers =new GUIButton[4];
     
     private Panopoly panopoly;
     static BufferedImage[] images = new BufferedImage[6];
@@ -69,7 +71,7 @@ class GUI {
 
         latestAction.setBounds(10+Offset,(((int)(FRAME_SIZE.getHeight()*.9))/2)+210,Offset*(SquaresOnSide-2),30);
         latestAction.setVisible(true);
-        latestAction.setFont(new Font("times new roman",Font.BOLD,20));
+        latestAction.setFont(new Font("Times New Roman",Font.BOLD,20));
         latestAction.setForeground(Color.white);
         latestAction.setText("Welcome To Interdimensional Panopoly");
         MainPane.add(latestAction);
@@ -185,6 +187,7 @@ class GUI {
                         panopoly.leaveGame();
                     }
                 },this);
+        leaveButton.setVisible(true);
         quitButton =new GUIButton("Quit",(int)(10+(Offset*((SquaresOnSide-1)/2.0)))+Offset*2,(((int)(FRAME_SIZE.getHeight()*.9))/2)+240,
                 new MouseAdapter() {
                     @Override
@@ -193,7 +196,16 @@ class GUI {
                     }
                 },this);
         quitButton.setVisible(true);
-
+        for(GUIButton button:answers)
+        {
+            button=new GUIButton("Answer",(int)(10+(Offset*((SquaresOnSide-1)/2.0)))+Offset*2,(((int)(FRAME_SIZE.getHeight()*.9))/2)+240,
+                    new MouseAdapter() {
+                        @Override
+                        public void mouseClicked(MouseEvent e) {
+                            panopoly.endGame(panopoly.decideWinner());
+                        }
+                    },this);
+        }
     }
     
     private void setVisibleButtons()
@@ -201,13 +213,15 @@ class GUI {
     	panopoly.setPossibleCommands();
     	rollButton.setVisible(rollCommand);
     	endturn.setVisible(endCommand);
-    	if (panopoly.getCurrentPlayer().isInJail())
-        {
+    	if (panopoly.getCurrentPlayer().isInJail()) {
+            setSelectedLabel(null);
             setSelectedLabel(getLocationLabel(panopoly.getCurrentPlayer().getPosition()));
-        }
-        leaveButton.setVisible(!rollCommand&&!endCommand);
-    }
+            updateAction("Tests question?");
+            //todo get cian stuff here
 
+        }
+        //leaveButton.setVisible(!rollCommand&&!endCommand);
+    }
 
     void resetCommands()
     {
