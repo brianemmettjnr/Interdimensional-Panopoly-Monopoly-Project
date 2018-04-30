@@ -30,7 +30,7 @@ public class Panopoly
 		currentPlayer.rollComplete = true;
 		int movePositions = dice.rollNormalDice();
 		
-		String msg = currentPlayer.getIdentifier() + " has rolled " + movePositions + ". ";
+		String msg = currentPlayer.getIdentifier() + " has rolled " + movePositions + ".\n";
 		
 		if (currentPlayer.move(movePositions, clockwiseMovement))
 			 gui.updateAction(currentPlayer.getIdentifier() + " has passed GO and earned 200.");
@@ -39,6 +39,13 @@ public class Panopoly
 		{
 			currentPlayer.canRoll = true;
 			msg += currentPlayer.getIdentifier() + " has rolled doubles and can roll again.";
+			currentPlayer.doubles++;
+			
+			if(currentPlayer.doubles == 3)
+			{
+				currentPlayer.sendToJail();
+				msg = currentPlayer.getIdentifier() + " has rolled 3 doubles in a row and been sent to Jail";
+			}
 		}
 		
 		getSquareAction();
@@ -182,9 +189,7 @@ public class Panopoly
 	
 	//buy, roll, drawCard, endTurn
 	public void setPossibleCommands()
-	{
-		Locatable square = board.getLocation(currentPlayer.getPosition());
-		
+	{		
 		if(currentPlayer.isInJail())
 			currentPlayer.canRoll = false;
 		
@@ -203,6 +208,7 @@ public class Panopoly
 	
 	public String nextPlayer()
 	{
+		currentPlayer.doubles = 0;
 		currentPlayer.canRoll = true;
 		currentPlayer.rollComplete = false;
 		currentPlayer = players.get((players.indexOf(currentPlayer)+1)%players.size());

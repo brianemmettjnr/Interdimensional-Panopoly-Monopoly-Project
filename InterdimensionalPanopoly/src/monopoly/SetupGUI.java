@@ -192,12 +192,12 @@ public class SetupGUI
         playerPanel.add(nameSpace);
         *///AFTER HERE IS TEST INSTANTIATION
         players=new ArrayList<Player>();
-        players.add(new Player("Brian",0,0,panopoly));
-        players.add(new Player("Chloe",1,1,panopoly));
-        players.add(new Player("Cian",2,2,panopoly));
-        players.add(new Player("Mossy",3,3,panopoly));
-        players.add(new Player("Tony",4,4,panopoly));
-        players.add(new Player("Christ",5,5,panopoly));
+        players.add(new Player("Brian..........",0,0,panopoly));
+        players.add(new Player("Chloe..........",1,1,panopoly));
+        players.add(new Player("Cian...........",2,2,panopoly));
+        players.add(new Player("Mossy..........",3,3,panopoly));
+        players.add(new Player("Tony...........",4,4,panopoly));
+        players.add(new Player("Christ.........",5,5,panopoly));
         panopoly.createGUI(players);
     }
 

@@ -21,6 +21,7 @@ public class Player implements Playable {
 	boolean canRoll = true;
 	boolean rollComplete = false;
 	private boolean inJail = false;
+	int doubles;
 	
 	public Player(String name, int imageIndex, int playerIndex,Panopoly panopoly)
 	{
@@ -30,6 +31,7 @@ public class Player implements Playable {
 		this.name = name;
 		balance = STARTING_BALANCE;
 		position = 0;
+		doubles = 0;
 	}
 
 	@Override
@@ -63,10 +65,7 @@ public class Player implements Playable {
 			}
 			
 			if(panopoly.getBoard().getLocation(position).getIdentifier() == "Go to Jail")
-			{
-				position = panopoly.getBoard().getJailLocation();
-				inJail = true;
-			}
+				sendToJail();
 		}
 		
 		else
@@ -87,6 +86,12 @@ public class Player implements Playable {
 	public boolean isInJail()
 	{
 		return inJail;
+	}
+	
+	public void sendToJail()
+	{
+		position = panopoly.getBoard().getJailLocation();
+		inJail = true;
 	}
 	
 	public void releaseFromJail()
