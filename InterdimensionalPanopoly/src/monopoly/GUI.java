@@ -14,6 +14,7 @@ import java.util.ArrayList;
 
 class GUI {
 
+    private final int SquaresOnSide;
     private int BOARD_SIZE;
     private Dimension FRAME_SIZE=Toolkit.getDefaultToolkit().getScreenSize();
     private LocationLabel[] LocationLabels;
@@ -37,6 +38,12 @@ class GUI {
 
     GUI(int BoardSize)
     {
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); }
+            catch (ClassNotFoundException e) { e.printStackTrace(); }
+            catch (InstantiationException e) { e.printStackTrace(); }
+            catch (IllegalAccessException e) { e.printStackTrace(); }
+            catch (UnsupportedLookAndFeelException e) { e.printStackTrace(); }
         BOARD_SIZE=BoardSize;
         JFrame mainFrame = new JFrame("Interdimensional Panopoly");
         mainFrame.setSize(FRAME_SIZE);
@@ -48,7 +55,7 @@ class GUI {
         MainPane.setBackground(Color.red.darker().darker());
         mainFrame.add(MainPane);
         PlayerLabels=new PlayerLabel[players.size()];
-        int SquaresOnSide=(((BOARD_SIZE-4)/4)+2);
+        SquaresOnSide=(((BOARD_SIZE-4)/4)+2);
         int frameSize=(int)(FRAME_SIZE.getHeight()*.9);
         Offset=(frameSize)/SquaresOnSide;
         PlacePlayers();
@@ -86,17 +93,17 @@ class GUI {
         mainFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
 
-     static void setPlayers(ArrayList<Player> players) {
+    static void setPlayers(ArrayList<Player> players) {
         GUI.players = players;
     }
 
-     static void setPanopoly(Panopoly panopoly) {
+    static void setPanopoly(Panopoly panopoly) {
         GUI.panopoly = panopoly;
     }
 
     private void setupbuttons()
     {
-        rollButton=new GUIButton("Roll",(int)((FRAME_SIZE.getHeight()*.9)/2)-10,(((int)(FRAME_SIZE.getHeight()*.9))/2)+240,
+        rollButton=new GUIButton("Roll",(int)(10+(Offset*((SquaresOnSide-1)/2.0))),(((int)(FRAME_SIZE.getHeight()*.9))/2)+240,
         new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -107,7 +114,7 @@ class GUI {
             }
         },this);
 
-        buyButton=new GUIButton("Buy",(int)(FRAME_SIZE.getHeight()*.9)/2-getOffset()-10,(((int)(FRAME_SIZE.getHeight()*.9))/2)+240,
+        buyButton=new GUIButton("Buy",(int)(10+(Offset*((SquaresOnSide-1)/2.0))),Offset+20,
                 new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
@@ -117,7 +124,7 @@ class GUI {
                     }
                 },this);
 
-        endturn=new GUIButton("End",(int)((FRAME_SIZE.getHeight()*.9)/2)-10,(((int)(FRAME_SIZE.getHeight()*.9))/2)+240,
+        endturn=new GUIButton("End",(int)(10+(Offset*((SquaresOnSide-1)/2.0))),(((int)(FRAME_SIZE.getHeight()*.9))/2)+240,
                 new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
@@ -327,6 +334,8 @@ class GUI {
 
             else
             {
+                demoButton.setVisible(false);
+                buildButton.setVisible(false);
                 mortgageButton.setVisible(false);
                 redeemButton.setVisible(false);
             }
@@ -370,7 +379,10 @@ class GUI {
         updateGUI();
     }
 
-
+    int getBOARD_SIZE()
+    {
+        return BOARD_SIZE;
+    }
     int getOffset()
     {
         return  Offset;

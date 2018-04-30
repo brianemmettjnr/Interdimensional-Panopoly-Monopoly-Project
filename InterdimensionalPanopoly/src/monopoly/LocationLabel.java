@@ -14,25 +14,22 @@ class LocationLabel
     private GUI gui;
     private Border BorderColour=BorderFactory.createLineBorder(BLACK, 2);
     private JLabel label=new JLabel();
+    private JLabel colourLabel=new JLabel();
     private Locatable location;
     private LocationLabel thisLocation =this;
     private int index;
-    LocationLabel(int x, int y, int NumOnBoard, GUI guiObj, Locatable location) {
+    private int x=0,y=0;
+
+    LocationLabel(int x, int y, int NumOnBoard, GUI guiObj, Locatable location)
+    {
         this.location = location;
         index=NumOnBoard;
         gui = guiObj;
-        String html=this.getHTML();
+        this.x=x;
+        this.y=y;
         String name=location.getIdentifier().replace(" ","\n");
         String text="<html><center><p1><body style='width: "+gui.getOffset()+"px'>"+ name + "</center></body></p1></html>";
         label = new JLabel(text, SwingConstants.CENTER);
-//        label.addMouseListener(new MouseAdapter() {
-//            @Override
-//            public void mouseEntered(MouseEvent e) {
-//                if (finalLabel.getBorder() != BorderFactory.createLineBorder(MAGENTA, 2))
-//                    finalLabel.setBorder(BorderFactory.createLineBorder(black, 3));
-//                gui.updateGUI();
-//            }
-//        });
         label.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseExited(MouseEvent e) {
@@ -47,17 +44,27 @@ class LocationLabel
 
             }
         });
-            label.setBounds(x, y, gui.getOffset(), gui.getOffset());
+        if(location instanceof InvestmentProperty)
+        {label.setBounds(x, y + (gui.getOffset() / 5)-1, gui.getOffset(), (int) (gui.getOffset() * .8)+2);
+            colourLabel.setBounds(x, y , gui.getOffset(), (int) (gui.getOffset() * .2));
+            colourLabel.setBorder(BorderColour);
+            colourLabel.setVisible(true);
+            colourLabel.setBackground(((InvestmentProperty) location).getGroup().getColor());
+            colourLabel.setOpaque(true);
+            gui.getMainPane().add(colourLabel);}
+
+        else {
+        label.setBounds(x, y,gui.getOffset(), (int)(gui.getOffset()));
+        }
         label.setMaximumSize(label.getSize());
         label.setBorder(BorderColour);
         gui.getMainPane().add(label,7);
         label.setOpaque(true);
         label.setBackground(Color.white);
-        label.setFont(new Font("Courier", Font.BOLD,  20));
 
         int size = 20;
 
-        while(label.getFontMetrics(new Font("Courier", Font.BOLD,  size)).stringWidth("Investment") > gui.getOffset())
+        while(label.getFontMetrics(new Font("Courier", Font.BOLD,  size)).stringWidth("investments") > gui.getOffset())
         {
             size--;
             label.setFont(new Font("Courier", Font.BOLD,  size));
@@ -74,11 +81,11 @@ class LocationLabel
     }
     int getX()
     {
-        return label.getX();
+        return x;
     }
     int getY()
     {
-        return label.getY();
+        return y;
     }
 
     Locatable getLocation() {

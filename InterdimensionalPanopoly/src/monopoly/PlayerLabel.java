@@ -40,7 +40,7 @@ public class PlayerLabel
                 gui.setSelectedLabel(null);
                 for(Rentable property:player.getProperties())
                 {
-                    gui.getLocationLabel(((Locatable)property)).setTempBorder(BorderFactory.createLineBorder(Color.pink,4));
+                    gui.getLocationLabel(((Locatable)property)).setTempBorder(BorderFactory.createLineBorder(Color.blue,4));
                 }
             }
         });
