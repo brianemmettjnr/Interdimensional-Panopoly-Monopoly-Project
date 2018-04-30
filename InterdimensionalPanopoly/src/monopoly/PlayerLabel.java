@@ -16,7 +16,8 @@ import static java.awt.Color.green;
 
 public class PlayerLabel
 {
-    private final int scale;
+    private int scale;
+    private JLabel name;
     private Player player;
     private int index;
     private JLabel balance=new JLabel("",SwingConstants.CENTER);
@@ -59,7 +60,7 @@ public class PlayerLabel
             }
         });
         gui.getMainPane().add(this.icon);
-        JLabel name = new JLabel("", SwingConstants.CENTER);
+        name = new JLabel("", SwingConstants.CENTER);
         gui.getMainPane().add(name);
 
         name.setText(player.getIdentifier());
@@ -86,20 +87,32 @@ public class PlayerLabel
         scale=(int)((gui.getOffset())*.5);
         ImageIcon newIcon =new ImageIcon(bi.getScaledInstance(scale,scale,1));
         positionIcon= new JLabel(newIcon);
-        positionIcon.setBounds(1,1,scale,scale);
+        positionIcon.setBounds(gui.getLocationLabel(player.getPosition()).getX()+(index%3*(gui.getOffset()/4)),
+                gui.getLocationLabel(player.getPosition()).getY()+1+(index%2*(gui.getOffset()/2)),scale,scale);
         gui.getMainPane().add(positionIcon,index);
     }
      void updateLabel()
     {
         balance.setText("$"+player.getBalance());
+        positionIcon.updateUI();
         positionIcon.setBounds(gui.getLocationLabel(player.getPosition()).getX()+(index%3*(gui.getOffset()/4)),
                 gui.getLocationLabel(player.getPosition()).getY()+1+(index%2*(gui.getOffset()/2)),scale,scale);
-        positionIcon.updateUI();
         icon.setBorder(null);
     }
 
     public Player getPlayer() {
         return player;
+    }
+
+    public void removePlayer()
+    {
+        gui.getMainPane().remove(positionIcon);
+        gui.getMainPane().remove(balance);
+        gui.getMainPane().remove(icon);
+        gui.getMainPane().remove(name);
+        gui.getMainPane().validate();
+        gui.getMainPane().repaint();
+
     }
 
     public void setCurrentPlayer() {

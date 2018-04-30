@@ -102,7 +102,7 @@ public class Panopoly
 	public void leaveGame()
 	{
 		gui.updateAction(currentPlayer.getIdentifier() + " has left the game.");
-		
+		gui.leaveGame(currentPlayer);
 		int index = players.indexOf(currentPlayer);
 		players.remove(currentPlayer);
 		currentPlayer = players.get(index % players.size());
@@ -142,12 +142,15 @@ public class Panopoly
 		else
 		{
 			String draw = "Draw between ";
-			for(int i = 0; i < winners.size() - 2; i++)
+			for(int i = 0; i <= winners.size() - 2; i++)
 				draw += winners.get(i).getIdentifier() + ", ";
-			
-			draw += "and " + winners.get(winners.size() - 1) + ".";
+
+			draw = draw.substring(0, draw.length() - 2);
+			draw += " and " + winners.get(winners.size() - 1).getIdentifier() + ".";
 			gui.updateAction(draw);
+
 		}
+		gui.endGame();
 	}
 
 	//TO DO: DRAW CARD
@@ -192,11 +195,11 @@ public class Panopoly
 		gui.endCommand = (!gui.rollCommand && currentPlayer.getBalance() >= 0);
 	}
 
-	public void createGUI() 
+	public void createGUI(ArrayList<Player> playerArray)
 	{
-		players = GUI.getPlayersArray();
+		players = playerArray;
 		currentPlayer = players.get(0);
-		gui = new GUI(board.getNumLocations());
+		gui = new GUI(board.getNumLocations(),this,players);
 		gui.updateGUI();
 	}
 	
