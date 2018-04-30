@@ -27,7 +27,7 @@ class GUI {
     private static ArrayList<Player> players=new ArrayList<>();
 	
     boolean rollCommand,endCommand;
-	private GUIButton buyButton, rollButton, endturn, mortgageButton, redeemButton,buildButton,demoButton;
+	private GUIButton helpButton,buyButton, rollButton, endturn, mortgageButton, redeemButton,buildButton,demoButton;
     
     private static Panopoly panopoly;
     static BufferedImage[] images = new BufferedImage[6];
@@ -103,6 +103,12 @@ class GUI {
 
     private void setupbuttons()
     {
+        helpButton=new GUIButton("Help", (int)FRAME_SIZE.getWidth() - 40, 10, new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                SetupGUI.getHelp();
+            }
+        },this);
         rollButton=new GUIButton("Roll",(int)(10+(Offset*((SquaresOnSide-1)/2.0))),(((int)(FRAME_SIZE.getHeight()*.9))/2)+240,
         new MouseAdapter() {
             @Override

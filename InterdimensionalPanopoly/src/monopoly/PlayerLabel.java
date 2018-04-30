@@ -4,6 +4,7 @@ import interfaces.Locatable;
 import interfaces.Rentable;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -22,19 +23,21 @@ public class PlayerLabel
     private JLabel icon;
     private GUI gui;
     private JLabel positionIcon;
-     PlayerLabel(Player player, int i, ImageIcon icon,GUI gui)
+    private Border border;
+
+     PlayerLabel(Player player, int i, ImageIcon image,GUI gui)
     {
         this.gui=gui;
         this.player=player;
         this.index=i;
-        this.icon=new JLabel(icon);
+        this.icon=new JLabel(image);
 
         //noinspection SuspiciousNameCombination
-        this.icon.setBounds(this.gui.getFRAME_SIZE().height,i*110+10,100,100);
-        this.icon.setVisible(true);
-        this.icon.setBackground(Color.DARK_GRAY);
-        this.icon.setOpaque(true);
-        this.icon.addMouseListener(new MouseAdapter() {
+        icon.setBounds(this.gui.getFRAME_SIZE().height,i*110+10,100,100);
+        icon.setVisible(true);
+        icon.setBackground(Color.DARK_GRAY);
+        icon.setOpaque(true);
+        icon.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 gui.setSelectedLabel(null);
@@ -42,6 +45,17 @@ public class PlayerLabel
                 {
                     gui.getLocationLabel(((Locatable)property)).setTempBorder(BorderFactory.createLineBorder(Color.blue,4));
                 }
+            }
+            @Override
+            public void mouseEntered(MouseEvent e)
+            {
+                border=icon.getBorder();
+                icon.setBorder(BorderFactory.createLineBorder(Color.white,2));
+            }
+            @Override
+            public void mouseExited(MouseEvent e)
+            {
+                icon.setBorder(border);
             }
         });
         gui.getMainPane().add(this.icon);
@@ -65,9 +79,9 @@ public class PlayerLabel
         balance.setForeground(Color.WHITE);
         gui.getMainPane().add(balance);
 
-        BufferedImage bi = new BufferedImage(icon.getIconWidth(), icon.getIconHeight(), BufferedImage.TYPE_INT_ARGB);
+        BufferedImage bi = new BufferedImage(image.getIconWidth(), image.getIconHeight(), BufferedImage.TYPE_INT_ARGB);
         Graphics g = bi.createGraphics();
-        icon.paintIcon(null, g, 0,0);
+        image.paintIcon(null, g, 0,0);
         g.dispose();
         scale=(int)((gui.getOffset())*.5);
         ImageIcon newIcon =new ImageIcon(bi.getScaledInstance(scale,scale,1));

@@ -202,4 +202,8 @@ public class SetupGUI
         GUI.setPanopoly(panopoly);
         panopoly.createGUI();
     }
+
+    public static void getHelp() {
+
+    }
 }

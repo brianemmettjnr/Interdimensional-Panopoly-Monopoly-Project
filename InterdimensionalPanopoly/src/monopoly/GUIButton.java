@@ -22,4 +22,9 @@ public class GUIButton {
     {
         button.setVisible(visibility);
     }
+
+    public void setSize(int width,int height)
+    {
+        button.setSize(width,height);
+    }
 }
