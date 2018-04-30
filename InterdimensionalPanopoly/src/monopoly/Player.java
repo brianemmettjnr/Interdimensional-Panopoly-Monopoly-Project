@@ -47,13 +47,17 @@ public class Player implements Playable {
 		return imageIndex;
 	}
 
-	 void move(int squares, boolean clockwise)
+	public boolean move(int squares, boolean clockwise)
 	{
+		boolean passedGO = false;
+		
 		if(clockwise)
 		{
 			position += squares;
+			//if they pass GO
 			if(position>=panopoly.getBoard().getNumLocations()) {
 				position = position - panopoly.getBoard().getNumLocations();
+				passedGO = true;
 				earn(200);
 			}
 		}
@@ -61,12 +65,16 @@ public class Player implements Playable {
 		else
 		{
 			position -= squares;
+			//if they pass GO
 			if(position<0) {
 				position = position + panopoly.getBoard().getNumLocations();
+				passedGO = true;
 				earn(200);
 			}
 
 		}
+		
+		return passedGO;
 	}
 	
 	 void pay(int payment)

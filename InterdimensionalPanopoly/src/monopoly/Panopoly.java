@@ -32,7 +32,8 @@ public class Panopoly
 		
 		String msg = currentPlayer.getIdentifier() + " has rolled " + movePositions + ". ";
 		
-		currentPlayer.move(movePositions, clockwiseMovement);
+		if (currentPlayer.move(movePositions, clockwiseMovement))
+			 gui.updateAction(currentPlayer.getIdentifier() + " has passed GO and earned 200.");
 		
 		if(dice.getDoubles())
 		{
@@ -97,6 +98,58 @@ public class Panopoly
 		
 		return currentPlayer.getIdentifier() + " has redeemed " + redeemProperty.getIdentifier() + " for " + redeemProperty.getRedeemAmount() + ".";
 	}
+	
+	public void leaveGame()
+	{
+		gui.updateAction(currentPlayer.getIdentifier() + " has left the game.");
+		
+		int index = players.indexOf(currentPlayer);
+		players.remove(currentPlayer);
+		currentPlayer = players.get(index % players.size());
+		
+		if(players.size() == 1)
+			endGame(players);
+	}
+	
+	@SuppressWarnings("null")
+	public ArrayList<Player> decideWinner()
+	{
+		 int winningWorth = players.get(0).getNetWorth();
+		 ArrayList<Player> winners = null;
+		 
+		 for(Player p: players)
+		 {
+			 if(p.getNetWorth() > winningWorth)
+			 {
+				 winners.clear();
+				 winners.add(p);
+				 winningWorth = p.getNetWorth();
+			 }
+			 
+			 else if(p.getNetWorth() == winningWorth)
+			 {
+				 winners.add(p);
+			 }
+		 }
+		 
+		 return winners;
+	}
+	
+	public void endGame(ArrayList<Player> winners)
+	{
+		if(winners.size() == 1)
+			gui.updateAction(winners.get(0).getIdentifier() + " has won!");
+		
+		else
+		{
+			String draw = "Draw between ";
+			for(Player p: winners)
+				draw += p.getIdentifier() + ", ";
+			//remove last comma
+			draw = draw.substring(0, draw.length() - 2) + ".";
+			gui.updateAction(draw);
+		}
+	}
 
 	//TO DO: DRAW CARD
 	private void getSquareAction() 
@@ -122,7 +175,8 @@ public class Panopoly
 			((Player) ((Rentable) square).getOwner()).earn(rent);
 			gui.updateAction(currentPlayer.getIdentifier() + " has paid " + rent + " to " + ((Rentable) square).getOwner().getIdentifier());
 		}
-		
+		else if (square instanceof Chance || square instanceof CommunityChest)
+			leaveGame();
 		
 	}
 	
