@@ -64,7 +64,7 @@ class LocationLabel
 
         int size = 20;
 
-        while(label.getFontMetrics(new Font("Courier", Font.BOLD,  size)).stringWidth("investmente") > gui.getOffset())
+        while(label.getFontMetrics(new Font("Courier", Font.BOLD,  size)).stringWidth("investment") > gui.getOffset())
         {
             size--;
             label.setFont(new Font("Courier", Font.BOLD,  size));
@@ -108,7 +108,7 @@ class LocationLabel
             color="gray";
         else if(location instanceof Utility)
             color="#008b8b";
-        String HTML="<html>"+"<body style='width: 100%'><center><font size='16' color='"+color+"'>";
+        String HTML="<html>"+"<body style='width: 100%'><center><font size='6' color='"+color+"'>";
         HTML+=name + "</font><br>";
         if(location instanceof RentalProperty)
         {
