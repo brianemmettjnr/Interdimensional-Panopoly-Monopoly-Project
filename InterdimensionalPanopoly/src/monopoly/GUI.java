@@ -437,10 +437,19 @@ class GUI {
         if(action.contains("\n"))
         {
             lines = action.split("\n");
-            thirdAction.setText(latestAction.getText());
-            System.out.println(action);
-            secondAction.setText(lines[0]);
-            latestAction.setText(lines[1]);
+            
+            if(lines.length == 2)
+            {
+            	thirdAction.setText(latestAction.getText());
+            	secondAction.setText(lines[0]);
+                latestAction.setText(lines[1]);
+            }
+            else
+            {
+            	thirdAction.setText(lines[0]);
+            	secondAction.setText(lines[1]);
+                latestAction.setText(lines[2]);
+            }   
         }
         else{
             thirdAction.setText(secondAction.getText());

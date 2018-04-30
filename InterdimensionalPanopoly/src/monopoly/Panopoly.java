@@ -32,8 +32,7 @@ public class Panopoly
 		
 		String msg = currentPlayer.getIdentifier() + " has rolled " + movePositions + ".";
 		
-		if (currentPlayer.move(movePositions, clockwiseMovement))
-			 gui.updateAction(currentPlayer.getIdentifier() + " has passed GO and earned 200.");
+		msg += currentPlayer.move(movePositions, clockwiseMovement);
 		
 		if(dice.getDoubles())
 		{
