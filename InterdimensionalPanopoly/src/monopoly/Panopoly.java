@@ -102,7 +102,7 @@ public class Panopoly
 	public void leaveGame()
 	{
 		gui.updateAction(currentPlayer.getIdentifier() + " has left the game.");
-		
+		gui.leaveGame(currentPlayer);
 		int index = players.indexOf(currentPlayer);
 		players.remove(currentPlayer);
 		currentPlayer = players.get(index % players.size());

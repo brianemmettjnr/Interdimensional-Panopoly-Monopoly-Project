@@ -27,7 +27,8 @@ class GUI {
     private static ArrayList<Player> players=new ArrayList<>();
 	
     boolean rollCommand,endCommand;
-	private GUIButton helpButton,buyButton, rollButton, endturn, mortgageButton, redeemButton,buildButton,demoButton;
+	private GUIButton helpButton,buyButton, rollButton, endturn, mortgageButton,
+            leaveButton, redeemButton,buildButton,demoButton,quitButton;
     
     private static Panopoly panopoly;
     static BufferedImage[] images = new BufferedImage[6];
@@ -58,8 +59,8 @@ class GUI {
         SquaresOnSide=(((BOARD_SIZE-4)/4)+2);
         int frameSize=(int)(FRAME_SIZE.getHeight()*.9);
         Offset=(frameSize)/SquaresOnSide;
-        PlacePlayers();
         PlaceBoard();
+        PlacePlayers();
         setupbuttons();
 
         image=new JLabel(new ImageIcon(GUI.class.getResource("Logo.png")));
@@ -172,6 +173,21 @@ class GUI {
                         gui.updateAction(panopoly.demolishUnit(breaker));
                     }
                 },this);
+        leaveButton =new GUIButton("Leave",(int)(10+(Offset*((SquaresOnSide-1)/2.0)))+Offset,(((int)(FRAME_SIZE.getHeight()*.9))/2)+240,
+                new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        panopoly.leaveGame();
+                    }
+                },this);
+        quitButton =new GUIButton("Quit",(int)(10+(Offset*((SquaresOnSide-1)/2.0)))+Offset,(((int)(FRAME_SIZE.getHeight()*.9))/2)+240,
+                new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        panopoly.endGame(panopoly.decideWinner());
+                    }
+                },this);
+        quitButton.setVisible(true);
 
     }
     
@@ -180,6 +196,7 @@ class GUI {
     	panopoly.setPossibleCommands();
     	rollButton.setVisible(rollCommand);
     	endturn.setVisible(endCommand);
+        leaveButton.setVisible(!rollCommand&&!endCommand);
     }
     
     void resetCommands()
@@ -188,7 +205,7 @@ class GUI {
     	endCommand = false;
     }
     
-    private void PlacePlayers()
+    public void PlacePlayers()
     {
         int i=0;
         for(Player player:players)
@@ -196,6 +213,20 @@ class GUI {
             PlayerLabels[i]=new PlayerLabel(player,i,new ImageIcon(images[player.getImageIndex()]),this);
             i++;
         }
+    }
+    public void deletePlayers()
+    {
+        for(PlayerLabel label:PlayerLabels)
+        {
+            label.removePlayer();
+            label=null;
+        }
+    }
+    public void leaveGame(Player player)
+    {
+        players.remove(player);
+        deletePlayers();
+        PlacePlayers();
     }
 
     LocationLabel getLocationLabel(Locatable location) throws ArrayIndexOutOfBoundsException
