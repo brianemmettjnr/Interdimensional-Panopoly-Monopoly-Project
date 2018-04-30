@@ -14,12 +14,12 @@ public class Player implements Playable {
 
 	private String name;
 	private int balance;
-	private ArrayList<Rentable> properties = new ArrayList<Rentable>();
+	private ArrayList<Rentable> properties = new ArrayList<>();
 	private int position;
 	private int imageIndex=0;
 	private Panopoly panopoly;
-	public boolean canRoll = true;
-	public boolean rollComplete = false;
+	 boolean canRoll = true;
+	 boolean rollComplete = false;
 	
 	public Player(String name, int imageIndex, int playerIndex,Panopoly panopoly)
 	{
@@ -37,12 +37,12 @@ public class Player implements Playable {
 		return name;
 	}
 
-	public int getPosition()
+	 int getPosition()
 	{
 		return position;
 	}
 
-	public int getImageIndex()
+	 int getImageIndex()
 	{
 		return imageIndex;
 	}
@@ -77,12 +77,12 @@ public class Player implements Playable {
 		return passedGO;
 	}
 	
-	public void pay(int payment)
+	 void pay(int payment)
 	{
 		balance -= payment;
 	}
 	
-	public void earn(int earnings)
+	 void earn(int earnings)
 	{
 		balance += earnings;
 	}
@@ -138,12 +138,12 @@ public class Player implements Playable {
 		return isGroupOwner;
 	}
 	
-	public boolean hasProperty()
+	 boolean hasProperty()
 	{
 		return !properties.isEmpty();
 	}
 	
-	public int ownedStations()
+	 int ownedStations()
 	{
 		int stations = 0;
 		
@@ -175,5 +175,9 @@ public class Player implements Playable {
 
 	public int getPlayerIndex() {
 		return playerIndex;
+	}
+
+	public ArrayList<Rentable> getProperties() {
+		return properties;
 	}
 }

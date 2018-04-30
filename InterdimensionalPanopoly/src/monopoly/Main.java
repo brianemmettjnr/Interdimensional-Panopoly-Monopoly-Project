@@ -1,5 +1,6 @@
 package monopoly;
 
+import javax.swing.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Main {

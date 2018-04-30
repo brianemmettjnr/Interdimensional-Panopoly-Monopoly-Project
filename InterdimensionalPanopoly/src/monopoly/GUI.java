@@ -14,26 +14,23 @@ import java.util.ArrayList;
 
 class GUI {
 
+    private final int SquaresOnSide;
     private int BOARD_SIZE;
     private Dimension FRAME_SIZE=Toolkit.getDefaultToolkit().getScreenSize();
     private LocationLabel[] LocationLabels;
     private PlayerLabel[] PlayerLabels;
     private JLayeredPane MainPane;
     private int Offset;
-    private static JTextField nameSpace=new JTextField();
     private LocationLabel SelectedLabel=null;
-    private static String[] characters={"boat","car","dog","hat","iron","thimble"};
-    private static int selectedpictureIndex=-1;
-    private static JLabel selectedImage =null;
+    static String[] characters={"boat","car","dog","hat","iron","thimble"};
     private JLabel image;
-    private static int playerCount=0;
     private static ArrayList<Player> players=new ArrayList<>();
 	
-    boolean buyCommand,rollCommand,endCommand;
-	private JLabel buyButton, rollButton, endturn,mortgageButton, redeemButton,buildButton,demoButton;
+    boolean rollCommand,endCommand;
+	private GUIButton helpButton,buyButton, rollButton, endturn, mortgageButton, redeemButton,buildButton,demoButton;
     
     private static Panopoly panopoly;
-    private static BufferedImage[] images = new BufferedImage[6];
+    static BufferedImage[] images = new BufferedImage[6];
     private JLabel locationWindow=new JLabel(" ",SwingConstants.CENTER);
     private JLabel latestAction=new JLabel("",SwingConstants.CENTER);
     private JLabel secondAction=new JLabel("",SwingConstants.CENTER);
@@ -41,6 +38,12 @@ class GUI {
 
     GUI(int BoardSize)
     {
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); }
+            catch (ClassNotFoundException e) { e.printStackTrace(); }
+            catch (InstantiationException e) { e.printStackTrace(); }
+            catch (IllegalAccessException e) { e.printStackTrace(); }
+            catch (UnsupportedLookAndFeelException e) { e.printStackTrace(); }
         BOARD_SIZE=BoardSize;
         JFrame mainFrame = new JFrame("Interdimensional Panopoly");
         mainFrame.setSize(FRAME_SIZE);
@@ -52,7 +55,7 @@ class GUI {
         MainPane.setBackground(Color.red.darker().darker());
         mainFrame.add(MainPane);
         PlayerLabels=new PlayerLabel[players.size()];
-        int SquaresOnSide=(((BOARD_SIZE-4)/4)+2);
+        SquaresOnSide=(((BOARD_SIZE-4)/4)+2);
         int frameSize=(int)(FRAME_SIZE.getHeight()*.9);
         Offset=(frameSize)/SquaresOnSide;
         PlacePlayers();
@@ -90,94 +93,85 @@ class GUI {
         mainFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
 
+    static void setPlayers(ArrayList<Player> players) {
+        GUI.players = players;
+    }
+
+    static void setPanopoly(Panopoly panopoly) {
+        GUI.panopoly = panopoly;
+    }
+
     private void setupbuttons()
     {
-        rollButton=new JLabel("Roll");
-        MainPane.add(rollButton);
-        rollButton.setVisible(true);
-        rollButton.setBounds((int)((FRAME_SIZE.getHeight()*.9)/2)-10,(((int)(FRAME_SIZE.getHeight()*.9))/2)+240,Offset,30);
-        rollButton.setOpaque(true);
-        rollButton.addMouseListener(new MouseAdapter() {
+        helpButton=new GUIButton("Help", (int)FRAME_SIZE.getWidth() - 40, 10, new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                SetupGUI.getHelp();
+            }
+        },this);
+        rollButton=new GUIButton("Roll",(int)(10+(Offset*((SquaresOnSide-1)/2.0))),(((int)(FRAME_SIZE.getHeight()*.9))/2)+240,
+        new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 gui.updateAction(panopoly.roll());
-                setSelectedLabel(getLocationLabel(panopoly.getCurrentPlayer().getPosition()));
+                if(getSelectedLocation()!=getLocationLabel(panopoly.getCurrentPlayer().getPosition())) {
+                    setSelectedLabel(getLocationLabel(panopoly.getCurrentPlayer().getPosition()));
+                }
             }
-        });
-        buyButton=new JLabel("Buy");
-        MainPane.add(buyButton);
-        buyButton.setVisible(buyCommand);
-        buyButton.setBounds((int)(FRAME_SIZE.getHeight()*.9)/2-getOffset()-10,(((int)(FRAME_SIZE.getHeight()*.9))/2)+240,Offset,30);
-        buyButton.setOpaque(true);
-        buyButton.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                Rentable buyProperty= (Rentable)panopoly.getBoard().getLocation(panopoly.getCurrentPlayer().getPosition());
-                gui.updateAction(panopoly.buyProperty(buyProperty));
-                gui.buyCommand = false;
-                gui.updateGUI();
-            }
-        });
-        endturn=new JLabel("End Turn");
-        MainPane.add(endturn);
-        endturn.setVisible(false);
-        endturn.setBounds((int)((FRAME_SIZE.getHeight()*.9)/2)-10,(((int)(FRAME_SIZE.getHeight()*.9))/2)+240,Offset,30);
-        endturn.setOpaque(true);
-        endturn.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                gui.updateAction(panopoly.nextPlayer());
-            }
-        });
-        mortgageButton=new JLabel("Mortgage");
-        MainPane.add(mortgageButton);
-        mortgageButton.setVisible(false);
-        mortgageButton.setBounds(((int)(FRAME_SIZE.getHeight()*.9)/2)-190,(((int)(FRAME_SIZE.getHeight()*.9))/2)-100,Offset,30);
-        mortgageButton.setOpaque(true);
-        mortgageButton.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                RentalProperty mortgageProperty = (RentalProperty)getSelectedLocation().getLocation();
-                gui.updateAction(panopoly.mortgage(mortgageProperty));
-            }
-        });
-        redeemButton =new JLabel("Redeem");
-        MainPane.add(redeemButton);
-        redeemButton.setVisible(false);
-        redeemButton.setBounds(((int)(FRAME_SIZE.getHeight()*.9)/2)-190,(((int)(FRAME_SIZE.getHeight()*.9))/2)+-100,Offset,30);
-        redeemButton.setOpaque(true);
-        redeemButton.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                RentalProperty redeem=(RentalProperty)getSelectedLocation().getLocation();
-                gui.updateAction(panopoly.redeem(redeem));
-            }
-        });
-        buildButton =new JLabel("Build");
-        MainPane.add(buildButton);
-        buildButton.setVisible(false);
-        buildButton.setBounds(((int)(FRAME_SIZE.getHeight()*.9)/2)+190,(((int)(FRAME_SIZE.getHeight()*.9))/2)-85,Offset,30);
-        buildButton.setOpaque(true);
-        buildButton.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                InvestmentProperty builder=(InvestmentProperty) getSelectedLocation().getLocation();
-                gui.updateAction(panopoly.buildUnit(builder));
-            }
-        });
-        demoButton =new JLabel("Demolish");
-        MainPane.add(demoButton);
-        demoButton.setVisible(false);
-        demoButton.setBounds(((int)(FRAME_SIZE.getHeight()*.9)/2)+190,(((int)(FRAME_SIZE.getHeight()*.9))/2)-115,Offset,30);
-        demoButton.setOpaque(true);
-        demoButton.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                InvestmentProperty breaker=(InvestmentProperty) getSelectedLocation().getLocation();
-                gui.updateAction(panopoly.demolishUnit(breaker));
-            }
-        });
+        },this);
 
+        buyButton=new GUIButton("Buy",(int)(10+(Offset*((SquaresOnSide-1)/2.0))),Offset+20,
+                new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        Rentable buyProperty= (Rentable)panopoly.getBoard().getLocation(panopoly.getCurrentPlayer().getPosition());
+                        gui.updateAction(panopoly.buyProperty(buyProperty));
+                        gui.updateGUI();
+                    }
+                },this);
+
+        endturn=new GUIButton("End",(int)(10+(Offset*((SquaresOnSide-1)/2.0))),(((int)(FRAME_SIZE.getHeight()*.9))/2)+240,
+                new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        gui.updateAction(panopoly.nextPlayer());
+                    }
+                },this);
+
+        mortgageButton=new GUIButton("Mortgage",((int)(FRAME_SIZE.getHeight()*.9)/2)-190,(((int)(FRAME_SIZE.getHeight()*.9))/2)-100,
+                new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        RentalProperty mortgageProperty = (RentalProperty)getSelectedLocation().getLocation();
+                        gui.updateAction(panopoly.mortgage(mortgageProperty));
+                    }
+                },this);
+        redeemButton =new GUIButton("Redeem",((int)(FRAME_SIZE.getHeight()*.9)/2)-190,(((int)(FRAME_SIZE.getHeight()*.9))/2)+-100,
+                new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        RentalProperty redeem=(RentalProperty)getSelectedLocation().getLocation();
+                        gui.updateAction(panopoly.redeem(redeem));
+                    }
+                },this);
+
+        buildButton =new GUIButton("Build",((int)(FRAME_SIZE.getHeight()*.9)/2)+190,(((int)(FRAME_SIZE.getHeight()*.9))/2)-85,
+                new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        InvestmentProperty builder=(InvestmentProperty) getSelectedLocation().getLocation();
+                        gui.updateAction(panopoly.buildUnit(builder));
+                    }
+                },this);
+
+        demoButton =new GUIButton("Demolish",((int)(FRAME_SIZE.getHeight()*.9)/2)+190,(((int)(FRAME_SIZE.getHeight()*.9))/2)-115,
+                new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        InvestmentProperty breaker=(InvestmentProperty) getSelectedLocation().getLocation();
+                        gui.updateAction(panopoly.demolishUnit(breaker));
+                    }
+                },this);
 
     }
     
@@ -185,14 +179,12 @@ class GUI {
     {
     	panopoly.setPossibleCommands();
     	rollButton.setVisible(rollCommand);
-    	buyButton.setVisible(buyCommand);
     	endturn.setVisible(endCommand);
     }
     
     void resetCommands()
     {
     	rollCommand = false;
-    	buyCommand = false;
     	endCommand = false;
     }
     
@@ -252,194 +244,22 @@ class GUI {
             NumOnBoard++;
         }
     }
-
-    static void PlayerCountGui(Panopoly panopoly1)
-    {
-    	panopoly = panopoly1;
-
-    	/*
-        //how many players
-        JFrame playerFrame= new JFrame("Interdimensional Panopoly");
-        JPanel playerPanel=new JPanel();
-
-        playerFrame.setSize(400,170);
-        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-        playerFrame.setLocation(dim.width/2-playerFrame.getSize().width/2, dim.height/2-playerFrame.getSize().height/2);
-        playerFrame.add(playerPanel);
-        //panel changes after here
-        playerPanel.setBackground(Color.WHITE);
-        playerPanel.setLayout(null);
-        JLabel image=new JLabel(new ImageIcon(GUI.class.getResource("MiniLogo.png")));
-        JLabel[] button=new JLabel[5];
-        Border border=BorderFactory.createLineBorder(MAGENTA,2,true);
-        for(int i=0;i<5;i++)
-        {
-            button[i]=new JLabel();
-            button[i].setBounds(((i)*75)+7,80,70,40);
-            button[i].setBorder(border);
-            button[i].setText("  "+(i+2)+" Players");
-            button[i].setFont(new Font("Times New Roman",Font.BOLD,12));
-            int finalI = i;
-            button[i].addMouseListener(new MouseAdapter()
-            {
-                @Override
-                public void mouseEntered(MouseEvent e) {
-                    button[finalI].setText("  "+(finalI +2)+" Players?");
-                    button[finalI].setBorder(BorderFactory.createLineBorder(Color.blue,3,true));
-                }
-            });
-            button[i].addMouseListener(new MouseAdapter() {
-                @Override
-                public void mouseExited(MouseEvent e) {
-                    button[finalI].setText("  "+(finalI +2)+" Players");
-                    button[finalI].setBorder(border);
-                }
-            });
-            button[i].addMouseListener(new MouseAdapter() {
-                @Override
-                public void mouseClicked(MouseEvent e)
-                {
-                  //set player count
-                  playerFrame.dispatchEvent(new WindowEvent(playerFrame, WindowEvent.WINDOW_CLOSING));
-                  playerCount= finalI+2;
-                  GUI.PlayerNameGUI();
-                }
-            });
-            playerPanel.add(button[i]);
-        }
-        //player select
-        playerFrame.setVisible(true);
-        playerFrame.setResizable(false);
-        image.setBounds(-10,0,400,100);//this isnt relative yet okay jeez
-        playerPanel.add(image);
-        */
-        GUI.PlayerNameGUI();
-    }
-
-    private static void PlayerNameGUI() {
-        for(int i=0;i<6;i++)
-        {
-
-            try
-            {
-                images[i] = ImageIO.read(GUI.class.getResource(characters[i]+".png"));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-        }
-        /*
-        JFrame playerFrame= new JFrame("Interdimensional Panopoly");
-        JPanel playerPanel=new JPanel();
-        playerFrame.setBounds(300,300,636,270);
-        playerFrame.setResizable(false);
-        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-        playerFrame.setLocation(dim.width/2-playerFrame.getSize().width/2, dim.height/2-playerFrame.getSize().height/2);
-        playerFrame.add(playerPanel);
-        playerPanel.setLayout(null);
-        playerPanel.setOpaque(true);
-        playerPanel.setBackground(Color.DARK_GRAY);
-        playerFrame.setVisible(true);
-        for(int i=0;i<6;i++)
-        {
-            JLabel image=new JLabel(new ImageIcon(images[i]));
-            playerPanel.add(image);
-            image.setBounds(10+(i*100),40,100,100);
-            image.setText(String.valueOf(i));
-            int finalI = i;
-            image.addMouseListener(new MouseAdapter() {
-                @Override
-                public void mouseClicked(MouseEvent e) {
-                    if(selectedImage ==image) {
-                        image.setBorder(BorderFactory.createLineBorder(Color.black,3,true));
-                        selectedImage = null;
-                    }
-                    else {
-                        if(selectedImage!=null)
-                            selectedImage.setBorder(null);
-                        image.setBorder(BorderFactory.createLineBorder(Color.WHITE, 3,true));
-                        selectedImage = image;
-                        selectedpictureIndex = finalI;
-                    }
-                }
-            });
-            image.addMouseListener(new MouseAdapter() {
-                @Override
-                public void mouseEntered(MouseEvent e) {
-                    if(selectedImage !=image) {
-                        image.setBorder(BorderFactory.createLineBorder(Color.black, 3,true));
-                    }
-                }
-            });
-            image.addMouseListener(new MouseAdapter() {
-                @Override
-                public void mouseExited(MouseEvent e) {
-                    if(selectedImage!=image)
-                        image.setBorder(null);
-                }
-            });
-        }
-        JLabel upperline=new JLabel("Select your Icon, then enter your username.");
-        upperline.setBounds(120,10,600,20);
-        upperline.setFont(new Font("Times New Roman",Font.ITALIC,20));
-        upperline.setForeground(Color.white);
-        playerPanel.add(upperline);
-        nameSpace.setBounds(218,150,200,20);
-        JButton sendinputButton=new JButton();
-        sendinputButton.setBounds(218,180,200,40);
-        sendinputButton.setText("PRESS TO CONFIRM");
-        sendinputButton.setFont(new Font("Times New Roman",Font.ITALIC,16));
-        nameSpace.setText("");
-        final int[] playerIncrement = {0};
-        sendinputButton.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if(!(nameSpace.getText().isEmpty()||selectedImage==null||nameSpace.getText()==null))
-                {
-                    upperline.setForeground(Color.white);
-                    players.add(new Player(nameSpace.getText(),selectedpictureIndex,playerIncrement[0],panopoly));
-                    nameSpace.setText("");
-                    selectedImage.setVisible(false);
-                    selectedImage=null;
-                    playerIncrement[0]++;
-                }
-                else
-                {
-                    upperline.setForeground(Color.red);
-                }
-                if(playerCount== playerIncrement[0])
-                {
-                    playerFrame.dispatchEvent(new WindowEvent(playerFrame, WindowEvent.WINDOW_CLOSING));
-                    //create main game GUI
-                    panopoly.createGUI();
-                }
-
-            }
-        });
-        playerPanel.add(sendinputButton);
-        playerPanel.add(nameSpace);
-        */
-        players.add(new Player("Brian",0,0,panopoly));
-        players.add(new Player("Chloe",1,1,panopoly));
-        players.add(new Player("Cian",2,2,panopoly));
-        players.add(new Player("Mossy",3,3,panopoly));
-        players.add(new Player("Tony",4,4,panopoly));
-        players.add(new Player("Christ",5,5,panopoly));
-        panopoly.createGUI();
-    }
-
     static ArrayList<Player> getPlayersArray()
     {
         return players;
     }
 
-    LocationLabel getSelectedLocation()
+    private LocationLabel getSelectedLocation()
     {
         return SelectedLabel;
     }
 
     void setSelectedLabel(LocationLabel location)
     {
+        for(LocationLabel label:gui.getLocationLabels())
+        {
+            label.resetBorder();
+        }
         if(this.SelectedLabel!=null)
         {
             this.SelectedLabel.getLabel().setBorder(BorderFactory.createLineBorder(Color.BLACK,2));
@@ -452,6 +272,7 @@ class GUI {
             image.setVisible(true);
             locationWindow.setText(" ");
             locationWindow.setOpaque(false);
+            buyButton.setVisible(false);
             mortgageButton.setVisible(false);
             redeemButton.setVisible(false);
             buildButton.setVisible(false);
@@ -476,10 +297,16 @@ class GUI {
                     }
 
                     redeemButton.setVisible(locationCheck.isMortgaged()
-                            &&locationCheck.getRedeemAmount()>=locationCheck.getOwner().getBalance());
+                            &&locationCheck.getRedeemAmount()<=panopoly.getCurrentPlayer().getBalance());
                     mortgageButton.setVisible(!locationCheck.isMortgaged() && mortgageable);
                 }
-                
+                else
+                {
+                    buyButton.setVisible(locationCheck.getOwner()==null&&locationCheck.getPrice()<=panopoly.getCurrentPlayer().getBalance()
+                            &&panopoly.getCurrentPlayer().getPosition()==location.getIndex());
+                    mortgageButton.setVisible(false);
+                    redeemButton.setVisible(false);
+                }
                 if(location.getLocation() instanceof InvestmentProperty)
                 {
                     InvestmentProperty investment=(InvestmentProperty)location.getLocation();
@@ -497,11 +324,24 @@ class GUI {
                         demoButton.setVisible((investment.hasBuildings()));
                         buildButton.setVisible(buildable&&investment.hotels==0&&investment.getOwner().getBalance()>=investment.buildPrice);
                     }
+                    else
+                    {
+                        demoButton.setVisible(false);
+                        buildButton.setVisible(false);
+                    }
                 }
+                else
+                {
+                    demoButton.setVisible(false);
+                    buildButton.setVisible(false);
+                }
+
             }
 
             else
             {
+                demoButton.setVisible(false);
+                buildButton.setVisible(false);
                 mortgageButton.setVisible(false);
                 redeemButton.setVisible(false);
             }
@@ -545,12 +385,19 @@ class GUI {
         updateGUI();
     }
 
-    int getBOARD_SIZE() {
+    int getBOARD_SIZE()
+    {
         return BOARD_SIZE;
     }
-
     int getOffset()
     {
         return  Offset;
+    }
+
+     private LocationLabel[] getLocationLabels() {
+        return LocationLabels;
+    }
+     static ArrayList<Player> getPlayers() {
+        return players;
     }
 }

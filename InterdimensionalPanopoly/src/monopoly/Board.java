@@ -49,7 +49,7 @@ public class Board
 				else
 				{
 					int price = generatePrice();
-					locations.add(new InvestmentProperty("Investment", price, generateRentArray(price), (price/2), 10, brown));
+					locations.add(new InvestmentProperty("Investment", price, generateRentArray(price), (price/2), 10, new Group("name")));
 					minPrice += priceIncrease * 10;
 					maxPrice += priceIncrease * 15;
 				}

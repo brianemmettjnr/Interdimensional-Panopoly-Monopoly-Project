@@ -1,11 +1,17 @@
 package monopoly;
 
+import interfaces.Locatable;
+import interfaces.Rentable;
+
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
+import java.util.concurrent.TimeUnit;
 
+import static java.awt.Color.getColor;
 import static java.awt.Color.green;
 
 public class PlayerLabel
@@ -13,23 +19,47 @@ public class PlayerLabel
     private final int scale;
     private Player player;
     private int index;
-    private JLabel name=new JLabel("",SwingConstants.CENTER);
     private JLabel balance=new JLabel("",SwingConstants.CENTER);
     private JLabel icon;
     private GUI gui;
     private JLabel positionIcon;
-    public PlayerLabel(Player player, int i, ImageIcon icon,GUI gui)
+    private Border border;
+
+     PlayerLabel(Player player, int i, ImageIcon image,GUI gui)
     {
         this.gui=gui;
         this.player=player;
         this.index=i;
-        this.icon=new JLabel(icon);
+        this.icon=new JLabel(image);
 
-        this.icon.setBounds(this.gui.getFRAME_SIZE().height,i*110+10,100,100);
-        this.icon.setVisible(true);
-        this.icon.setBackground(Color.DARK_GRAY);
-        this.icon.setOpaque(true);
+        //noinspection SuspiciousNameCombination
+        icon.setBounds(this.gui.getFRAME_SIZE().height,i*110+10,100,100);
+        icon.setVisible(true);
+        icon.setBackground(Color.DARK_GRAY);
+        icon.setOpaque(true);
+        icon.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                gui.setSelectedLabel(null);
+                for(Rentable property:player.getProperties())
+                {
+                    gui.getLocationLabel(((Locatable)property)).setTempBorder(BorderFactory.createLineBorder(Color.blue,4));
+                }
+            }
+            @Override
+            public void mouseEntered(MouseEvent e)
+            {
+                border=icon.getBorder();
+                icon.setBorder(BorderFactory.createLineBorder(Color.white,2));
+            }
+            @Override
+            public void mouseExited(MouseEvent e)
+            {
+                icon.setBorder(border);
+            }
+        });
         gui.getMainPane().add(this.icon);
+        JLabel name = new JLabel("", SwingConstants.CENTER);
         gui.getMainPane().add(name);
 
         name.setText(player.getIdentifier());
@@ -49,9 +79,9 @@ public class PlayerLabel
         balance.setForeground(Color.WHITE);
         gui.getMainPane().add(balance);
 
-        BufferedImage bi = new BufferedImage(icon.getIconWidth(), icon.getIconHeight(), BufferedImage.TYPE_INT_ARGB);
+        BufferedImage bi = new BufferedImage(image.getIconWidth(), image.getIconHeight(), BufferedImage.TYPE_INT_ARGB);
         Graphics g = bi.createGraphics();
-        icon.paintIcon(null, g, 0,0);
+        image.paintIcon(null, g, 0,0);
         g.dispose();
         scale=(int)((gui.getOffset())*.5);
         ImageIcon newIcon =new ImageIcon(bi.getScaledInstance(scale,scale,1));
@@ -59,11 +89,11 @@ public class PlayerLabel
         positionIcon.setBounds(1,1,scale,scale);
         gui.getMainPane().add(positionIcon,index);
     }
-    public void updateLabel()
+     void updateLabel()
     {
         balance.setText("$"+player.getBalance());
-        positionIcon.setBounds(gui.getLocationLabel(player.getPosition()).getX()+(int)(index%3*(gui.getOffset()/4)),
-                gui.getLocationLabel(player.getPosition()).getY()+1+(int)(index%2*(gui.getOffset()/2)),scale,scale);
+        positionIcon.setBounds(gui.getLocationLabel(player.getPosition()).getX()+(index%3*(gui.getOffset()/4)),
+                gui.getLocationLabel(player.getPosition()).getY()+1+(index%2*(gui.getOffset()/2)),scale,scale);
         positionIcon.updateUI();
         icon.setBorder(null);
     }
