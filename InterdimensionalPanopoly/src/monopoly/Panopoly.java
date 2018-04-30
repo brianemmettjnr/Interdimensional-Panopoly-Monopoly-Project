@@ -111,11 +111,10 @@ public class Panopoly
 			endGame(players);
 	}
 	
-	@SuppressWarnings("null")
 	public ArrayList<Player> decideWinner()
 	{
 		 int winningWorth = players.get(0).getNetWorth();
-		 ArrayList<Player> winners = null;
+		 ArrayList<Player> winners = new ArrayList<Player>();
 		 
 		 for(Player p: players)
 		 {
