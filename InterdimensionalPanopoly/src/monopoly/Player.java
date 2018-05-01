@@ -208,9 +208,9 @@ public class Player implements Playable {
 	}
 	
 	//On release, move to next player's turn
-	public String  releaseFromJail()
+	public void releaseFromJail()
 	{
 		inJail = false;
-		return panopoly.startPlayerTurn(panopoly.getNextPlayer());
+		panopoly.startPlayerTurn(panopoly.getNextPlayer());
 	}
 }
