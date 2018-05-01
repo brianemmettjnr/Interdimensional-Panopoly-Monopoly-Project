@@ -28,4 +28,10 @@ public class GUIButton {
     {
         button.setSize(width,height);
     }
+
+    public void setMouseEvent(MouseAdapter mouse)
+    {
+        button.removeMouseListener(button.getMouseListeners()[0]);
+        button.addMouseListener(mouse);
+    }
 }
