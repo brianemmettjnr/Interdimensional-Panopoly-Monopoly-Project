@@ -43,7 +43,7 @@ class GUI {
     private MouseAdapter incorrect=new MouseAdapter() {
         @Override
         public void mouseClicked(MouseEvent e) {
-            panopoly.nextPlayer();
+            panopoly.startPlayerTurn(panopoly.getNextPlayer());
             gui.hideAnswers();
             updateAction("Wrong answer.");
         }
@@ -165,7 +165,7 @@ class GUI {
                 new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
-                        gui.updateAction(panopoly.nextPlayer());
+                        gui.updateAction(panopoly.startPlayerTurn(panopoly.getNextPlayer()));
                     }
                 },this);
 
