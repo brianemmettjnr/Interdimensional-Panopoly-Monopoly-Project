@@ -74,7 +74,6 @@ public class Player implements Playable {
 		for(Ownable p: properties)
 		{
 			netWorth += p.getValue();
-			System.out.print(((Identifiable) p).getIdentifier() + p.getValue()); 
 		}
 		
 		return netWorth;
