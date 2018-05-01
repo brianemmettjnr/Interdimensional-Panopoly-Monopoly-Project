@@ -230,10 +230,10 @@ class GUI {
                     }
                 },this);
         quitButton.setVisible(true);
-        int x=-Offset*2;
+        int x=-Offset;
         for(int i=0;i<4;i++)
         {
-            answers[i]=new GUIButton("Answer",(int)(10+(Offset*((SquaresOnSide-1)/2.0)))+x,(((int)(FRAME_SIZE.getHeight()*.9))/2)+240,
+            answers[i]=new GUIButton("Answer",(int)(10+(Offset*((SquaresOnSide-2)/2.0)))+x,-20+(SquaresOnSide-1)*Offset,
                    null,this);
             x+=Offset;
         }
