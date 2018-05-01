@@ -3,7 +3,7 @@ package monopoly;
 import interfaces.Ownable;
 import interfaces.Playable;
 
-public class PrivateProperty extends NamedLocation implements Ownable
+public abstract class PrivateProperty extends NamedLocation implements Ownable
 {	
 	private Playable owner;
 	private int price;

@@ -16,7 +16,14 @@ public class InvestmentProperty extends RentalProperty implements Improvable{
 		this.buildPrice = buildPrice;
 	}
 	
-	public int getBuildPrice() {
+	@Override
+	public int getValue()
+	{
+		return super.getValue() + getNumBuildings()*buildPrice;
+	}
+	
+	public int getBuildPrice() 
+	{
 		return buildPrice;
 	}
 	

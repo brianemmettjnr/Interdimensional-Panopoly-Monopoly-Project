@@ -189,7 +189,7 @@ public class Panopoly
 	
 	public ArrayList<Player> decideWinners()
 	{
-		 int winningWorth = players.get(0).getNetWorth();
+		 int winningWorth = 0;
 		 ArrayList<Player> winners = new ArrayList<Player>();
 		 
 		 for(Player p: players)
