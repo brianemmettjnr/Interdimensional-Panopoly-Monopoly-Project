@@ -1,6 +1,12 @@
 package monopoly;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
+
+import javax.swing.Timer;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import interfaces.*;
 
@@ -12,11 +18,17 @@ public class Panopoly
 	public GUI gui;
 	private Dice dice = new Dice();
 	private boolean clockwiseMovement = true;
+	private Timer countdownTimer;
 	
 	Panopoly(int numLocations)
 	{
 		board = new Board(numLocations);
 		SetupGUI.PlayerCountGui(this);
+
+		countdownTimer = new Timer(10 * 60, null);
+		
+		countdownTimer.setRepeats(false);
+		countdownTimer.start();
 	}
 	
 	public Board getBoard()
@@ -113,8 +125,21 @@ public class Panopoly
 		gui.leaveGame(currentPlayer);
 		currentPlayer = players.get(index % players.size());
 		
+		
+		currentPlayer.doubles = 0;
+		currentPlayer.canRoll = true;
+		currentPlayer.rollComplete = false;
+		
+		gui.resetCommands();
+		gui.updateGUI();
+		
+		
+		
 		if(players.size() == 1)
 			endGame(players);
+		
+		else
+			gui.updateAction(currentPlayer.getIdentifier() + "'s turn");
 	}
 	
 	public ArrayList<Player> decideWinner()
@@ -183,7 +208,17 @@ public class Panopoly
 			((Player) ((Rentable) square).getOwner()).earn(rent);
 			gui.updateAction(currentPlayer.getIdentifier() + " has paid " + rent + " to " + ((Rentable) square).getOwner().getIdentifier());
 		}
+		else if((square instanceof Chance) || (square instanceof CommunityChest))
+		{			
+			ActionListener timerListener = new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
+					endGame(decideWinner());
+				}};
 				
+			countdownTimer.addActionListener(timerListener);
+			countdownTimer.restart();
+		}
 	}
 	
 	//buy, roll, drawCard, endTurn
