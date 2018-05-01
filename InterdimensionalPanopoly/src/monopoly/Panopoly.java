@@ -124,23 +124,12 @@ public class Panopoly
 		int index = players.indexOf(currentPlayer);
 		players.remove(currentPlayer);
 		gui.leaveGame(currentPlayer);
-		currentPlayer = players.get(index % players.size());
-		
-		
-		currentPlayer.doubles = 0;
-		currentPlayer.canRoll = true;
-		currentPlayer.rollComplete = false;
-		
-		gui.resetCommands();
-		gui.updateGUI();
-		
-		
 		
 		if(players.size() == 1)
 			endGame(players);
 		
 		else
-			gui.updateAction(currentPlayer.getIdentifier() + "'s turn");
+			gui.updateAction(startPlayerTurn(players.get(index % players.size())));
 	}
 	
 	public ArrayList<Player> decideWinner()
@@ -209,19 +198,20 @@ public class Panopoly
 			((Player) ((Rentable) square).getOwner()).earn(rent);
 			gui.updateAction(currentPlayer.getIdentifier() + " has paid " + rent + " to " + ((Rentable) square).getOwner().getIdentifier());
 		}
-		else if((square instanceof Chance) || (square instanceof CommunityChest))
-		{			
-			ActionListener timerListener = new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent arg0) {
-					endGame(decideWinner());
-				}};
-				
-			countdownTimer.addActionListener(timerListener);
-			countdownTimer.restart();
-			gui.updateAction("COUNTDOWN STARTED");
-			gui.updateAction("Elapsed Time in secs: " + (System.currentTimeMillis() - startTime) / 1000);
-		}
+	}
+	
+	public void startCountdown()
+	{
+		ActionListener timerListener = new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				endGame(decideWinner());
+			}};
+			
+		countdownTimer.addActionListener(timerListener);
+		countdownTimer.restart();
+		gui.updateAction("COUNTDOWN STARTED");
+		gui.updateAction("Elapsed Time in secs: " + (System.currentTimeMillis() - startTime) / 1000);
 	}
 
 	public void createGUI(ArrayList<Player> playerArray)
@@ -232,12 +222,12 @@ public class Panopoly
 		gui.updateGUI();
 	}
 	
-	public String nextPlayer()
+	public String startPlayerTurn(Player player)
 	{
 		currentPlayer.doubles = 0;
 		currentPlayer.canRoll = true;
 		currentPlayer.rollComplete = false;
-		currentPlayer = players.get((players.indexOf(currentPlayer)+1)%players.size());
+		currentPlayer = player;
 		
 		gui.resetCommands();
 		gui.updateGUI();
@@ -248,5 +238,10 @@ public class Panopoly
 	public Player getCurrentPlayer() 
 	{
 		return currentPlayer;
+	}
+	
+	public Player getNextPlayer()
+	{
+		return players.get((players.indexOf(currentPlayer)+1)%players.size());
 	}
 }

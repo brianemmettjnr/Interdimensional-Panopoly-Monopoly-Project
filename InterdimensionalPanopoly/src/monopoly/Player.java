@@ -96,13 +96,16 @@ public class Player implements Playable {
 	{
 		position = panopoly.getBoard().getJailLocation();
 		inJail = true;
-		panopoly.nextPlayer();
+		panopoly.startPlayerTurn(panopoly.getNextPlayer());
 	}
 	
 	public void releaseFromJail()
 	{
 		inJail = false;
-		panopoly.nextPlayer();
+		
+		
+		
+		panopoly.startPlayerTurn(panopoly.getNextPlayer());
 	}
 	
 	 void pay(int payment)
