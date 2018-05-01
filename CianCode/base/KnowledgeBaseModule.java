@@ -151,10 +151,15 @@ public class KnowledgeBaseModule
 		
 		return matchingKeys;
 	}
-	public Vector<String> getAllKeysWithFieldValue2(String fieldname, Vector<String> value)
+	public Vector<String> getAllKeysWithFieldValueNon(String fieldname, String value)
 	{
 		Vector<String> matchingKeys = new Vector();
-	
+
+		if (value == null) 
+			return matchingKeys;
+		else
+			value = value.intern();
+		
 		for (int f = 0; f < fieldTables.size(); f++)
 		{
 			String name = (String)fieldNames.elementAt(f);
@@ -174,7 +179,9 @@ public class KnowledgeBaseModule
 				Vector values = (Vector)field.get(key);
 				
 				if (values != null && values.contains(value))
+				{
 					matchingKeys.add(key);
+				}
 			}
 		}
 		
