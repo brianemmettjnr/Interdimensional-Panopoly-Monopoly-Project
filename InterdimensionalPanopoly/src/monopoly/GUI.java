@@ -33,8 +33,24 @@ class GUI {
             leaveButton, redeemButton,buildButton,demoButton,quitButton;
 
 	private GUIButton[] answers =new GUIButton[4];
-	private MouseAdapter correct;
-	private MouseAdapter incorrect;
+	private MouseAdapter correct=new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            panopoly.getCurrentPlayer().releaseFromJail();
+            gui.hideAnswers();
+            updateAction("Correct answer.");
+        }
+    };
+
+
+    private MouseAdapter incorrect=new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            panopoly.nextPlayer();
+            gui.hideAnswers();
+            updateAction("Wrong answer.");
+        }
+    };
     
     private Panopoly panopoly;
     static BufferedImage[] images = new BufferedImage[6];
@@ -102,10 +118,8 @@ class GUI {
         MainPane.add(locationWindow);
 
         questionWindow.setBounds((int)(10+(Offset*((SquaresOnSide)/2.0)))-200,(((int)(FRAME_SIZE.getHeight()*.9))/2)-140,400,80);
-        questionWindow.setVisible(true);
         questionWindow.setBackground(Color.WHITE);
         questionWindow.setForeground(Color.BLACK);
-        questionWindow.setOpaque(true);
         questionWindow.setBorder(BorderFactory.createLineBorder(Color.black,4));
         questionWindow.setVerticalAlignment(JLabel.TOP);
         MainPane.add(questionWindow);
@@ -230,7 +244,9 @@ class GUI {
             for(GUIButton button:answers)
             {
                 button.setVisible(true);
+                button.setMouseEvent(incorrect);
             }
+            answers[0].setMouseEvent(correct);
             //todo get cian stuff here
 
         }
@@ -266,7 +282,12 @@ class GUI {
         deletePlayers();
         PlacePlayers();
     }
-
+    private void hideAnswers() {
+        for(GUIButton answer:answers)
+        {
+            answer.setVisible(false);
+        }
+    }
     LocationLabel getLocationLabel(Locatable location) throws ArrayIndexOutOfBoundsException
     {
         for(LocationLabel local:LocationLabels)
@@ -348,6 +369,7 @@ class GUI {
             this.SelectedLabel=location;
             image.setVisible(false);
             questionWindow.setVisible(true);
+            questionWindow.setOpaque(true);
             locationWindow.setText(" ");
             locationWindow.setOpaque(false);
             locationWindow.setVisible(false);

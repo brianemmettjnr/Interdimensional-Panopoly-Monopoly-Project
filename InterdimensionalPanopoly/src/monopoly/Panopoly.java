@@ -208,17 +208,17 @@ public class Panopoly
 			((Player) ((Rentable) square).getOwner()).earn(rent);
 			gui.updateAction(currentPlayer.getIdentifier() + " has paid " + rent + " to " + ((Rentable) square).getOwner().getIdentifier());
 		}
-		else if((square instanceof Chance) || (square instanceof CommunityChest))
-		{			
-			ActionListener timerListener = new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent arg0) {
-					endGame(decideWinner());
-				}};
-				
-			countdownTimer.addActionListener(timerListener);
-			countdownTimer.restart();
-		}
+//		else if((square instanceof Chance) || (square instanceof CommunityChest))
+//		{
+//			ActionListener timerListener = new ActionListener() {
+//				@Override
+//				public void actionPerformed(ActionEvent arg0) {
+//					endGame(decideWinner());
+//				}};
+//
+//			//countdownTimer.addActionListener(timerListener);
+//			//countdownTimer.restart();
+//		}
 	}
 	
 	//buy, roll, drawCard, endTurn

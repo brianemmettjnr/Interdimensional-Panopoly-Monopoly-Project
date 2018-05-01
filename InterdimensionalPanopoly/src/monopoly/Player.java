@@ -102,6 +102,7 @@ public class Player implements Playable {
 	public void releaseFromJail()
 	{
 		inJail = false;
+		panopoly.nextPlayer();
 	}
 	
 	 void pay(int payment)
