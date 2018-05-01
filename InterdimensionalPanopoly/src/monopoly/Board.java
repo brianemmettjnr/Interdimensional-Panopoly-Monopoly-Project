@@ -49,7 +49,18 @@ public class Board
 				else
 				{
 					int price = generatePrice();
-					locations.add(new InvestmentProperty("Investment", price, generateRentArray(price), (price/2), 10, new Group("name")));
+					int buildCost = 0;
+					//first side
+					if(locations.size() < numLocations/4)
+						buildCost = 50;
+					else if(locations.size() < numLocations/2)
+						buildCost = 100;
+					else if(locations.size() < (numLocations*3)/4)
+						buildCost = 150;
+					else
+						buildCost = 200;					
+					
+					locations.add(new InvestmentProperty("Investment", price, generateRentArray(price), (price/2), buildCost, new Group("name")));
 					minPrice += priceIncrease * 10;
 					maxPrice += priceIncrease * 15;
 				}

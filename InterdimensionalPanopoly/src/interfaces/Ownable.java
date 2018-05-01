@@ -6,4 +6,5 @@ public interface Ownable
 	public void setOwner(Playable player);
 	
 	public int getPrice();
+	public int getValue();
 }

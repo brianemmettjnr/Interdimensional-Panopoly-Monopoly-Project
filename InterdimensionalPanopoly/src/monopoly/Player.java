@@ -3,6 +3,7 @@ package monopoly;
 import java.util.ArrayList;
 
 import interfaces.Groupable;
+import interfaces.Identifiable;
 import interfaces.Ownable;
 import interfaces.Playable;
 import interfaces.Rentable;
@@ -64,7 +65,7 @@ public class Player implements Playable {
 		return properties;
 	}
 	
-	//If game ends early - get winner by net worth = balance + price of properties
+	//If game ends early - get winner by net worth = balance + value of properties
 	@Override
 	public int getNetWorth() 
 	{
@@ -72,7 +73,8 @@ public class Player implements Playable {
 		
 		for(Ownable p: properties)
 		{
-			netWorth += p.getPrice();
+			netWorth += p.getValue();
+			System.out.print(((Identifiable) p).getIdentifier() + p.getValue()); 
 		}
 		
 		return netWorth;

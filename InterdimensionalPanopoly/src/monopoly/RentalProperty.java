@@ -59,5 +59,14 @@ public abstract class RentalProperty extends PrivateProperty implements Rentable
 	{
 		return group;
 	}
-
+	
+	@Override
+	public int getValue()
+	{
+		if(isMortgaged())
+			return getMortgageAmount();
+		
+		else
+			return getPrice();
+	}
 }
