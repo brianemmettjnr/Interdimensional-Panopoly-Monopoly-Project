@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="BrianTestGui/src"/>
 	<classpathentry kind="src" path="ChrisCode/src"/>
 	<classpathentry kind="src" path="CianCode"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
