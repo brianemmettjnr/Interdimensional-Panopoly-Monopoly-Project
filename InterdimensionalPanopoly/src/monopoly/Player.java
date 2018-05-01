@@ -49,7 +49,35 @@ public class Player implements Playable {
 	{
 		return imageIndex;
 	}
+	 
+	@Override
+	public int getBalance() 
+	{
+		return balance;
+	}
+	
+	public int getPlayerIndex() {
+		return playerIndex;
+	}
 
+	public ArrayList<Rentable> getProperties() {
+		return properties;
+	}
+	
+	//If game ends early - get winner by net worth = balance + price of properties
+	@Override
+	public int getNetWorth() 
+	{
+		int netWorth = balance;
+		
+		for(Ownable p: properties)
+		{
+			netWorth += p.getPrice();
+		}
+		
+		return netWorth;
+	}
+	
 	public String move(int squares, boolean clockwise)
 	{
 		boolean passedGO = false;
@@ -87,27 +115,6 @@ public class Player implements Playable {
 		return ret;
 	}
 	
-	public boolean isInJail()
-	{
-		return inJail;
-	}
-	
-	public void sendToJail()
-	{
-		position = panopoly.getBoard().getJailLocation();
-		inJail = true;
-		panopoly.startPlayerTurn(panopoly.getNextPlayer());
-	}
-	
-	public void releaseFromJail()
-	{
-		inJail = false;
-		
-		
-		
-		panopoly.startPlayerTurn(panopoly.getNextPlayer());
-	}
-	
 	 void pay(int payment)
 	{
 		balance -= payment;
@@ -118,6 +125,7 @@ public class Player implements Playable {
 		balance += earnings;
 	}
 	
+	//PROPERTY METHODS
 	public void buyProperty(Rentable property, int price)
 	{
 		pay(price);
@@ -134,26 +142,6 @@ public class Player implements Playable {
 		newOwner.buyProperty(property, sellPrice);
 	}
 
-	//If game ends early - get winner by net worth
-	@Override
-	public int getNetWorth() 
-	{
-		int netWorth = balance;
-		
-		for(Ownable p: properties)
-		{
-			netWorth += p.getPrice();
-		}
-		
-		return netWorth;
-	}
-
-	@Override
-	public int getBalance() 
-	{
-		return balance;
-	}
-	
 	public boolean ownsGroup(Group group)
 	{
 		boolean isGroupOwner = true;
@@ -203,12 +191,25 @@ public class Player implements Playable {
 		
 		return utilities;
 	}
-
-	public int getPlayerIndex() {
-		return playerIndex;
+	
+	//JAIL METHODS
+	public boolean isInJail()
+	{
+		return inJail;
 	}
-
-	public ArrayList<Rentable> getProperties() {
-		return properties;
+	
+	//On send to jail, end current player's turn
+	public void sendToJail()
+	{
+		position = panopoly.getBoard().getJailLocation();
+		inJail = true;
+		panopoly.startPlayerTurn(panopoly.getNextPlayer());
+	}
+	
+	//On release, move to next player's turn
+	public void releaseFromJail()
+	{
+		inJail = false;
+		panopoly.startPlayerTurn(panopoly.getNextPlayer());
 	}
 }

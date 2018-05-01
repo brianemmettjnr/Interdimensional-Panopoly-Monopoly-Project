@@ -49,7 +49,7 @@ public class InvestmentProperty extends RentalProperty implements Improvable{
 	}
 	//build houses one by one
 	@Override
-	public void build() {
+	public String build() {
 		
 		houses++;
 			
@@ -59,11 +59,17 @@ public class InvestmentProperty extends RentalProperty implements Improvable{
 			houses = 0;
 			hotels++;
 		}
+		
+		if(getNumHotels() == 1)
+			return getOwner().getIdentifier() + " has built a hotel on " + getIdentifier() + ".";
+		else
+			return getOwner().getIdentifier() + " has built a house on " + getIdentifier() + ".";
+
 	}
 
 	//demolish houses one by one
 	@Override
-	public void demolish() {
+	public String demolish() {
 		
 		//demolish houses first
 		if(houses > 0)
@@ -77,5 +83,11 @@ public class InvestmentProperty extends RentalProperty implements Improvable{
 			hotels--;
 			houses += 4;
 		}
+		
+		if(getNumHouses() == InvestmentProperty.MAX_UNITS - 1)
+			return getOwner().getIdentifier() + " has demolished a hotel on " + getIdentifier() + ".";
+		else
+			return getOwner().getIdentifier() + " has demolished a house on " + getIdentifier() + ".";
+
 	}
 }
