@@ -7,8 +7,8 @@ public interface Improvable extends Ownable{
 
 	int getNumBuildings();
 
-	public void build();
-	public void demolish();
+	public String build();
+	public String demolish();
 	
 	public int getNumHouses();
 	public int getNumHotels();

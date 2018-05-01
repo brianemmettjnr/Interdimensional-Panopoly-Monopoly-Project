@@ -13,7 +13,7 @@ public class Panopoly
 	private ArrayList<Player> players;
 	private Player currentPlayer;
 	private Board board;
-	public GUI gui;
+	private GUI gui;
 	private Dice dice = new Dice();
 	private boolean clockwiseMovement = true;
 	private long startTime;
@@ -27,14 +27,84 @@ public class Panopoly
 		startTime = System.currentTimeMillis();
 
 		countdownTimer = new Timer(10 * 60 * 10, null);
-		
 		countdownTimer.setRepeats(false);
-		countdownTimer.start();
 	}
 	
+	public void createGUI(ArrayList<Player> playerArray)
+	{
+		players = playerArray;
+		currentPlayer = players.get(0);
+		gui = new GUI(board.getNumLocations(),this,players);
+		gui.updateGUI();
+	}
+	
+	//GETTER METHODS
 	public Board getBoard()
 	{
 		return this.board;
+	}
+
+	public Player getCurrentPlayer() 
+	{
+		return currentPlayer;
+	}
+	
+	public Player getNextPlayer()
+	{
+		return players.get((players.indexOf(currentPlayer)+1)%players.size());
+	}
+	
+	//TO DO: DRAW CARD
+	private void getSquareAction() 
+	{
+		Locatable square = board.getLocation(currentPlayer.getPosition());
+		
+		if(square instanceof TaxableProperty)
+		{
+			currentPlayer.pay(((Taxable) square).getFlatAmount());
+			gui.updateAction(currentPlayer.getIdentifier() + " has paid " + ((Taxable) square).getFlatAmount() + " in tax.");
+		}
+		//rental property owned by another player
+		else if((square instanceof RentalProperty) && (((Rentable) square).getOwner()!=null) && (((Rentable) square).getOwner()!=currentPlayer) && !(((RentalProperty) square).isMortgaged()))
+		{
+			int rent = ((Rentable) square).getRentalAmount();
+			
+			if(!(currentPlayer.hasProperty() || currentPlayer.getBalance() >= rent))
+			{
+				rent = currentPlayer.getBalance();
+			}
+			
+			currentPlayer.pay(rent);
+			((Player) ((Rentable) square).getOwner()).earn(rent);
+			gui.updateAction(currentPlayer.getIdentifier() + " has paid " + rent + " to " + ((Rentable) square).getOwner().getIdentifier());
+		}
+	}
+	
+	public void startCountdown()
+	{
+		ActionListener timerListener = new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				endGame();
+			}};
+			
+		countdownTimer.addActionListener(timerListener);
+		countdownTimer.start();
+		gui.updateAction("COUNTDOWN STARTED");
+		gui.updateAction("Elapsed Time in secs: " + (System.currentTimeMillis() - startTime) / 1000);
+	}
+	
+	public String startPlayerTurn(Player player)
+	{
+		currentPlayer.doubles = 0;
+		currentPlayer.canRoll = true;
+		currentPlayer.rollComplete = false;
+		currentPlayer = player;
+		
+		gui.resetCommands();
+		gui.updateGUI();
+		
+		return currentPlayer.getIdentifier() + "'s turn";
 	}
 	
 	public String roll()
@@ -68,6 +138,7 @@ public class Panopoly
 		return msg;
 	}
 	
+	//PROPERTY METHODS
 	public String buyProperty(Rentable property)
 	{
 		currentPlayer.buyProperty(property, property.getPrice());
@@ -78,46 +149,29 @@ public class Panopoly
 	
 	public String buildUnit(InvestmentProperty property)
 	{
-		property.build();
-		
 		currentPlayer.pay(property.buildPrice);
-		
-		if(property.getNumHotels() == 1)
-			return currentPlayer.getIdentifier() + " has built a hotel on " + property.getIdentifier() + ".";
-		else
-			return currentPlayer.getIdentifier() + " has built a house on " + property.getIdentifier() + ".";
+		return property.build();		
 	}
 	
 	public String demolishUnit(InvestmentProperty property)
 	{
-		property.demolish();
-		
 		currentPlayer.earn(property.buildPrice / 2);
-		
-		if(property.getNumHouses() == InvestmentProperty.MAX_UNITS - 1)
-			return currentPlayer.getIdentifier() + " has demolished a hotel on " + property.getIdentifier() + ".";
-		else
-			return currentPlayer.getIdentifier() + " has demolished a house on " + property.getIdentifier() + ".";
+		return property.demolish();
 	}
 
 	public String mortgage(RentalProperty mortgageProperty) 
 	{
-		mortgageProperty.mortgage();
-		
 		currentPlayer.earn(mortgageProperty.getMortgageAmount());
-		
-		return currentPlayer.getIdentifier() + " has mortgaged " + mortgageProperty.getIdentifier() + " for " + mortgageProperty.getMortgageAmount() + ".";
+		return mortgageProperty.mortgage();
 	}
 	
 	public String redeem(RentalProperty redeemProperty) 
 	{
-		redeemProperty.redeem();
-		
 		currentPlayer.pay(redeemProperty.getRedeemAmount());
-		
-		return currentPlayer.getIdentifier() + " has redeemed " + redeemProperty.getIdentifier() + " for " + redeemProperty.getRedeemAmount() + ".";
+		return redeemProperty.redeem();	
 	}
 	
+	//if one
 	public void leaveGame()
 	{
 		gui.updateAction(currentPlayer.getIdentifier() + " has left the game.");
@@ -125,14 +179,15 @@ public class Panopoly
 		players.remove(currentPlayer);
 		gui.leaveGame(currentPlayer);
 		
+		//if one player left, they win automatically and game ends
 		if(players.size() == 1)
-			endGame(players);
+			endGame();
 		
 		else
 			gui.updateAction(startPlayerTurn(players.get(index % players.size())));
 	}
 	
-	public ArrayList<Player> decideWinner()
+	public ArrayList<Player> decideWinners()
 	{
 		 int winningWorth = players.get(0).getNetWorth();
 		 ArrayList<Player> winners = new ArrayList<Player>();
@@ -155,11 +210,15 @@ public class Panopoly
 		 return winners;
 	}
 	
-	public void endGame(ArrayList<Player> winners)
+	public void endGame()
 	{
+		ArrayList<Player> winners = decideWinners();
+		
+		//if one distinct winner
 		if(winners.size() == 1)
 			gui.updateAction(winners.get(0).getIdentifier() + " has won!");
 		
+		//if there is a draw
 		else
 		{
 			String draw = "Draw between ";
@@ -172,76 +231,5 @@ public class Panopoly
 
 		}
 		gui.endGame();
-	}
-
-	//TO DO: DRAW CARD
-	private void getSquareAction() 
-	{
-		Locatable square = board.getLocation(currentPlayer.getPosition());
-		
-		if(square instanceof TaxableProperty)
-		{
-			currentPlayer.pay(((Taxable) square).getFlatAmount());
-			gui.updateAction(currentPlayer.getIdentifier() + " has paid " + ((Taxable) square).getFlatAmount() + " in tax.");
-		}
-		//rental property owned by another player
-		else if((square instanceof RentalProperty) && (((Rentable) square).getOwner()!=null) && (((Rentable) square).getOwner()!=currentPlayer) && !(((RentalProperty) square).isMortgaged()))
-		{
-			int rent = ((Rentable) square).getRentalAmount();
-			
-			if(!(currentPlayer.hasProperty() || currentPlayer.getBalance() >= rent))
-			{
-				rent = currentPlayer.getBalance();
-			}
-			
-			currentPlayer.pay(rent);
-			((Player) ((Rentable) square).getOwner()).earn(rent);
-			gui.updateAction(currentPlayer.getIdentifier() + " has paid " + rent + " to " + ((Rentable) square).getOwner().getIdentifier());
-		}
-	}
-	
-	public void startCountdown()
-	{
-		ActionListener timerListener = new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				endGame(decideWinner());
-			}};
-			
-		countdownTimer.addActionListener(timerListener);
-		countdownTimer.restart();
-		gui.updateAction("COUNTDOWN STARTED");
-		gui.updateAction("Elapsed Time in secs: " + (System.currentTimeMillis() - startTime) / 1000);
-	}
-
-	public void createGUI(ArrayList<Player> playerArray)
-	{
-		players = playerArray;
-		currentPlayer = players.get(0);
-		gui = new GUI(board.getNumLocations(),this,players);
-		gui.updateGUI();
-	}
-	
-	public String startPlayerTurn(Player player)
-	{
-		currentPlayer.doubles = 0;
-		currentPlayer.canRoll = true;
-		currentPlayer.rollComplete = false;
-		currentPlayer = player;
-		
-		gui.resetCommands();
-		gui.updateGUI();
-		
-		return currentPlayer.getIdentifier() + "'s turn";
-	}
-
-	public Player getCurrentPlayer() 
-	{
-		return currentPlayer;
-	}
-	
-	public Player getNextPlayer()
-	{
-		return players.get((players.indexOf(currentPlayer)+1)%players.size());
 	}
 }

@@ -3,8 +3,8 @@ package interfaces;
 public interface Mortgageable extends Ownable{
 	public int getMortgageAmount();
 	
-	public void mortgage();
-	public void redeem();
+	public String mortgage();
+	public String redeem();
 	
 	public boolean isMortgaged();
 }

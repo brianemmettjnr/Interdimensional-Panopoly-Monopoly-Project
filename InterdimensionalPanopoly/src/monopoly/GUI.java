@@ -224,7 +224,7 @@ class GUI {
                 new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
-                        panopoly.endGame(panopoly.decideWinner());
+                        panopoly.endGame();
                     }
                 },this);
         quitButton.setVisible(true);
