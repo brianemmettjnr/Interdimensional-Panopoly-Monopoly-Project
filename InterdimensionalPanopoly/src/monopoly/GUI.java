@@ -3,14 +3,11 @@ import interfaces.Groupable;
 import interfaces.Locatable;
 import interfaces.Rentable;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.swing.border.Border;
 
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.ArrayList;
 
 class GUI {
@@ -29,8 +26,8 @@ class GUI {
     private ArrayList<Player> players=new ArrayList<>();
 	
     boolean rollCommand,endCommand;
-	private GUIButton helpButton,buyButton, rollButton, endturn, mortgageButton,
-            leaveButton, redeemButton,buildButton,demoButton,quitButton;
+	private GUIButton helpButton,buyButton, rollButton, endButton, mortgageButton,
+            leaveButton, redeemButton,buildButton, demolishButton,quitButton;
 
 	private GUIButton[] answers =new GUIButton[4];
 	private MouseAdapter correct=new MouseAdapter() {
@@ -164,7 +161,7 @@ class GUI {
                     }
                 },this);
 
-        endturn=new GUIButton("End",(int)(10+(Offset*((SquaresOnSide-1)/2.0))),(((int)(FRAME_SIZE.getHeight()*.9))/2)+240,
+        endButton =new GUIButton("End",(int)(10+(Offset*((SquaresOnSide-1)/2.0))),(((int)(FRAME_SIZE.getHeight()*.9))/2)+240,
                 new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
@@ -198,7 +195,7 @@ class GUI {
                     }
                 },this);
 
-        demoButton =new GUIButton("Demolish",((int)(FRAME_SIZE.getHeight()*.9)/2)+190,(((int)(FRAME_SIZE.getHeight()*.9))/2)-55,
+        demolishButton =new GUIButton("Demolish",((int)(FRAME_SIZE.getHeight()*.9)/2)+190,(((int)(FRAME_SIZE.getHeight()*.9))/2)-55,
                 new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
@@ -248,7 +245,7 @@ class GUI {
 		}
     	
     	rollButton.setVisible(rollCommand);
-    	endturn.setVisible(endCommand);
+    	endButton.setVisible(endCommand);
     	if (panopoly.getCurrentPlayer().isInJail()) {
             setSelectedLabel(null);
             setSelectedLabel(getLocationLabel(panopoly.getCurrentPlayer().getPosition()));
@@ -374,7 +371,7 @@ class GUI {
             mortgageButton.setVisible(false);
             redeemButton.setVisible(false);
             buildButton.setVisible(false);
-            demoButton.setVisible(false);
+            demolishButton.setVisible(false);
         }
         else if(panopoly.getCurrentPlayer().isInJail()&&location==getLocationLabel(panopoly.getCurrentPlayer().getPosition()))
         {
@@ -389,7 +386,7 @@ class GUI {
             mortgageButton.setVisible(false);
             redeemButton.setVisible(false);
             buildButton.setVisible(false);
-            demoButton.setVisible(false);
+            demolishButton.setVisible(false);
         }
         else
         {
@@ -436,18 +433,18 @@ class GUI {
                                 break;
                             }
                         }
-                        demoButton.setVisible((investment.hasBuildings()));
+                        demolishButton.setVisible((investment.hasBuildings()));
                         buildButton.setVisible(buildable&&investment.hotels==0&&investment.getOwner().getBalance()>=investment.buildPrice);
                     }
                     else
                     {
-                        demoButton.setVisible(false);
+                        demolishButton.setVisible(false);
                         buildButton.setVisible(false);
                     }
                 }
                 else
                 {
-                    demoButton.setVisible(false);
+                    demolishButton.setVisible(false);
                     buildButton.setVisible(false);
                 }
 
@@ -455,7 +452,7 @@ class GUI {
 
             else
             {
-                demoButton.setVisible(false);
+                demolishButton.setVisible(false);
                 buildButton.setVisible(false);
                 mortgageButton.setVisible(false);
                 redeemButton.setVisible(false);
@@ -544,37 +541,30 @@ class GUI {
     }
     public void endGame()
     {
-        JFrame playerFrame= new JFrame("Interdimensional Panopoly");
-        JPanel playerPanel=new JPanel();
-        playerFrame.setBounds(300,300,636,270);
-        playerFrame.add(playerPanel);
-        playerPanel.setOpaque(true);
-        playerPanel.setBackground(Color.DARK_GRAY);
-        playerFrame.setVisible(true);
-        JButton newGame =new JButton("New Game?");
-        newGame.setSize(100,50);
-        playerPanel.add(newGame);
-
-        newGame.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                mainFrame.dispose();
-                playerFrame.dispose();
-                Main.createPanopoly();
-            }
-        });
-        JButton endGame =new JButton("End Game?");
-        endGame.setSize(100,50);
-        playerPanel.add(endGame);
-
-        endGame.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                mainFrame.dispose();
-                playerFrame.dispose();
-            }
-        });
-
-    }
+        getMainPane().remove(buyButton.getButton());
+        getMainPane().remove(endButton.getButton());
+        getMainPane().remove(demolishButton.getButton());
+        getMainPane().remove(mortgageButton.getButton());
+        getMainPane().remove(buildButton.getButton());
+        getMainPane().remove(redeemButton.getButton());
+        getMainPane().remove(rollButton.getButton());
+        getMainPane().validate();
+        getMainPane().repaint();
+       quitButton.setMouseEvent(new MouseAdapter() {
+           @Override
+           public void mouseClicked(MouseEvent e) {
+               mainFrame.dispose();
+               Main.createPanopoly();
+           }
+       });
+       quitButton.setText("AGAIN");
+       leaveButton.setMouseEvent(new MouseAdapter() {
+           @Override
+           public void mouseClicked(MouseEvent e) {
+               mainFrame.dispose();
+           }
+       });
+       leaveButton.setText("EXIT");
+      }
     
 }
