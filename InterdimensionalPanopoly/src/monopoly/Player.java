@@ -96,6 +96,7 @@ public class Player implements Playable {
 	{
 		position = panopoly.getBoard().getJailLocation();
 		inJail = true;
+		panopoly.nextPlayer();
 	}
 	
 	public void releaseFromJail()

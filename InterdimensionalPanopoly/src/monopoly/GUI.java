@@ -33,10 +33,13 @@ class GUI {
             leaveButton, redeemButton,buildButton,demoButton,quitButton;
 
 	private GUIButton[] answers =new GUIButton[4];
+	private MouseAdapter correct;
+	private MouseAdapter incorrect;
     
     private Panopoly panopoly;
     static BufferedImage[] images = new BufferedImage[6];
     private JLabel locationWindow=new JLabel(" ",SwingConstants.CENTER);
+    private JLabel questionWindow=new JLabel(" ",SwingConstants.CENTER);
     private JLabel latestAction=new JLabel("",SwingConstants.CENTER);
     private JLabel secondAction=new JLabel("",SwingConstants.CENTER);
     private JLabel thirdAction=new JLabel("",SwingConstants.CENTER);
@@ -97,6 +100,15 @@ class GUI {
         locationWindow.setBorder(BorderFactory.createLineBorder(Color.black,4));
         locationWindow.setVerticalAlignment(JLabel.TOP);
         MainPane.add(locationWindow);
+
+        questionWindow.setBounds((int)(10+(Offset*((SquaresOnSide)/2.0)))-200,(((int)(FRAME_SIZE.getHeight()*.9))/2)-140,400,80);
+        questionWindow.setVisible(true);
+        questionWindow.setBackground(Color.WHITE);
+        questionWindow.setForeground(Color.BLACK);
+        questionWindow.setOpaque(true);
+        questionWindow.setBorder(BorderFactory.createLineBorder(Color.black,4));
+        questionWindow.setVerticalAlignment(JLabel.TOP);
+        MainPane.add(questionWindow);
         mainFrame.setVisible(true);
         mainFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
@@ -172,7 +184,7 @@ class GUI {
                     }
                 },this);
 
-        demoButton =new GUIButton("Demolish",((int)(FRAME_SIZE.getHeight()*.9)/2)+190,(((int)(FRAME_SIZE.getHeight()*.9))/2)-115,
+        demoButton =new GUIButton("Demolish",((int)(FRAME_SIZE.getHeight()*.9)/2)+190,(((int)(FRAME_SIZE.getHeight()*.9))/2)-55,
                 new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
@@ -180,7 +192,7 @@ class GUI {
                         gui.updateAction(panopoly.demolishUnit(breaker));
                     }
                 },this);
-        leaveButton =new GUIButton("Leave",(int)(10+(Offset*((SquaresOnSide-1)/2.0)))+Offset,(((int)(FRAME_SIZE.getHeight()*.9))/2)+240,
+        leaveButton =new GUIButton("Leave",(int)(10+(Offset*((SquaresOnSide-1)/2.0)))+Offset*2,(((int)(FRAME_SIZE.getHeight()*.9))/2)+240,
                 new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
@@ -188,7 +200,7 @@ class GUI {
                     }
                 },this);
         leaveButton.setVisible(true);
-        quitButton =new GUIButton("Quit",(int)(10+(Offset*((SquaresOnSide-1)/2.0)))+Offset*2,(((int)(FRAME_SIZE.getHeight()*.9))/2)+240,
+        quitButton =new GUIButton("Quit",(int)(10+(Offset*((SquaresOnSide-1)/2.0)))+Offset*3,(((int)(FRAME_SIZE.getHeight()*.9))/2)+240,
                 new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
@@ -196,16 +208,14 @@ class GUI {
                     }
                 },this);
         quitButton.setVisible(true);
-        for(GUIButton button:answers)
+        int x=-Offset*2;
+        for(int i=0;i<4;i++)
         {
-            button=new GUIButton("Answer",(int)(10+(Offset*((SquaresOnSide-1)/2.0)))+Offset*2,(((int)(FRAME_SIZE.getHeight()*.9))/2)+240,
-                    new MouseAdapter() {
-                        @Override
-                        public void mouseClicked(MouseEvent e) {
-                            panopoly.endGame(panopoly.decideWinner());
-                        }
-                    },this);
+            answers[i]=new GUIButton("Answer",(int)(10+(Offset*((SquaresOnSide-1)/2.0)))+x,(((int)(FRAME_SIZE.getHeight()*.9))/2)+240,
+                   null,this);
+            x+=Offset;
         }
+
     }
     
     private void setVisibleButtons()
@@ -216,7 +226,11 @@ class GUI {
     	if (panopoly.getCurrentPlayer().isInJail()) {
             setSelectedLabel(null);
             setSelectedLabel(getLocationLabel(panopoly.getCurrentPlayer().getPosition()));
-            updateAction("Tests question?");
+
+            for(GUIButton button:answers)
+            {
+                button.setVisible(true);
+            }
             //todo get cian stuff here
 
         }
@@ -322,6 +336,21 @@ class GUI {
             image.setVisible(true);
             locationWindow.setText(" ");
             locationWindow.setOpaque(false);
+            questionWindow.setVisible(false);
+            buyButton.setVisible(false);
+            mortgageButton.setVisible(false);
+            redeemButton.setVisible(false);
+            buildButton.setVisible(false);
+            demoButton.setVisible(false);
+        }
+        else if(panopoly.getCurrentPlayer().isInJail()&&location==getLocationLabel(panopoly.getCurrentPlayer().getPosition()))
+        {
+            this.SelectedLabel=location;
+            image.setVisible(false);
+            questionWindow.setVisible(true);
+            locationWindow.setText(" ");
+            locationWindow.setOpaque(false);
+            locationWindow.setVisible(false);
             buyButton.setVisible(false);
             mortgageButton.setVisible(false);
             redeemButton.setVisible(false);
@@ -330,9 +359,11 @@ class GUI {
         }
         else
         {
+            questionWindow.setVisible(false);
             this.SelectedLabel=location;
             this.SelectedLabel.getLabel().setBorder(BorderFactory.createLineBorder(Color.green.darker(),2));
             locationWindow.setOpaque(true);
+            locationWindow.setVisible(true);
             image.setVisible(false);
             if (location.getLocation() instanceof RentalProperty)
             {

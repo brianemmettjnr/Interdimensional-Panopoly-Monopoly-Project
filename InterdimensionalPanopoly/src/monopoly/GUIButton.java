@@ -15,7 +15,8 @@ public class GUIButton {
         button.setVisible(false);
         button.setBounds(x,y,gui.getOffset(),30);
         button.setOpaque(true);
-        button.addMouseListener(mouseAdapter);
+        if(mouseAdapter!=null)
+            button.addMouseListener(mouseAdapter);
         gui.getMainPane().add(button);
     }
     public void setVisible(boolean visibility)
