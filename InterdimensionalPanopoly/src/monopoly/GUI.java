@@ -176,7 +176,7 @@ class GUI {
                 new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
-                        gui.updateAction(panopoly.startPlayerTurn(panopoly.getNextPlayer()));
+                        panopoly.startPlayerTurn(panopoly.getNextPlayer());
                     }
                 },this);
 

@@ -94,7 +94,7 @@ public class Panopoly
 		gui.updateAction("Elapsed Time in secs: " + (System.currentTimeMillis() - startTime) / 1000);
 	}
 	
-	public String startPlayerTurn(Player player)
+	public void startPlayerTurn(Player player)
 	{
 		currentPlayer.doubles = 0;
 		currentPlayer.canRoll = true;
@@ -104,7 +104,7 @@ public class Panopoly
 		gui.resetCommands();
 		gui.updateGUI();
 		
-		return currentPlayer.getIdentifier() + "'s turn";
+		gui.updateAction(currentPlayer.getIdentifier() + "'s turn");
 	}
 	
 	public String roll()
@@ -184,7 +184,7 @@ public class Panopoly
 			endGame();
 		
 		else
-			gui.updateAction(startPlayerTurn(players.get(index % players.size())));
+			startPlayerTurn(players.get(index % players.size()));
 	}
 	
 	public ArrayList<Player> decideWinners()
