@@ -202,7 +202,19 @@ public class SetupGUI
     }
 
     public static void getHelp() {
-
+        JFrame helpFrame=new JFrame();
+        helpFrame.setVisible(true);
+        helpFrame.setBounds(100,100,450,600);
+        helpFrame.setResizable(false);
+        JPanel panel=new JPanel();
+        panel.setBounds(0,0,400,600);
+        helpFrame.add(panel);
+        JTextArea text=new JTextArea();
+        text.setBounds(0,0,400,600);
+        text.setLineWrap(true);
+        text.setEditable(false);
+        panel.add(text);
+        text.setText("Go away I havent written actual rules yet shut up chloe");
     }
 
 

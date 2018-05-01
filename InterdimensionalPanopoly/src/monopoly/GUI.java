@@ -122,6 +122,15 @@ class GUI {
         MainPane.add(questionWindow);
         mainFrame.setVisible(true);
         mainFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+
+        helpButton=new GUIButton("?", (int)FRAME_SIZE.getWidth() - 40, 10, new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                SetupGUI.getHelp();
+            }
+        },this);
+        helpButton.setSize(30,30);
+        helpButton.setVisible(true);
     }
 
     void setPlayers(ArrayList<Player> players) {
