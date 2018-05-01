@@ -12,6 +12,7 @@ import java.util.ArrayList;
 
 class GUI {
 
+    public static String symbol="Q";
     private final int SquaresOnSide;
     private final JFrame mainFrame;
     private int BOARD_SIZE;
@@ -159,8 +160,15 @@ class GUI {
                 }
             }
         },this);
+        endButton =new GUIButton("End",(int)(10+(Offset*((SquaresOnSide-1)/2.0))),-20+(SquaresOnSide-1)*Offset,
+                new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        panopoly.startPlayerTurn(panopoly.getNextPlayer());
+                    }
+                },this);
 
-        buyButton=new GUIButton("Buy",(int)(10+(Offset*((SquaresOnSide-1)/2.0))),Offset+10,
+        buyButton=new GUIButton("Buy",10+4*Offset+200,2*Offset+10,
                 new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
@@ -170,15 +178,7 @@ class GUI {
                     }
                 },this);
 
-        endButton =new GUIButton("End",(int)(10+(Offset*((SquaresOnSide-1)/2.0))),-20+(SquaresOnSide-1)*Offset,
-                new MouseAdapter() {
-                    @Override
-                    public void mouseClicked(MouseEvent e) {
-                        panopoly.startPlayerTurn(panopoly.getNextPlayer());
-                    }
-                },this);
-
-        mortgageButton=new GUIButton("Mortgage",10+Offset,10+Offset,
+        mortgageButton=new GUIButton("Mortgage",10+4*Offset+200,2*Offset+10+30,
                 new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
@@ -186,7 +186,7 @@ class GUI {
                         gui.updateAction(panopoly.mortgage(mortgageProperty));
                     }
                 },this);
-        redeemButton =new GUIButton("Redeem",10+Offset,10+Offset,
+        redeemButton =new GUIButton("Redeem",10+4*Offset+200,2*Offset+10+30,
                 new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
@@ -195,7 +195,7 @@ class GUI {
                     }
                 },this);
 
-        buildButton =new GUIButton("Build",(int)(10+(Offset*((SquaresOnSide-2)))),10+Offset,
+        buildButton =new GUIButton("Build",10+4*Offset+200,2*Offset+10+60,
                 new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
@@ -204,7 +204,7 @@ class GUI {
                     }
                 },this);
 
-        demolishButton =new GUIButton("Demolish",(int)(10+(Offset*((SquaresOnSide-2)))),10+2*Offset,
+        demolishButton =new GUIButton("Demolish",10+4*Offset+200,2*Offset+10+90,
                 new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
@@ -245,6 +245,9 @@ class GUI {
 			gui.rollCommand = false;
 			gui.endCommand = false;
 		}
+
+		else if(panopoly.getCurrentPlayer().getBalance() < 0)
+		    gui.rollCommand = false;
 		
 		else
 		{

@@ -55,29 +55,31 @@ public class Panopoly
 	}
 	
 	//TO DO: DRAW CARD
-	private void getSquareAction() 
+	private String getSquareAction()
 	{
 		Locatable square = board.getLocation(currentPlayer.getPosition());
 		
 		if(square instanceof TaxableProperty)
 		{
 			currentPlayer.pay(((Taxable) square).getFlatAmount());
-			gui.updateAction(currentPlayer.getIdentifier() + " has paid " + ((Taxable) square).getFlatAmount() + " in tax.");
+			return "\n" + currentPlayer.getIdentifier() + " has paid " + ((Taxable) square).getFlatAmount() + " in tax.";
 		}
 		//rental property owned by another player
 		else if((square instanceof RentalProperty) && (((Rentable) square).getOwner()!=null) && (((Rentable) square).getOwner()!=currentPlayer) && !(((RentalProperty) square).isMortgaged()))
 		{
 			int rent = ((Rentable) square).getRentalAmount();
-			
-			if(!(currentPlayer.hasProperty() || currentPlayer.getBalance() >= rent))
-			{
-				rent = currentPlayer.getBalance();
-			}
-			
+//
+//			if(!(currentPlayer.hasProperty() || currentPlayer.getBalance() >= rent))
+//			{
+//				rent = currentPlayer.getBalance();
+//			}
+//
 			currentPlayer.pay(rent);
 			((Player) ((Rentable) square).getOwner()).earn(rent);
-			gui.updateAction(currentPlayer.getIdentifier() + " has paid " + rent + " to " + ((Rentable) square).getOwner().getIdentifier());
+			return "\n" + currentPlayer.getIdentifier() + " has paid " + rent + " to " + ((Rentable) square).getOwner().getIdentifier();
 		}
+
+		return "";
 	}
 	
 	public void startCountdown()
@@ -114,9 +116,7 @@ public class Panopoly
 		int movePositions = dice.rollNormalDice();
 		
 		String msg = currentPlayer.getIdentifier() + " has rolled " + movePositions + ".";
-		
-		msg += currentPlayer.move(movePositions, clockwiseMovement);
-		
+
 		if(dice.getDoubles())
 		{
 			currentPlayer.canRoll = true;
@@ -129,8 +129,10 @@ public class Panopoly
 				msg = currentPlayer.getIdentifier() + " has rolled 3 doubles in a row and been sent to Jail";
 			}
 		}
-		
-		getSquareAction();
+
+		msg += currentPlayer.move(movePositions, clockwiseMovement);
+
+		msg += getSquareAction();
 		
 		gui.resetCommands();
 		gui.updateGUI();
