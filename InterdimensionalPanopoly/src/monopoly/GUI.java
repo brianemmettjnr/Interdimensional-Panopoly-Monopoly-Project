@@ -33,9 +33,9 @@ class GUI {
 	private MouseAdapter correct=new MouseAdapter() {
         @Override
         public void mouseClicked(MouseEvent e) {
-            panopoly.getCurrentPlayer().releaseFromJail();
-            gui.hideAnswers();
             updateAction("Correct answer.");
+            updateAction(panopoly.getCurrentPlayer().releaseFromJail());
+            gui.hideAnswers();
         }
     };
 
@@ -43,9 +43,9 @@ class GUI {
     private MouseAdapter incorrect=new MouseAdapter() {
         @Override
         public void mouseClicked(MouseEvent e) {
-            panopoly.startPlayerTurn(panopoly.getNextPlayer());
-            gui.hideAnswers();
             updateAction("Wrong answer.");
+            updateAction(panopoly.startPlayerTurn(panopoly.getNextPlayer()));
+            gui.hideAnswers();
         }
     };
     
@@ -80,7 +80,7 @@ class GUI {
         PlacePlayers();
         setupbuttons();
 
-        image=new JLabel(new ImageIcon(GUI.class.getResource("Logo.png")));
+        image=new JLabel(new ImageIcon(GUI.class.getResource("media/Logo.png")));
         image.setBounds((((int)(FRAME_SIZE.getHeight()*.9))/2)-190,(((int)(FRAME_SIZE.getHeight()*.9))/2)-240,400,400);
         image.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
         MainPane.add(image);
@@ -106,12 +106,12 @@ class GUI {
         thirdAction.setText("");
         MainPane.add(thirdAction);
 
-        locationWindow.setBounds((((int)(FRAME_SIZE.getHeight()*.9))/2)-90,(((int)(FRAME_SIZE.getHeight()*.9))/2)-240,200,380);
-        locationWindow.setVisible(true);
+        locationWindow.setBounds(10+3*Offset,(((int)(FRAME_SIZE.getHeight()*.9))/2)-240,200,380);
         locationWindow.setBackground(Color.WHITE);
         locationWindow.setForeground(Color.BLACK);
         locationWindow.setBorder(BorderFactory.createLineBorder(Color.black,4));
         locationWindow.setVerticalAlignment(JLabel.TOP);
+        locationWindow.setVisible(false);
         MainPane.add(locationWindow);
 
         questionWindow.setBounds((int)(10+(Offset*((SquaresOnSide)/2.0)))-200,(((int)(FRAME_SIZE.getHeight()*.9))/2)-140,400,80);
@@ -119,8 +119,6 @@ class GUI {
         questionWindow.setForeground(Color.BLACK);
         questionWindow.setBorder(BorderFactory.createLineBorder(Color.black,4));
         questionWindow.setVerticalAlignment(JLabel.TOP);
-        questionWindow.setOpaque(false);
-        questionWindow.setVisible(false);
         MainPane.add(questionWindow);
         mainFrame.setVisible(true);
         mainFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -230,10 +228,10 @@ class GUI {
                     }
                 },this);
         quitButton.setVisible(true);
-        int x=-Offset*2;
+        int x=-Offset;
         for(int i=0;i<4;i++)
         {
-            answers[i]=new GUIButton("Answer",(int)(10+(Offset*((SquaresOnSide-1)/2.0)))+x,(((int)(FRAME_SIZE.getHeight()*.9))/2)+240,
+            answers[i]=new GUIButton("Answer",(int)(10+(Offset*((SquaresOnSide-2)/2.0)))+x,(((int)(FRAME_SIZE.getHeight()*.9))/2)-60,
                    null,this);
             x+=Offset;
         }
@@ -268,7 +266,7 @@ class GUI {
             }
             answers[0].setMouseEvent(correct);
             //todo get cian stuff here
-
+            questionWindow.setText("Hey Choose the left one okay");
         }
         //leaveButton.setVisible(!rollCommand&&!endCommand);
     }
@@ -377,6 +375,7 @@ class GUI {
             image.setVisible(true);
             locationWindow.setText(" ");
             locationWindow.setOpaque(false);
+            locationWindow.setVisible(false);
             questionWindow.setVisible(false);
             questionWindow.setOpaque(false);
             buyButton.setVisible(false);

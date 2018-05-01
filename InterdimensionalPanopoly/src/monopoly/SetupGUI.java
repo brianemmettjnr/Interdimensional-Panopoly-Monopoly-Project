@@ -90,7 +90,7 @@ public class SetupGUI
 
             try
             {
-                GUI.images[i] = ImageIO.read(GUI.class.getResource(GUI.characters[i]+".png"));
+                GUI.images[i] = ImageIO.read(GUI.class.getResource("media/"+GUI.characters[i]+".png"));
             } catch (IOException e) {
                 e.printStackTrace();
             }
