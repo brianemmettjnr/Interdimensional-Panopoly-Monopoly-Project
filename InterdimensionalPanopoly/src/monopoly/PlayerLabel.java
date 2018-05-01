@@ -93,7 +93,7 @@ public class PlayerLabel
     }
      void updateLabel()
     {
-        balance.setText("$"+player.getBalance());
+        balance.setText("£"+player.getBalance());
         positionIcon.updateUI();
         positionIcon.setBounds(gui.getLocationLabel(player.getPosition()).getX()+(index%3*(gui.getOffset()/4)),
                 gui.getLocationLabel(player.getPosition()).getY()+1+(index%2*(gui.getOffset()/2)),scale,scale);

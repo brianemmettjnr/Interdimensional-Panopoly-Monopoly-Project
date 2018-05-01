@@ -33,9 +33,9 @@ class GUI {
 	private MouseAdapter correct=new MouseAdapter() {
         @Override
         public void mouseClicked(MouseEvent e) {
-            gui.hideAnswers();
             updateAction("Correct answer.");
-            //updateAction(panopoly.getCurrentPlayer().releaseFromJail());
+            updateAction(panopoly.getCurrentPlayer().releaseFromJail());
+            gui.hideAnswers();
         }
     };
 
@@ -43,9 +43,9 @@ class GUI {
     private MouseAdapter incorrect=new MouseAdapter() {
         @Override
         public void mouseClicked(MouseEvent e) {
-            gui.hideAnswers();
             updateAction("Wrong answer.");
             updateAction(panopoly.startPlayerTurn(panopoly.getNextPlayer()));
+            gui.hideAnswers();
         }
     };
     
@@ -106,11 +106,12 @@ class GUI {
         thirdAction.setText("");
         MainPane.add(thirdAction);
 
-        locationWindow.setBounds(10+2*Offset,(((int)(FRAME_SIZE.getHeight()*.9))/2)-240,200,380);
+        locationWindow.setBounds(10+3*Offset,(((int)(FRAME_SIZE.getHeight()*.9))/2)-240,200,380);
         locationWindow.setBackground(Color.WHITE);
         locationWindow.setForeground(Color.BLACK);
         locationWindow.setBorder(BorderFactory.createLineBorder(Color.black,4));
         locationWindow.setVerticalAlignment(JLabel.TOP);
+        locationWindow.setVisible(false);
         MainPane.add(locationWindow);
 
         questionWindow.setBounds((int)(10+(Offset*((SquaresOnSide)/2.0)))-200,(((int)(FRAME_SIZE.getHeight()*.9))/2)-140,400,80);
@@ -118,8 +119,6 @@ class GUI {
         questionWindow.setForeground(Color.BLACK);
         questionWindow.setBorder(BorderFactory.createLineBorder(Color.black,4));
         questionWindow.setVerticalAlignment(JLabel.TOP);
-        questionWindow.setOpaque(false);
-        questionWindow.setVisible(false);
         MainPane.add(questionWindow);
         mainFrame.setVisible(true);
         mainFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -376,6 +375,7 @@ class GUI {
             image.setVisible(true);
             locationWindow.setText(" ");
             locationWindow.setOpaque(false);
+            locationWindow.setVisible(false);
             questionWindow.setVisible(false);
             questionWindow.setOpaque(false);
             buyButton.setVisible(false);

@@ -117,11 +117,11 @@ class LocationLabel
             Player owner= (Player) rentable.getOwner();
             if(owner==null) {
                 HTML +="Unowned" + "<br>";
-                HTML +="For sale for: $" + rentable.getPrice() + "<br>";
+                HTML +="For sale for: £" + rentable.getPrice() + "<br>";
             }
             else {
                 HTML += "Owned by: " + owner.getIdentifier() + "<br>";
-                HTML += "Rent: $" + rentable.getRentalAmount() + "<br>";
+                HTML += "Rent: £" + rentable.getRentalAmount() + "<br>";
                 if(((RentalProperty) location).isMortgaged())
                     HTML += "Site is currently Mortgaged<br>Cost to Redeem: $"+((RentalProperty) location).getRedeemAmount()+"<br>";
 
@@ -131,12 +131,12 @@ class LocationLabel
                 Improvable improver=(Improvable) location;
                 HTML+="Houses: "+improver.getNumHouses()+"<br>";
                 HTML+="Hotels: "+improver.getNumHotels()+"<br>";
-                HTML+="Building cost: $"+improver.getBuildPrice()+"<br>";
+                HTML+="Building cost: £"+improver.getBuildPrice()+"<br>";
             }
         }
         else if(location instanceof TaxableProperty)
         {
-            HTML+="Tax: $"+((TaxableProperty) location).getFlatAmount()+"<br>";
+            HTML+="Tax: £"+((TaxableProperty) location).getFlatAmount()+"<br>";
         }
         boolean playerOnTile=false;
         for(Player player:gui.getPlayers())
