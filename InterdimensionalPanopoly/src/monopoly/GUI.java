@@ -220,7 +220,19 @@ class GUI {
     
     private void setVisibleButtons()
     {
-    	panopoly.setPossibleCommands();
+    	if(panopoly.getCurrentPlayer().isInJail())
+		{
+			gui.rollCommand = false;
+			gui.endCommand = false;
+		}
+		
+		else
+		{
+			gui.rollCommand = panopoly.getCurrentPlayer().canRoll;
+			//unowned property and player has rolled at least once
+			gui.endCommand = (!gui.rollCommand && panopoly.getCurrentPlayer().getBalance() >= 0);
+		}
+    	
     	rollButton.setVisible(rollCommand);
     	endturn.setVisible(endCommand);
     	if (panopoly.getCurrentPlayer().isInJail()) {
@@ -490,7 +502,6 @@ class GUI {
         LocationLabel label=getSelectedLocation();
         setSelectedLabel(label);
         setSelectedLabel(label);
-        panopoly.setPossibleCommands();
         updateGUI();
     }
 

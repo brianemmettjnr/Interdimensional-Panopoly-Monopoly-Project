@@ -5,8 +5,6 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import javax.swing.Timer;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import interfaces.*;
 
@@ -18,14 +16,17 @@ public class Panopoly
 	public GUI gui;
 	private Dice dice = new Dice();
 	private boolean clockwiseMovement = true;
+	private long startTime;
 	private Timer countdownTimer;
 	
 	Panopoly(int numLocations)
 	{
 		board = new Board(numLocations);
 		SetupGUI.PlayerCountGui(this);
+		
+		startTime = System.currentTimeMillis();
 
-		countdownTimer = new Timer(10 * 60, null);
+		countdownTimer = new Timer(10 * 60 * 10, null);
 		
 		countdownTimer.setRepeats(false);
 		countdownTimer.start();
@@ -218,23 +219,8 @@ public class Panopoly
 				
 			countdownTimer.addActionListener(timerListener);
 			countdownTimer.restart();
-		}
-	}
-	
-	//buy, roll, drawCard, endTurn
-	public void setPossibleCommands()
-	{		
-		if(currentPlayer.isInJail())
-		{
-			gui.rollCommand = false;
-			gui.endCommand = false;
-		}
-		
-		else
-		{
-			gui.rollCommand = currentPlayer.canRoll;
-			//unowned property and player has rolled at least once
-			gui.endCommand = (!gui.rollCommand && currentPlayer.getBalance() >= 0);
+			gui.updateAction("COUNTDOWN STARTED");
+			gui.updateAction("Elapsed Time in secs: " + (System.currentTimeMillis() - startTime) / 1000);
 		}
 	}
 
