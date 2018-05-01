@@ -548,23 +548,27 @@ class GUI {
         getMainPane().remove(buildButton.getButton());
         getMainPane().remove(redeemButton.getButton());
         getMainPane().remove(rollButton.getButton());
+        getMainPane().remove(quitButton.getButton());
+        getMainPane().remove(leaveButton.getButton());
         getMainPane().validate();
         getMainPane().repaint();
-       quitButton.setMouseEvent(new MouseAdapter() {
-           @Override
-           public void mouseClicked(MouseEvent e) {
-               mainFrame.dispose();
-               Main.createPanopoly();
-           }
-       });
-       quitButton.setText("AGAIN");
-       leaveButton.setMouseEvent(new MouseAdapter() {
-           @Override
-           public void mouseClicked(MouseEvent e) {
-               mainFrame.dispose();
-           }
-       });
-       leaveButton.setText("EXIT");
+        GUIButton again=new GUIButton("New Game?",10+Offset*(SquaresOnSide-2)/2,(((int)(FRAME_SIZE.getHeight()*.9))/2)+240,
+                new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        mainFrame.dispose();
+                        Main.createPanopoly();
+                    }
+                },this);
+        again.setVisible(true);
+        GUIButton exit=new GUIButton("Done?",10+Offset+(Offset*(SquaresOnSide-2)/2),(((int)(FRAME_SIZE.getHeight()*.9))/2)+240,
+                new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        mainFrame.dispose();
+                    }
+                },this);
+        exit.setVisible(true);
       }
     
 }
