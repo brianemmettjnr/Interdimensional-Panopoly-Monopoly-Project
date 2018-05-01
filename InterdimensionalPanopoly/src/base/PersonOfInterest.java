@@ -109,7 +109,7 @@ public class PersonOfInterest
 		int mons = DICE.nextInt(moneyValues.length);
 		String robbedLoc[] = {"a bank", "a safe", "a cryptocurrency excahnge", "a mansion", "the CIA", "the FBI", "the White House", "Trump Tower"};
 		int locs = DICE.nextInt(robbedLoc.length);		
-		String output = "You help " + criminals.get(rands) + " rob " + robbedLoc[locs] + ", gain €" + moneyValues[mons];
+		String output = "You help " + criminals.get(rands) + " rob " + robbedLoc[locs] + ", gain ï¿½" + moneyValues[mons];
 		return output;
 	}
 	
@@ -129,7 +129,7 @@ public class PersonOfInterest
 		int rands = DICE.nextInt(criminals.size());
 		double moneyValues[] = {50,100,150,200,250};
 		int mons = DICE.nextInt(moneyValues.length);
-		String output = "You get busted while with " + criminals.get(rands) + ", pay €" + moneyValues[mons] + " in bail money";  
+		String output = "You get busted while with " + criminals.get(rands) + ", pay ï¿½" + moneyValues[mons] + " in bail money";  
 		return output; // possible to go to jail otherwise
 	}
 	
@@ -139,7 +139,7 @@ public class PersonOfInterest
 		double moneyValues[] = {50,100,150,200,250};
 		int mons = DICE.nextInt(moneyValues.length);
 		opponents = NOC3.getAllKeysWithFieldValueNon("Character", enemies.get(rands));
-		String output = "You help " + enemies.get(rands) + " defeat their opponent(s) " + opponents + ", recieve €" + moneyValues[mons];
+		String output = "You help " + enemies.get(rands) + " defeat their opponent(s) " + opponents + ", recieve ï¿½" + moneyValues[mons];
 		output = output.replace("]", "");
 		output = output.replace("[", "");
 		return output;
@@ -157,7 +157,7 @@ public class PersonOfInterest
 		int rands = DICE.nextInt(wealthy.size());
 		double moneyValues[] = {50,100,150,200,250};
 		int mons = DICE.nextInt(moneyValues.length);
-		String output = "You aid " + wealthy.get(rands) + ", they reward you with €" + moneyValues[mons];
+		String output = "You aid " + wealthy.get(rands) + ", they reward you with ï¿½" + moneyValues[mons];
 		return output;
 	}
 	
@@ -167,7 +167,7 @@ public class PersonOfInterest
 		opponents = NOC3.getAllKeysWithFieldValueNon("Character", blackmail.get(rands));
 		double moneyValues[] = {50,100,150,200,250};
 		int mons = DICE.nextInt(moneyValues.length);
-		String output = "You catch " + blackmail.get(rands) + " in bed with " + opponents + " you blackmail them, revieve €" + moneyValues[mons];
+		String output = "You catch " + blackmail.get(rands) + " in bed with " + opponents + " you blackmail them, revieve ï¿½" + moneyValues[mons];
 		output = output.replace("]", "");
 		output = output.replace("[", "");
 		return output;
@@ -191,7 +191,7 @@ public class PersonOfInterest
 		double moneyValues[] = {50,100,150,200,250};
 		int mons = DICE.nextInt(moneyValues.length);
 		People = NOC4.getAllKeysWithFieldValueNon("Character", weapons.get(rands));
-		String output = "You purchase " + weapons.get(rands) + "'s " + People + " at auction pay €" + moneyValues[mons];
+		String output = "You purchase " + weapons.get(rands) + "'s " + People + " at auction pay ï¿½" + moneyValues[mons];
 		output = output.replace("]", "");
 		output = output.replace("[", "");
 		return output;
@@ -203,7 +203,7 @@ public class PersonOfInterest
 		double moneyValues[] = {50,100,150,200,250};
 		int mons = DICE.nextInt(moneyValues.length);
 		People = NOC4.getAllKeysWithFieldValueNon("Character", weapons.get(rands));
-		String output = "You pawn " + weapons.get(rands) + "'s " + People + ", recieve pay €" + moneyValues[mons];
+		String output = "You pawn " + weapons.get(rands) + "'s " + People + ", recieve pay ï¿½" + moneyValues[mons];
 		output = output.replace("]", "");
 		output = output.replace("[", "");
 		return output;
@@ -215,7 +215,7 @@ public class PersonOfInterest
 		double moneyValues[] = {50,100,150,200,250};
 		int mons = DICE.nextInt(moneyValues.length);
 		People = NOC2.getAllKeysWithFieldValueNon("Character", cars.get(rands));
-		String output = "You total " + cars.get(rands) + "'s " + People + " while test driving it, pay €" + moneyValues[mons];
+		String output = "You total " + cars.get(rands) + "'s " + People + " while test driving it, pay ï¿½" + moneyValues[mons];
 		output = output.replace("]", "");
 		output = output.replace("[", "");
 		return output;
@@ -226,7 +226,7 @@ public class PersonOfInterest
 		int rands = DICE.nextInt(inheritance.size());
 		double moneyValues[] = {50,100,150,200,250};
 		int mons = DICE.nextInt(moneyValues.length);
-		String output = "You inherit the right to " + inheritance.get(rands) + "'s novels, recieve €" + moneyValues[mons];
+		String output = "You inherit the right to " + inheritance.get(rands) + "'s novels, recieve ï¿½" + moneyValues[mons];
 		return output;
 	}
 	
@@ -237,7 +237,7 @@ public class PersonOfInterest
 		int mons = DICE.nextInt(moneyValues.length);
 		String family[] = {"niece", "nephew", "cousin", "son", "daughter"};
 		int fams = DICE.nextInt(family.length);
-		String output = "You pay €" + moneyValues[mons] + " for " + actor.get(rands) + " to attend your " + family[fams] +"'s birthday party";
+		String output = "You pay ï¿½" + moneyValues[mons] + " for " + actor.get(rands) + " to attend your " + family[fams] +"'s birthday party";
  		return output;
 	}
 	
@@ -246,7 +246,7 @@ public class PersonOfInterest
 		int rands = DICE.nextInt(wedding.size());
 		double moneyValues[] = {50,100,150,200,250};
 		int mons = DICE.nextInt(moneyValues.length);
-		String output = "You attend " + wedding.get(rands) + "'s wedding, pay €" + moneyValues[mons] + " for the wedding gift";
+		String output = "You attend " + wedding.get(rands) + "'s wedding, pay ï¿½" + moneyValues[mons] + " for the wedding gift";
 		return output;
 	}
 	
@@ -255,7 +255,7 @@ public class PersonOfInterest
 		int rands = DICE.nextInt(scam.size());
 		double moneyValues[] = {50,100,150,200,250};
 		int mons = DICE.nextInt(moneyValues.length);
-		String output = "You get caught in " + scam.get(rands) + "'s pyraimid scheme scam, pay €" + moneyValues[mons];
+		String output = "You get caught in " + scam.get(rands) + "'s pyraimid scheme scam, pay ï¿½" + moneyValues[mons];
 		return output;
 	}
 	
@@ -264,7 +264,7 @@ public class PersonOfInterest
 		int rands = DICE.nextInt(lecture.size());
 		double moneyValues[] = {50,100,150,200,250};
 		int mons = DICE.nextInt(moneyValues.length);
-		String output = "You are attending a lecture presided over by " + lecture.get(rands) + " pay €" + moneyValues[mons] + " for tickets";
+		String output = "You are attending a lecture presided over by " + lecture.get(rands) + " pay ï¿½" + moneyValues[mons] + " for tickets";
 		return output;
 	}
 	
@@ -280,7 +280,7 @@ public class PersonOfInterest
 		int rands = DICE.nextInt(terrorist.size());
 		double moneyValues[] = {50,100,150,200,250};
 		int mons = DICE.nextInt(moneyValues.length);
-		String output = "You punch the known terrorist " + terrorist.get(rands) + " in the face, pay €" + moneyValues[mons] + " for a doctor's vist";
+		String output = "You punch the known terrorist " + terrorist.get(rands) + " in the face, pay ï¿½" + moneyValues[mons] + " for a doctor's vist";
 		return output;
 	}
 	
@@ -298,7 +298,7 @@ public class PersonOfInterest
 		int mons = DICE.nextInt(moneyValues.length);
 		String sportTypes[] = {"American Footbal franchise", "Football club", "Hurling club", "Basketball franchise", "Baseball franchise", "Lacrosse franchise", "Hockey franchise", "Ice Hockey franchise", "Golf club"};
 		int spts = DICE.nextInt(sportTypes.length);
-		String output = "You invest in a new " + sportTypes[spts] + " with " + sportstar.get(rands) + " pay €" + moneyValues[mons];
+		String output = "You invest in a new " + sportTypes[spts] + " with " + sportstar.get(rands) + " pay ï¿½" + moneyValues[mons];
 		return output;
 	}
 	
@@ -316,6 +316,15 @@ public class PersonOfInterest
 		int rands = DICE.nextInt(magic.size());
 		int moves = DICE.nextInt(14)+1;
 		String output = "You time travel with " + magic.get(rands) + " move back " + moves + " space(s)";
+		return output;
+	}
+
+	private String DoomsDay()
+	{
+		int rands = DICE.nextInt(villain.size());
+		String endWorld[] = {"zombie apocalypse", "nuclear weapons", "one-inch punch", " virus", "infinity gauntlet", "elderwand", "asteroid", "plague", "Death Star", "robot killing machines", "terminators", "alien invaders"};
+		int ends = DICE.nextInt(endWorld.length);
+		String output = "The end of the world is nigh, " + villain.get(rands) + " and their " + endWorld[ends] + " have brought about our downfall in t-minus 5 minutes, spend your remaining time wisely";
 		return output;
 	}
 	
@@ -353,6 +362,7 @@ public class PersonOfInterest
 		System.out.println(ps.Sports()); // 20 here
 		System.out.println(ps.TestDrive());
 		System.out.println(ps.TimeTravel());
+		System.out.println(ps.DoomsDay());
 	}
 		
 }	
