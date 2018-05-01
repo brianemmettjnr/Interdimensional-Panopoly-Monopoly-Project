@@ -34,7 +34,7 @@ class GUI {
         @Override
         public void mouseClicked(MouseEvent e) {
             updateAction("Correct answer.");
-            updateAction(panopoly.getCurrentPlayer().releaseFromJail());
+            panopoly.getCurrentPlayer().releaseFromJail();
             gui.hideAnswers();
         }
     };
@@ -44,7 +44,7 @@ class GUI {
         @Override
         public void mouseClicked(MouseEvent e) {
             updateAction("Wrong answer.");
-            updateAction(panopoly.startPlayerTurn(panopoly.getNextPlayer()));
+            panopoly.startPlayerTurn(panopoly.getNextPlayer());
             gui.hideAnswers();
         }
     };
@@ -174,7 +174,7 @@ class GUI {
                 new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
-                        gui.updateAction(panopoly.startPlayerTurn(panopoly.getNextPlayer()));
+                        panopoly.startPlayerTurn(panopoly.getNextPlayer());
                     }
                 },this);
 
