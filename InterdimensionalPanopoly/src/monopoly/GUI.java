@@ -119,6 +119,8 @@ class GUI {
         questionWindow.setForeground(Color.BLACK);
         questionWindow.setBorder(BorderFactory.createLineBorder(Color.black,4));
         questionWindow.setVerticalAlignment(JLabel.TOP);
+        questionWindow.setOpaque(false);
+        questionWindow.setVisible(false);
         MainPane.add(questionWindow);
         mainFrame.setVisible(true);
         mainFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -149,7 +151,7 @@ class GUI {
                 SetupGUI.getHelp();
             }
         },this);
-        rollButton=new GUIButton("Roll",(int)(10+(Offset*((SquaresOnSide-1)/2.0))),(((int)(FRAME_SIZE.getHeight()*.9))/2)+240,
+        rollButton=new GUIButton("Roll",(int)(10+(Offset*((SquaresOnSide-1)/2.0))),-20+(SquaresOnSide-1)*Offset,
         new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -160,7 +162,7 @@ class GUI {
             }
         },this);
 
-        buyButton=new GUIButton("Buy",(int)(10+(Offset*((SquaresOnSide-1)/2.0))),Offset+20,
+        buyButton=new GUIButton("Buy",(int)(10+(Offset*((SquaresOnSide-1)/2.0))),Offset+10,
                 new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
@@ -170,7 +172,7 @@ class GUI {
                     }
                 },this);
 
-        endButton =new GUIButton("End",(int)(10+(Offset*((SquaresOnSide-1)/2.0))),(((int)(FRAME_SIZE.getHeight()*.9))/2)+240,
+        endButton =new GUIButton("End",(int)(10+(Offset*((SquaresOnSide-1)/2.0))),-20+(SquaresOnSide-1)*Offset,
                 new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
@@ -178,7 +180,7 @@ class GUI {
                     }
                 },this);
 
-        mortgageButton=new GUIButton("Mortgage",((int)(FRAME_SIZE.getHeight()*.9)/2)-190,(((int)(FRAME_SIZE.getHeight()*.9))/2)-100,
+        mortgageButton=new GUIButton("Mortgage",10+Offset,10+Offset,
                 new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
@@ -186,7 +188,7 @@ class GUI {
                         gui.updateAction(panopoly.mortgage(mortgageProperty));
                     }
                 },this);
-        redeemButton =new GUIButton("Redeem",((int)(FRAME_SIZE.getHeight()*.9)/2)-190,(((int)(FRAME_SIZE.getHeight()*.9))/2)+-100,
+        redeemButton =new GUIButton("Redeem",10+Offset,10+Offset,
                 new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
@@ -195,7 +197,7 @@ class GUI {
                     }
                 },this);
 
-        buildButton =new GUIButton("Build",((int)(FRAME_SIZE.getHeight()*.9)/2)+190,(((int)(FRAME_SIZE.getHeight()*.9))/2)-85,
+        buildButton =new GUIButton("Build",(int)(10+(Offset*((SquaresOnSide-2)))),10+Offset,
                 new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
@@ -204,7 +206,7 @@ class GUI {
                     }
                 },this);
 
-        demolishButton =new GUIButton("Demolish",((int)(FRAME_SIZE.getHeight()*.9)/2)+190,(((int)(FRAME_SIZE.getHeight()*.9))/2)-55,
+        demolishButton =new GUIButton("Demolish",(int)(10+(Offset*((SquaresOnSide-2)))),10+2*Offset,
                 new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
@@ -212,7 +214,7 @@ class GUI {
                         gui.updateAction(panopoly.demolishUnit(breaker));
                     }
                 },this);
-        leaveButton =new GUIButton("Leave",(int)(10+(Offset*((SquaresOnSide-1)/2.0)))+Offset*2,(((int)(FRAME_SIZE.getHeight()*.9))/2)+240,
+        leaveButton =new GUIButton("Leave",(int)(10+Offset),-20+(SquaresOnSide-1)*Offset,
                 new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
@@ -220,7 +222,7 @@ class GUI {
                     }
                 },this);
         leaveButton.setVisible(true);
-        quitButton =new GUIButton("Quit",(int)(10+(Offset*((SquaresOnSide-1)/2.0)))+Offset*3,(((int)(FRAME_SIZE.getHeight()*.9))/2)+240,
+        quitButton =new GUIButton("Quit",(int)(10+(Offset*((SquaresOnSide-2)))),-20+(SquaresOnSide-1)*Offset,
                 new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
@@ -376,6 +378,7 @@ class GUI {
             locationWindow.setText(" ");
             locationWindow.setOpaque(false);
             questionWindow.setVisible(false);
+            questionWindow.setOpaque(false);
             buyButton.setVisible(false);
             mortgageButton.setVisible(false);
             redeemButton.setVisible(false);
@@ -400,6 +403,7 @@ class GUI {
         else
         {
             questionWindow.setVisible(false);
+            questionWindow.setOpaque(false);
             this.SelectedLabel=location;
             this.SelectedLabel.getLabel().setBorder(BorderFactory.createLineBorder(Color.green.darker(),2));
             locationWindow.setOpaque(true);
