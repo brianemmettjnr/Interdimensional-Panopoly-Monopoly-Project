@@ -33,9 +33,9 @@ class GUI {
 	private MouseAdapter correct=new MouseAdapter() {
         @Override
         public void mouseClicked(MouseEvent e) {
-            panopoly.getCurrentPlayer().releaseFromJail();
             gui.hideAnswers();
             updateAction("Correct answer.");
+            //updateAction(panopoly.getCurrentPlayer().releaseFromJail());
         }
     };
 
@@ -43,9 +43,9 @@ class GUI {
     private MouseAdapter incorrect=new MouseAdapter() {
         @Override
         public void mouseClicked(MouseEvent e) {
-            panopoly.startPlayerTurn(panopoly.getNextPlayer());
             gui.hideAnswers();
             updateAction("Wrong answer.");
+            updateAction(panopoly.startPlayerTurn(panopoly.getNextPlayer()));
         }
     };
     
@@ -80,7 +80,7 @@ class GUI {
         PlacePlayers();
         setupbuttons();
 
-        image=new JLabel(new ImageIcon(GUI.class.getResource("Logo.png")));
+        image=new JLabel(new ImageIcon(GUI.class.getResource("media/Logo.png")));
         image.setBounds((((int)(FRAME_SIZE.getHeight()*.9))/2)-190,(((int)(FRAME_SIZE.getHeight()*.9))/2)-240,400,400);
         image.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
         MainPane.add(image);
@@ -106,8 +106,7 @@ class GUI {
         thirdAction.setText("");
         MainPane.add(thirdAction);
 
-        locationWindow.setBounds((((int)(FRAME_SIZE.getHeight()*.9))/2)-90,(((int)(FRAME_SIZE.getHeight()*.9))/2)-240,200,380);
-        locationWindow.setVisible(true);
+        locationWindow.setBounds(10+2*Offset,(((int)(FRAME_SIZE.getHeight()*.9))/2)-240,200,380);
         locationWindow.setBackground(Color.WHITE);
         locationWindow.setForeground(Color.BLACK);
         locationWindow.setBorder(BorderFactory.createLineBorder(Color.black,4));
@@ -233,7 +232,7 @@ class GUI {
         int x=-Offset;
         for(int i=0;i<4;i++)
         {
-            answers[i]=new GUIButton("Answer",(int)(10+(Offset*((SquaresOnSide-2)/2.0)))+x,-20+(SquaresOnSide-1)*Offset,
+            answers[i]=new GUIButton("Answer",(int)(10+(Offset*((SquaresOnSide-2)/2.0)))+x,(((int)(FRAME_SIZE.getHeight()*.9))/2)-60,
                    null,this);
             x+=Offset;
         }
@@ -268,7 +267,7 @@ class GUI {
             }
             answers[0].setMouseEvent(correct);
             //todo get cian stuff here
-
+            questionWindow.setText("Hey Choose the left one okay");
         }
         //leaveButton.setVisible(!rollCommand&&!endCommand);
     }
