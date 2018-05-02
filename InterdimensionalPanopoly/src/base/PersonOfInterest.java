@@ -1,5 +1,6 @@
 package base;
 
+import java.awt.*;
 import java.util.Random;
 import java.util.Set;
 import java.util.Vector;
@@ -17,6 +18,7 @@ public class PersonOfInterest
 	private KnowledgeBaseModule NOC4		= null;
 	private KnowledgeBaseModule NOC5		= null;
 	private KnowledgeBaseModule NOC6		= null;
+	private KnowledgeBaseModule NOC7		= null;
 	private KnowledgeBaseModule WORLDS       = null;
 	
 	private static Vector<String> People			= null;
@@ -44,6 +46,7 @@ public class PersonOfInterest
 	private static Vector<String> tests				= null;
 	private static Vector<String> magic				= null;
 	private static Vector<String> placeholder		= null;
+	private static Vector<String> getPlaceholder2	= null;
 
 	static ArrayList<String> locations = new ArrayList<String>();
 	Set<String> removes = new HashSet<>();
@@ -57,18 +60,19 @@ public class PersonOfInterest
 		NOC3 		  = new KnowledgeBaseModule("Veale's The NOC List.txt", 8);
 		NOC4 		  = new KnowledgeBaseModule("Veale's The NOC List.txt", 11);
 		NOC5		  = new KnowledgeBaseModule("Veale's The NOC List.txt", 5);
-		NOC6		  = new KnowledgeBaseModule("Veale's The NOC List.txt", 14);
+		NOC6		  = new KnowledgeBaseModule("Veale's The NOC List.txt", 17);
+		NOC7		  = new KnowledgeBaseModule("Veale's The NOC List.txt", 16);
 		WORLDS        = new KnowledgeBaseModule("Veale's domains.txt", 0);
 		
-		criminals = NOC.getAllKeysWithFieldValueNon("Genres", "crime");
-		enemies = NOC.getAllKeysWithoutFieldValue("Opponent", "");
-		checkers = WORLDS.getAllKeys("Specific Domains"); 
-		murder = NOC.getAllKeysWithFieldValueNon("Negative Talking Points", "evil");
-		wealthy = NOC.getAllKeysWithFieldValueNon("Positive Talking Points", "wealthy");
-		blackmail = NOC.getAllKeysWithFieldValueNon("Domains", "American politics");
+		criminals 	= NOC.getAllKeysWithFieldValueNon("Genres", "crime");
+		enemies 	= NOC.getAllKeysWithoutFieldValue("Opponent", "");
+		checkers 	= WORLDS.getAllKeys("Specific Domains");
+		murder		= NOC.getAllKeysWithFieldValueNon("Negative Talking Points", "evil");
+		wealthy 	= NOC.getAllKeysWithFieldValueNon("Positive Talking Points", "wealthy");
+		blackmail 	= NOC.getAllKeysWithFieldValueNon("Domains", "American politics");
 		blackmailBritish = NOC.getAllKeysWithFieldValueNon("Domains", "British politics");
-		weapons = NOC.getAllKeysWithoutFieldValue("Weapon of Choice", "");
-		cars 	= NOC.getAllKeysWithoutFieldValue("Vehicle of Choice", "");
+		weapons 	= NOC.getAllKeysWithoutFieldValue("Weapon of Choice", "");
+		cars 		= NOC.getAllKeysWithoutFieldValue("Vehicle of Choice", "");
 		inheritance = NOC.getAllKeysWithFieldValueNon("Category", "Novelist");
 		actor		= NOC.getAllKeysWithFieldValueNon("Category", "Actor");
 		wedding 	= NOC.getAllKeysWithFieldValueNon("Marital Status", "single");
@@ -330,14 +334,14 @@ public class PersonOfInterest
 
 	private void Question()
 	{
-		//int probability = DICE.nextInt(2);
-		int probability = 3;
+		int probability = DICE.nextInt(5);
 		if(probability == 0)
 		{
 			int rands = DICE.nextInt(tests.size());
 			System.out.println("Who does this iconic vehicle the '" + tests.get(rands) + "' belong to?");
 			placeholder = NOC.getAllKeysWithFieldValueNon("Vehicle of Choice", tests.get(rands));
-			String output = "" + placeholder;
+			int rands2a = DICE.nextInt(placeholder.size());
+			String output = "" + placeholder.get(rands2a);
 			output = output.replace("]", "");
 			output = output.replace("[", "");
 			placeholder = NOC.getAllKeysWithoutFieldValue("Vehicle of Choice", tests.get(rands));
@@ -355,7 +359,8 @@ public class PersonOfInterest
 			int rands = DICE.nextInt(opponents.size());
 			System.out.println("Who calls '" + opponents.get(rands) + "' their opponent(s)?");
 			placeholder = NOC.getAllKeysWithFieldValueNon("Opponent", opponents.get(rands));
-			String output = "" + placeholder;
+			int rands2a = DICE.nextInt(placeholder.size());
+			String output = "" + placeholder.get(rands2a);
 			output = output.replace("]", "");
 			output = output.replace("[", "");
 			placeholder = NOC.getAllKeysWithoutFieldValue("Opponent", opponents.get(rands));
@@ -373,7 +378,8 @@ public class PersonOfInterest
 			int rands = DICE.nextInt(opponents.size());
 			System.out.print("Which of the following calls " + opponents.get(rands) + " home?  \n");
 			placeholder = NOC.getAllKeysWithFieldValueNon("Address 3", opponents.get(rands));
-			String output = "" + placeholder;
+			int rands2a = DICE.nextInt(placeholder.size());
+			String output = "" + placeholder.get(rands2a);
 			output = output.replace("]", "");
 			output = output.replace("[", "");
 			placeholder = NOC.getAllKeysWithoutFieldValue("Address 3", opponents.get(rands));
@@ -387,21 +393,39 @@ public class PersonOfInterest
 		}
 		if(probability == 3)
 		{
-			opponents = NOC6.getAllKeys("Genres");
+			opponents = NOC6.getAllKeys("Creator");
 			int rands = DICE.nextInt(opponents.size());
-			System.out.print("Which of the following characters covers this/these genre(s): " + opponents.get(rands) + "\n");
-			placeholder = NOC.getAllKeysWithFieldValueNon("Genres", opponents.get(rands));
-			String output = "" + placeholder;
-			output = output.replace("]", "");
-			output = output.replace("[", "");
-			placeholder = NOC.getAllKeysWithoutFieldValue("Genres", opponents.get(rands));
+			System.out.print(opponents.get(rands) + " created which of the following characters? \n");
+			placeholder = NOC.getAllKeysWithoutFieldValue("Creator", opponents.get(rands));
 			for (int i = 0; i < 3; i++)
 			{
 				int rands2 = DICE.nextInt(placeholder.size());
 				System.out.println(placeholder.get(rands2));
 				placeholder.removeElementAt(rands2);
 			}
-			System.out.println(output);
+			placeholder = NOC.getAllKeysWithFieldValueNon("Creator", opponents.get(rands));
+			String output = "" + placeholder.get(0);
+			output = output.replace("]", "");
+			output = output.replace("[", "");
+			System.out.print(output);
+		}
+		if(probability == 4)
+		{
+			opponents = NOC7.getAllKeys("Portrayed By");
+			int rands = DICE.nextInt(opponents.size());
+			System.out.print(opponents.get(rands) + " portrayed which of the following characters? \n");
+			placeholder = NOC.getAllKeysWithoutFieldValue("Portrayed By", opponents.get(rands));
+			for (int i = 0; i < 3; i++)
+			{
+				int rands2 = DICE.nextInt(placeholder.size());
+				System.out.println(placeholder.get(rands2));
+				placeholder.removeElementAt(rands2);
+			}
+			placeholder = NOC.getAllKeysWithFieldValueNon("Portrayed By", opponents.get(rands));
+			String output = "" + placeholder.get(0);
+			output = output.replace("]", "");
+			output = output.replace("[", "");
+			System.out.print(output);
 		}
 	}
 
@@ -440,6 +464,7 @@ public class PersonOfInterest
 		System.out.println(ps.TestDrive());
 		System.out.println(ps.TimeTravel());
 		System.out.println(ps.DoomsDay());
+		System.out.print("\n");
 		ps.Question();
 	}
 		
