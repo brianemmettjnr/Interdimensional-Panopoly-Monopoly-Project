@@ -3,12 +3,8 @@ package base;
 import java.util.Random;
 import java.util.Set;
 import java.util.Vector;
-
-
 import java.util.ArrayList;
 import java.util.HashSet;
-
-
 
 public class PersonOfInterest
 {
@@ -312,7 +308,6 @@ public class PersonOfInterest
 	
 	public String TimeTravel()
 	{
-
 		int rands = DICE.nextInt(magic.size());
 		int moves = DICE.nextInt(14)+1;
 		String output = "You time travel with " + magic.get(rands) + " move back " + moves + " space(s)";
@@ -326,6 +321,19 @@ public class PersonOfInterest
 		int ends = DICE.nextInt(endWorld.length);
 		String output = "The end of the world is nigh, " + villain.get(rands) + " and their " + endWorld[ends] + " have brought about our downfall in t-minus 5 minutes, spend your remaining time wisely";
 		return output;
+	}
+
+	private void Question()
+	{
+		int rands = DICE.nextInt(tests.size());
+		System.out.println("Who does this iconic vehicle the '" + tests.get(rands) + "' belong to?");
+		cars = NOC.getAllKeysWithFieldValueNon("Vehicle of Choice", tests.get(rands));
+		String output = "" + cars;
+		output = output.replace("]", "");
+		output = output.replace("[", "");
+		cars = NOC.getAllKeysWithoutFieldValue("Vehicle of Choice", tests.get(rands));
+		System.out.println(cars);
+		System.out.println(output);
 	}
 	
 	public ArrayList<String> placenames (ArrayList<String> locations)
@@ -363,7 +371,7 @@ public class PersonOfInterest
 		System.out.println(ps.TestDrive());
 		System.out.println(ps.TimeTravel());
 		System.out.println(ps.DoomsDay());
+		ps.Question();
 	}
 		
-}	
-
+}
