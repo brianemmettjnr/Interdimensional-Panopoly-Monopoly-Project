@@ -82,7 +82,7 @@ class GUI {
         setupbuttons();
 
         image=new JLabel(new ImageIcon(GUI.class.getResource("media/Logo.png")));
-        image.setBounds((((int)(FRAME_SIZE.getHeight()*.9))/2)-190,(((int)(FRAME_SIZE.getHeight()*.9))/2)-240,400,400);
+        image.setBounds((((int)(FRAME_SIZE.getHeight()*.9))/2)-190,10+Offset+10,400,400);
         image.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
         MainPane.add(image);
 
@@ -120,18 +120,11 @@ class GUI {
         questionWindow.setForeground(Color.BLACK);
         questionWindow.setBorder(BorderFactory.createLineBorder(Color.black,4));
         questionWindow.setVerticalAlignment(JLabel.TOP);
+        questionWindow.setVisible(false);
         MainPane.add(questionWindow);
         mainFrame.setVisible(true);
         mainFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
-        helpButton=new GUIButton("?", (int)FRAME_SIZE.getWidth() - 40, 10, new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                SetupGUI.getHelp();
-            }
-        },this);
-        helpButton.setSize(30,30);
-        helpButton.setVisible(true);
     }
 
     void setPlayers(ArrayList<Player> players) {
@@ -144,12 +137,14 @@ class GUI {
 
     private void setupbuttons()
     {
-        helpButton=new GUIButton("Help", (int)FRAME_SIZE.getWidth() - 40, 10, new MouseAdapter() {
+        helpButton=new GUIButton("?", (int)FRAME_SIZE.getWidth() - 40, 10, new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 SetupGUI.getHelp();
             }
         },this);
+        helpButton.setSize(30,30);
+        helpButton.setVisible(true);
         rollButton=new GUIButton("Roll",(int)(10+(Offset*((SquaresOnSide-1)/2.0))),-20+(SquaresOnSide-1)*Offset,
         new MouseAdapter() {
             @Override
@@ -413,6 +408,7 @@ class GUI {
             image.setVisible(false);
             if (location.getLocation() instanceof RentalProperty)
             {
+                buyButton.setEnabled(true);
                 RentalProperty locationCheck = (RentalProperty) location.getLocation();
                 if (locationCheck.getOwner() == panopoly.getCurrentPlayer())
                 {
@@ -429,8 +425,17 @@ class GUI {
                 }
                 else
                 {
-                    buyButton.setVisible(locationCheck.getOwner()==null&&locationCheck.getPrice()<=panopoly.getCurrentPlayer().getBalance()
-                            &&panopoly.getCurrentPlayer().getPosition()==location.getIndex());
+                    if(locationCheck.getOwner()==null &&panopoly.getCurrentPlayer().getPosition()==location.getIndex())
+                    {
+                        if(panopoly.getCurrentPlayer().getBalance()<((RentalProperty) location.getLocation()).getPrice())
+                        {
+                            buyButton.setVisible(false);
+                        }
+                        else
+                            buyButton.setVisible(true);
+                    }
+                    else
+                        buyButton.setVisible(false);
                     mortgageButton.setVisible(false);
                     redeemButton.setVisible(false);
                 }
