@@ -2,7 +2,13 @@ package monopoly;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.sql.Time;
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 import javax.swing.Timer;
 
@@ -98,15 +104,31 @@ public class Panopoly
 	
 	public void startPlayerTurn(Player player)
 	{
-		currentPlayer.doubles = 0;
-		currentPlayer.canRoll = true;
-		currentPlayer.rollComplete = false;
-		currentPlayer = player;
-		
-		gui.resetCommands();
-		gui.updateGUI();
-		
-		gui.updateAction(currentPlayer.getIdentifier() + "'s turn");
+		if(player.getClass()==GameBot.class){
+			System.out.println(player.getIdentifier());
+			currentPlayer.doubles = 0;
+			currentPlayer.canRoll = true;
+			currentPlayer.rollComplete = false;
+			currentPlayer = (GameBot)player;
+			((GameBot) player).makeGameDecision(gui);
+
+			//gui.resetCommands();
+			//gui.rollCommand=true;
+
+			gui.updateGUI();
+			gui.updateAction(currentPlayer.getIdentifier() + "'s turn");
+		}else{
+			currentPlayer.doubles = 0;
+			currentPlayer.canRoll = true;
+			currentPlayer.rollComplete = false;
+			currentPlayer = player;
+
+			gui.resetCommands();
+			gui.updateGUI();
+
+			gui.updateAction(currentPlayer.getIdentifier() + "'s turn");
+		}
+
 	}
 	
 	public String roll()
