@@ -8,7 +8,7 @@ import interfaces.Ownable;
 import interfaces.Playable;
 import interfaces.Rentable;
 
-public class Player implements Playable {
+public class Player extends Thread implements Playable {
 	
 	private static final int STARTING_BALANCE = 200;
 	private int playerIndex;
