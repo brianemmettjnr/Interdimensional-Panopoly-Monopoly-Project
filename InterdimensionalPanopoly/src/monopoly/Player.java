@@ -13,7 +13,7 @@ public class Player extends Thread implements Playable {
 	private static final int STARTING_BALANCE = 200;
 	private int playerIndex;
 
-	private String name;
+	protected String name;
 	private int balance;
 	private ArrayList<Rentable> properties = new ArrayList<>();
 	private int position;

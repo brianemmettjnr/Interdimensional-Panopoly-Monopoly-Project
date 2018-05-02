@@ -27,7 +27,7 @@ class GUI {
     private ArrayList<Player> players=new ArrayList<>();
 	
     boolean rollCommand,endCommand;
-	private GUIButton helpButton,buyButton, rollButton, endButton, mortgageButton,
+	public GUIButton helpButton,buyButton, rollButton, endButton, mortgageButton,
             leaveButton, redeemButton,buildButton, demolishButton,quitButton;
 
 	private GUIButton[] answers =new GUIButton[4];
@@ -141,7 +141,15 @@ class GUI {
     void setPanopoly(Panopoly panopoly) {
         this.panopoly = panopoly;
     }
-
+    public void rollFunction(){
+        gui.updateAction(panopoly.roll());
+        if(getSelectedLocation()!=getLocationLabel(panopoly.getCurrentPlayer().getPosition())) {
+            setSelectedLabel(getLocationLabel(panopoly.getCurrentPlayer().getPosition()));
+        }
+    }
+    public void endTurnFunction(){
+        panopoly.startPlayerTurn(panopoly.getNextPlayer());
+    }
     private void setupbuttons()
     {
         helpButton=new GUIButton("Help", (int)FRAME_SIZE.getWidth() - 40, 10, new MouseAdapter() {
