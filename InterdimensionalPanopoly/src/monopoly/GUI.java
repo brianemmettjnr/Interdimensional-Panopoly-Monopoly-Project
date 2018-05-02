@@ -1,5 +1,6 @@
 package monopoly;
 import interfaces.Groupable;
+import interfaces.InteractionAPI;
 import interfaces.Locatable;
 import interfaces.Rentable;
 
@@ -10,7 +11,7 @@ import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
-class GUI {
+class GUI implements InteractionAPI {
 
     public static String symbol="Q";
     private final int SquaresOnSide;
@@ -141,6 +142,7 @@ class GUI {
     void setPanopoly(Panopoly panopoly) {
         this.panopoly = panopoly;
     }
+
     public void rollFunction(){
         gui.updateAction(panopoly.roll());
         if(getSelectedLocation()!=getLocationLabel(panopoly.getCurrentPlayer().getPosition())) {
@@ -150,6 +152,53 @@ class GUI {
     public void endTurnFunction(){
         panopoly.startPlayerTurn(panopoly.getNextPlayer());
     }
+
+    @Override
+    public void getHelpFunction() {
+
+    }
+
+    @Override
+    public void buyPropertyFunction() {
+        Rentable buyProperty= (Rentable)panopoly.getBoard().getLocation(panopoly.getCurrentPlayer().getPosition());
+        gui.updateAction(panopoly.buyProperty(buyProperty));
+        gui.updateGUI();
+    }
+
+    @Override
+    public void mortgagePropertyFunction() {
+        RentalProperty mortgageProperty = (RentalProperty)getSelectedLocation().getLocation();
+        gui.updateAction(panopoly.mortgage(mortgageProperty));
+    }
+
+    @Override
+    public void redeemPropertyFunction() {
+        RentalProperty redeem=(RentalProperty)getSelectedLocation().getLocation();
+        gui.updateAction(panopoly.redeem(redeem));
+    }
+
+    @Override
+    public void buildHouseFunction() {
+        InvestmentProperty builder=(InvestmentProperty) getSelectedLocation().getLocation();
+        gui.updateAction(panopoly.buildUnit(builder));
+    }
+
+    @Override
+    public void demolishHouseFunction() {
+        InvestmentProperty breaker=(InvestmentProperty) getSelectedLocation().getLocation();
+        gui.updateAction(panopoly.demolishUnit(breaker));
+    }
+
+    @Override
+    public void quitTheGameFunction() {
+        panopoly.endGame();
+    }
+
+    @Override
+    public void leaveGameFunction() {
+        panopoly.leaveGame();
+    }
+
     private void setupbuttons()
     {
         helpButton=new GUIButton("Help", (int)FRAME_SIZE.getWidth() - 40, 10, new MouseAdapter() {
@@ -162,17 +211,14 @@ class GUI {
         new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                gui.updateAction(panopoly.roll());
-                if(getSelectedLocation()!=getLocationLabel(panopoly.getCurrentPlayer().getPosition())) {
-                    setSelectedLabel(getLocationLabel(panopoly.getCurrentPlayer().getPosition()));
-                }
+                rollFunction();
             }
         },this);
         endButton =new GUIButton("End",(int)(10+(Offset*((SquaresOnSide-1)/2.0))),-20+(SquaresOnSide-1)*Offset,
                 new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
-                        panopoly.startPlayerTurn(panopoly.getNextPlayer());
+                        endTurnFunction();
                     }
                 },this);
 
@@ -180,9 +226,7 @@ class GUI {
                 new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
-                        Rentable buyProperty= (Rentable)panopoly.getBoard().getLocation(panopoly.getCurrentPlayer().getPosition());
-                        gui.updateAction(panopoly.buyProperty(buyProperty));
-                        gui.updateGUI();
+                        buyPropertyFunction();
                     }
                 },this);
 
@@ -190,16 +234,14 @@ class GUI {
                 new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
-                        RentalProperty mortgageProperty = (RentalProperty)getSelectedLocation().getLocation();
-                        gui.updateAction(panopoly.mortgage(mortgageProperty));
+                        mortgagePropertyFunction();
                     }
                 },this);
         redeemButton =new GUIButton("Redeem",10+4*Offset+200,2*Offset+10+30,
                 new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
-                        RentalProperty redeem=(RentalProperty)getSelectedLocation().getLocation();
-                        gui.updateAction(panopoly.redeem(redeem));
+                        redeemPropertyFunction();
                     }
                 },this);
 
@@ -207,8 +249,7 @@ class GUI {
                 new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
-                        InvestmentProperty builder=(InvestmentProperty) getSelectedLocation().getLocation();
-                        gui.updateAction(panopoly.buildUnit(builder));
+                        buildHouseFunction();
                     }
                 },this);
 
@@ -216,15 +257,14 @@ class GUI {
                 new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
-                        InvestmentProperty breaker=(InvestmentProperty) getSelectedLocation().getLocation();
-                        gui.updateAction(panopoly.demolishUnit(breaker));
+                        demolishHouseFunction();
                     }
                 },this);
         leaveButton =new GUIButton("Leave",(int)(10+Offset),-20+(SquaresOnSide-1)*Offset,
                 new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
-                        panopoly.leaveGame();
+                        leaveGameFunction();
                     }
                 },this);
         leaveButton.setVisible(true);
@@ -232,7 +272,7 @@ class GUI {
                 new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
-                        panopoly.endGame();
+                        quitTheGameFunction();
                     }
                 },this);
         quitButton.setVisible(true);
