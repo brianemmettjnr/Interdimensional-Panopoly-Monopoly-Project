@@ -332,17 +332,21 @@ public class PersonOfInterest
 		output = output.replace("]", "");
 		output = output.replace("[", "");
 		cars = NOC.getAllKeysWithoutFieldValue("Vehicle of Choice", tests.get(rands));
-		System.out.println(cars);
+		for(int i = 0; i < 3; i++)
+		{
+			int rands2 = DICE.nextInt(cars.size());
+			System.out.println(cars.get(rands2));
+		}
 		System.out.println(output);
 	}
-	
+
 	public ArrayList<String> placenames (ArrayList<String> locations)
 	{
 		ArrayList<String> places = new ArrayList<String>();
 		places.addAll(locations);
 		return places;
 	}
-	
+
 	
 	public static void main(String[] args)
 	{
