@@ -18,7 +18,9 @@ public class GameBot extends Player{
     }
 
     public void makeGameDecision(GUI gui){
-        gui.rollFunction();
-        gui.endTurnFunction();
+        if(gui.rollButton.isVisible())
+            gui.rollFunction();
+        else if(gui.endButton.isVisible())
+            gui.endTurnFunction();
     }
 }

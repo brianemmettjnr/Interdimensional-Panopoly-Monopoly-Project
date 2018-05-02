@@ -110,13 +110,13 @@ public class Panopoly
 			currentPlayer.canRoll = true;
 			currentPlayer.rollComplete = false;
 			currentPlayer = (GameBot)player;
-			((GameBot) player).makeGameDecision(gui);
 
 			//gui.resetCommands();
 			//gui.rollCommand=true;
 
 			gui.updateGUI();
 			gui.updateAction(currentPlayer.getIdentifier() + "'s turn");
+			((GameBot) player).makeGameDecision(gui);
 		}else{
 			currentPlayer.doubles = 0;
 			currentPlayer.canRoll = true;
@@ -158,7 +158,8 @@ public class Panopoly
 		
 		gui.resetCommands();
 		gui.updateGUI();
-		
+		if(currentPlayer instanceof GameBot)
+			((GameBot) currentPlayer).makeGameDecision(gui);
 		return msg;
 	}
 	

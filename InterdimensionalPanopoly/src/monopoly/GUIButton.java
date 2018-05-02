@@ -44,7 +44,10 @@ public class GUIButton {
         button.removeMouseListener(button.getMouseListeners()[0]);
         button.addMouseListener(mouse);
     }
-
+    public boolean isVisible()
+    {
+        return button.isVisible();
+    }
     public void setText(String text) {
         button.setText(text);
     }
