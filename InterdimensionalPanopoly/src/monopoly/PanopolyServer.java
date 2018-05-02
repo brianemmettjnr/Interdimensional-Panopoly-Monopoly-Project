@@ -48,7 +48,7 @@ public class PanopolyServer {
 //                    System.out.println("panopoly object made");
 //                }
 
-                SetupGUI.PlayerNameGUI(panopoly,players);
+                SetupGUI.PlayerNameServerGUI(panopoly,players);
             }
 //            for (int i = 0; i < maxNumOfPlayers; i++) {
 //                if (players.get(i) == null) {

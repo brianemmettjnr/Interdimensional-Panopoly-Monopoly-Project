@@ -81,7 +81,7 @@ public class SetupGUI
         image.setBounds(-10,0,400,100);//this isnt relative yet okay jeez
         playerPanel.add(image);*/
         //AFTER HERE IS TEST INSTANTIATION;
-        //PlayerNameGUI();
+        PlayerNameGUI();
     }
     private static void createIcons()
     {
@@ -97,7 +97,12 @@ public class SetupGUI
 
         }
     }
-    public static void PlayerNameGUI(Panopoly panopoly, ArrayList<Player> playerArray) {
+    public static void PlayerNameServerGUI(Panopoly panopoly, ArrayList<Player> playerArray) {
+        createIcons();
+
+        panopoly.createGUI(playerArray);
+    }
+    private static void PlayerNameGUI() {
         createIcons();
         /*
         JFrame playerFrame= new JFrame("Interdimensional Panopoly");
@@ -191,15 +196,14 @@ public class SetupGUI
         playerPanel.add(sendinputButton);
         playerPanel.add(nameSpace);
         *///AFTER HERE IS TEST INSTANTIATION
-//        players=new ArrayList<Player>();
-//        players.add(new Player("Brian..........",0,0,panopoly));
-//        players.add(new Player("Chloe..........",1,1,panopoly));
-//        players.add(new Player("Cian...........",2,2,panopoly));
-//        players.add(new Player("Mossy..........",3,3,panopoly));
-//        players.add(new Player("Tony...........",4,4,panopoly));
-//        players.add(new Player("Christ.........",5,5,panopoly));
-//        panopoly.createGUI(players);
-        panopoly.createGUI(playerArray);
+        players=new ArrayList<Player>();
+        players.add(new Player("Brian..........",0,0,panopoly));
+        players.add(new Player("Chloe..........",1,1,panopoly));
+        players.add(new Player("Cian...........",2,2,panopoly));
+        players.add(new Player("Mossy..........",3,3,panopoly));
+        players.add(new Player("Tony...........",4,4,panopoly));
+        players.add(new Player("Christ.........",5,5,panopoly));
+        panopoly.createGUI(players);
     }
 
     public static void getHelp() {
