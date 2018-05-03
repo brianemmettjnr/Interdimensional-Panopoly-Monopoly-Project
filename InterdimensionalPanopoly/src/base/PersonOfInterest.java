@@ -170,12 +170,24 @@ public class PersonOfInterest
 	{
 		int rands = DICE.nextInt(blackmail.size());
 		opponents = NOC3.getAllKeysWithFieldValueNon("Character", blackmail.get(rands));
-		double moneyValues[] = {50,100,150,200,250};
-		int mons = DICE.nextInt(moneyValues.length);
-		String output = "You catch " + blackmail.get(rands) + " in bed with " + opponents + " you blackmail them, revieve Q" + moneyValues[mons];
-		output = output.replace("]", "");
-		output = output.replace("[", "");
-		return output;
+		if (opponents.equals(""))
+		{
+			double moneyValues[] = {50,100,150,200,250};
+			int mons = DICE.nextInt(moneyValues.length);
+			String output = "You catch " + blackmail.get(rands) + " in bed with Donald Trump you blackmail them, revieve Q" + moneyValues[mons];
+			output = output.replace("]", "");
+			output = output.replace("[", "");
+			return output;
+		}
+		else
+			{
+			double moneyValues[] = {50, 100, 150, 200, 250};
+			int mons = DICE.nextInt(moneyValues.length);
+			String output = "You catch " + blackmail.get(rands) + " in bed with " + opponents + " you blackmail them, revieve Q" + moneyValues[mons];
+			output = output.replace("]", "");
+			output = output.replace("[", "");
+			return output;
+			}
 	}
 	
 	public String BlackmailerBr()
@@ -208,7 +220,7 @@ public class PersonOfInterest
 		double moneyValues[] = {50,100,150,200,250};
 		int mons = DICE.nextInt(moneyValues.length);
 		People = NOC4.getAllKeysWithFieldValueNon("Character", weapons.get(rands));
-		String output = "You pawn " + weapons.get(rands) + "'s " + People + ", recieve pay Q" + moneyValues[mons];
+		String output = "You pawn " + weapons.get(rands) + "'s " + People + ", recieve Q" + moneyValues[mons];
 		output = output.replace("]", "");
 		output = output.replace("[", "");
 		return output;
@@ -405,7 +417,7 @@ public class PersonOfInterest
 				placeholder.removeElementAt(rands2);
 			}
 			placeholder = NOC.getAllKeysWithFieldValueNon("Creator", opponents.get(rands));
-			String output = "" + placeholder.get(0);
+			String output = "" + placeholder;
 			output = output.replace("]", "");
 			output = output.replace("[", "");
 			qandA[4] = (output);
@@ -423,7 +435,7 @@ public class PersonOfInterest
 				placeholder.removeElementAt(rands2);
 			}
 			placeholder = NOC.getAllKeysWithFieldValueNon("Portrayed By", opponents.get(rands));
-			String output = "" + placeholder.get(0);
+			String output = "" + placeholder;
 			output = output.replace("]", "");
 			output = output.replace("[", "");
 			qandA[4] = (output);
