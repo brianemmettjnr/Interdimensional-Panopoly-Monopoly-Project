@@ -93,12 +93,6 @@ public class Player implements Playable {
 				ret += "\n" + getIdentifier() + " has passed GO and earned 200.";
 				earn(200);
 			}
-			
-			if(panopoly.getBoard().getLocation(position).getIdentifier() == "Go to Jail")
-			{
-				sendToJail();
-				ret += "\n" + getIdentifier() + " has landed on Go to Jail and been sent to Jail";
-			}
 		}
 		
 		else

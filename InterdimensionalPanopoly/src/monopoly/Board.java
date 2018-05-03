@@ -1,6 +1,7 @@
 package monopoly;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.concurrent.ThreadLocalRandom;
 
 import interfaces.Locatable;
@@ -70,6 +71,11 @@ public class Board
 			}
 		}
 	}
+	
+//	private HashMap<String, String> generateLocations()
+//	{
+//		
+//	}
 	
 	public Locatable getLocation(int squareLocation)
 	{
