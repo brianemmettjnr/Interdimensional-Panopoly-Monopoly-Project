@@ -15,4 +15,6 @@ public interface InteractionAPI {
     void demolishHouseFunction();
     void quitTheGameFunction();
     void leaveGameFunction();
+    void answerCorrectlyFunction();
+    void answerIncorrectlyFunction();
 }
