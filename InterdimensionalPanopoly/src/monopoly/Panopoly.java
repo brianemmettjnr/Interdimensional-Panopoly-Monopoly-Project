@@ -102,28 +102,31 @@ public class Panopoly
 	private String getSquareAction()
 	{
 		Locatable square = board.getLocation(currentPlayer.getPosition());
+		String ret = "";
 		
 		if(square instanceof TaxableProperty)
 		{
 			currentPlayer.pay(((Taxable) square).getFlatAmount());
-			return "\n" + currentPlayer.getIdentifier() + " has paid " + ((Taxable) square).getFlatAmount() + " in tax.";
+			ret = "\n" + currentPlayer.getIdentifier() + " has paid " + ((Taxable) square).getFlatAmount() + " in tax.";
 		}
 		//rental property owned by another player
 		else if((square instanceof RentalProperty) && (((Rentable) square).getOwner()!=null) && (((Rentable) square).getOwner()!=currentPlayer) && !(((RentalProperty) square).isMortgaged()))
 		{
 			int rent = ((Rentable) square).getRentalAmount();
-//
-//			if(!(currentPlayer.hasProperty() || currentPlayer.getBalance() >= rent))
-//			{
-//				rent = currentPlayer.getBalance();
-//			}
-//
+
 			currentPlayer.pay(rent);
 			((Player) ((Rentable) square).getOwner()).earn(rent);
-			return "\n" + currentPlayer.getIdentifier() + " has paid " + rent + " to " + ((Rentable) square).getOwner().getIdentifier();
+			ret = "\n" + currentPlayer.getIdentifier() + " has paid " + rent + " to " + ((Rentable) square).getOwner().getIdentifier();
+		}
+		
+		else if(square.getIdentifier() == "Go to Jail")
+		{
+			currentPlayer.sendToJail();
+			ret = "\n" + currentPlayer.getIdentifier() + " has landed on Go to Jail and been sent to jail.";
+			//ret += startPlayerTurn(getNextPlayer());
 		}
 
-		return "";
+		return ret;
 	}
 	
 	public void startCountdown()
@@ -164,11 +167,10 @@ public class Panopoly
 
 			updateAction(currentPlayer.getIdentifier() + "'s turn");
 		}
-
 	}
 
 
-	public String roll()
+	public void roll()
 	{
 		currentPlayer.canRoll = false;
 		currentPlayer.rollComplete = true;
@@ -189,15 +191,16 @@ public class Panopoly
 			}
 		}
 
+		//pass GO message
 		msg += currentPlayer.move(movePositions, clockwiseMovement);
 
 		msg += getSquareAction();
 		
 		resetCommands();
 		updateGUI();
+		updateAction(msg);
 		if(currentPlayer instanceof GameBot)
 		{}//todo fix ((GameBot) currentPlayer).makeGameDecision(gui);
-		return msg;
 	}
 	
 	//PROPERTY METHODS
@@ -233,10 +236,20 @@ public class Panopoly
 		return redeemProperty.redeem();	
 	}
 	
-	//if one
 	public void leaveGame()
 	{
+
+		for(Rentable property: currentPlayer.getProperties())
+		{
+			property.reset();
+		}
 		updateAction(currentPlayer.getIdentifier() + " has left the game.");
+		
+		for(Rentable property: currentPlayer.getProperties())
+		{
+			property.reset();
+		}
+
 		int index = players.indexOf(currentPlayer);
 		players.remove(currentPlayer);
 		leaveGame(currentPlayer);

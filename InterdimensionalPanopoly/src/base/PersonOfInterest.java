@@ -5,6 +5,7 @@ import java.util.Random;
 import java.util.Set;
 import java.util.Vector;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 
 public class PersonOfInterest
@@ -48,13 +49,9 @@ public class PersonOfInterest
 	private static Vector<String> placeholder		= null;
 	private static Vector<String> getPlaceholder2	= null;
 
-
 	public static ArrayList<String> locations = new ArrayList<String>();
 	Set<String> removes = new HashSet<>();
 	public static ArrayList<String> places = new ArrayList<String>();
-	public static String question = null;
-	public static String answers[] = new String [4];
-	public static int x = 0;
 
 	public PersonOfInterest()
 	{
@@ -93,16 +90,20 @@ public class PersonOfInterest
 		{
 			String world = (String) checkers.get(q);
 			allPeople = NOC1.getAllKeysWithFieldValue("Domains", world);
+			
+			//int rands = DICE.nextInt(3)+1; // change to get number of in world properties 
 			if(allPeople.size() >= 3)	// must match number in () line above
 			{		
-				for(int z = 0; z < 3; z++)
+				for(int z = 0; z < allPeople.size(); z++)
 				{
+					
 					int n = DICE.nextInt(allPeople.size());
 					locations.add((String) allPeople.get(n));
 					allPeople.remove(n);
 				}
 			}
-		}	
+		}		
+		
 		removes.addAll(locations);
 		locations.clear();
 		locations.addAll(removes); // removes duplicates
@@ -173,12 +174,24 @@ public class PersonOfInterest
 	{
 		int rands = DICE.nextInt(blackmail.size());
 		opponents = NOC3.getAllKeysWithFieldValueNon("Character", blackmail.get(rands));
-		double moneyValues[] = {50,100,150,200,250};
-		int mons = DICE.nextInt(moneyValues.length);
-		String output = "You catch " + blackmail.get(rands) + " in bed with " + opponents + " you blackmail them, revieve Q" + moneyValues[mons];
-		output = output.replace("]", "");
-		output = output.replace("[", "");
-		return output;
+		if (opponents.equals(""))
+		{
+			double moneyValues[] = {50,100,150,200,250};
+			int mons = DICE.nextInt(moneyValues.length);
+			String output = "You catch " + blackmail.get(rands) + " in bed with Donald Trump you blackmail them, revieve Q" + moneyValues[mons];
+			output = output.replace("]", "");
+			output = output.replace("[", "");
+			return output;
+		}
+		else
+			{
+			double moneyValues[] = {50, 100, 150, 200, 250};
+			int mons = DICE.nextInt(moneyValues.length);
+			String output = "You catch " + blackmail.get(rands) + " in bed with " + opponents + " you blackmail them, revieve Q" + moneyValues[mons];
+			output = output.replace("]", "");
+			output = output.replace("[", "");
+			return output;
+			}
 	}
 	
 	public String BlackmailerBr()
@@ -211,7 +224,7 @@ public class PersonOfInterest
 		double moneyValues[] = {50,100,150,200,250};
 		int mons = DICE.nextInt(moneyValues.length);
 		People = NOC4.getAllKeysWithFieldValueNon("Character", weapons.get(rands));
-		String output = "You pawn " + weapons.get(rands) + "'s " + People + ", recieve pay Q" + moneyValues[mons];
+		String output = "You pawn " + weapons.get(rands) + "'s " + People + ", recieve Q" + moneyValues[mons];
 		output = output.replace("]", "");
 		output = output.replace("[", "");
 		return output;
@@ -331,106 +344,107 @@ public class PersonOfInterest
 		int rands = DICE.nextInt(villain.size());
 		String endWorld[] = {"zombie apocalypse", "nuclear weapons", "one-inch punch", " virus", "infinity gauntlet", "elderwand", "asteroid", "plague", "Death Star", "robot killing machines", "terminators", "alien invaders"};
 		int ends = DICE.nextInt(endWorld.length);
-		String output = "The end of the world is nigh, " + villain.get(rands) + " and their " + endWorld[ends] + " have brought about our downfall in t-minus 5 minutes, spend your remaining time wisely";
+		String output = "The end of the world is nigh, " + villain.get(rands) + " and their " + endWorld[ends] + " have brought about armageddon in t-minus 5 minutes, spend your remaining time wisely";
 		return output;
 	}
 
-	public void Question()
+	public String[] Question()
 	{
+		String qandA[] = new String[5];
 		int probability = DICE.nextInt(5);
 		if(probability == 0)
 		{
 			int rands = DICE.nextInt(tests.size());
-			question = ("Who does this iconic vehicle the '" + tests.get(rands) + "' belong to?");
+			qandA[0] = ("Who does this iconic vehicle the '" + tests.get(rands) + "' belong to?");
 			placeholder = NOC.getAllKeysWithFieldValueNon("Vehicle of Choice", tests.get(rands));
 			int rands2a = DICE.nextInt(placeholder.size());
-			x = 500;
 			String output = "" + placeholder.get(rands2a);
 			output = output.replace("]", "");
 			output = output.replace("[", "");
 			placeholder = NOC.getAllKeysWithoutFieldValue("Vehicle of Choice", tests.get(rands));
-			for (int i = 0; i < 3; i++)
+			for (int i = 1; i < 4; i++)
 			{
 				int rands2 = DICE.nextInt(placeholder.size());
-				answers[i] = (placeholder.get(rands2));
+				qandA[i] = (placeholder.get(rands2));
 				placeholder.removeElementAt(rands2);
 			}
-			answers[3] = output;
+			qandA[4] = output;
 		}
 		if(probability == 1)
 		{
 			opponents = NOC3.getAllKeys("Opponent");
 			int rands = DICE.nextInt(opponents.size());
-			question = ("Who calls '" + opponents.get(rands) + "' their opponent(s)?");
+			qandA[0] = ("Who calls '" + opponents.get(rands) + "' their opponent(s)?");
 			placeholder = NOC.getAllKeysWithFieldValueNon("Opponent", opponents.get(rands));
 			int rands2a = DICE.nextInt(placeholder.size());
 			String output = "" + placeholder.get(rands2a);
 			output = output.replace("]", "");
 			output = output.replace("[", "");
 			placeholder = NOC.getAllKeysWithoutFieldValue("Opponent", opponents.get(rands));
-			for (int i = 0; i < 3; i++)
+			for (int i = 1; i < 4; i++)
 			{
 				int rands2 = DICE.nextInt(placeholder.size());
-				answers[i] = (placeholder.get(rands2));
+				qandA[i] = (placeholder.get(rands2));
 				placeholder.removeElementAt(rands2);
 			}
-			answers[3] = (output);
+			qandA[4] = (output);
 		}
 		if(probability == 2)
 		{
 			opponents = NOC5.getAllKeys("Address 3");
 			int rands = DICE.nextInt(opponents.size());
-			question = ("Which of the following calls " + opponents.get(rands) + " home?");
+			qandA[0] = ("Which of the following calls " + opponents.get(rands) + " home?");
 			placeholder = NOC.getAllKeysWithFieldValueNon("Address 3", opponents.get(rands));
 			int rands2a = DICE.nextInt(placeholder.size());
 			String output = "" + placeholder.get(rands2a);
 			output = output.replace("]", "");
 			output = output.replace("[", "");
 			placeholder = NOC.getAllKeysWithoutFieldValue("Address 3", opponents.get(rands));
-			for (int i = 0; i < 3; i++)
+			for (int i = 1; i < 4; i++)
 			{
 				int rands2 = DICE.nextInt(placeholder.size());
-				answers[i] = (placeholder.get(rands2));
+				qandA[i] = (placeholder.get(rands2));
 				placeholder.removeElementAt(rands2);
 			}
-			answers[3] = output;
+			qandA[4] = output;
 		}
 		if(probability == 3)
 		{
 			opponents = NOC6.getAllKeys("Creator");
 			int rands = DICE.nextInt(opponents.size());
-			question = (opponents.get(rands) + " created which of the following characters? \n");
+			qandA[0] = (opponents.get(rands) + " created which of the following characters?");
 			placeholder = NOC.getAllKeysWithoutFieldValue("Creator", opponents.get(rands));
-			for (int i = 0; i < 3; i++)
+			for (int i = 1; i < 4; i++)
 			{
 				int rands2 = DICE.nextInt(placeholder.size());
-				answers[i] = (placeholder.get(rands2));
+				qandA[i] = (placeholder.get(rands2));
 				placeholder.removeElementAt(rands2);
 			}
 			placeholder = NOC.getAllKeysWithFieldValueNon("Creator", opponents.get(rands));
-			String output = "" + placeholder.get(0);
+			String output = "" + placeholder;
 			output = output.replace("]", "");
 			output = output.replace("[", "");
-			answers[3] = (output);
+			qandA[4] = (output);
 		}
 		if(probability == 4)
 		{
 			opponents = NOC7.getAllKeys("Portrayed By");
 			int rands = DICE.nextInt(opponents.size());
-			question = (opponents.get(rands) + " portrayed which of the following characters? \n");
+			qandA[0] = (opponents.get(rands) + " portrayed which of the following characters?");
 			placeholder = NOC.getAllKeysWithoutFieldValue("Portrayed By", opponents.get(rands));
-			for (int i = 0; i < 3; i++)
+			for (int i = 1; i < 4; i++)
 			{
 				int rands2 = DICE.nextInt(placeholder.size());
-				answers[i] = (placeholder.get(rands2));
+				qandA[i] = (placeholder.get(rands2));
 				placeholder.removeElementAt(rands2);
 			}
 			placeholder = NOC.getAllKeysWithFieldValueNon("Portrayed By", opponents.get(rands));
-			String output = "" + placeholder.get(0);
+			String output = "" + placeholder;
 			output = output.replace("]", "");
 			output = output.replace("[", "");
-			answers[3] = (output);
+			qandA[4] = (output);
 		}
+		return qandA;
 	}
 
 	public ArrayList<String> placenames (ArrayList<String> locations)
@@ -470,12 +484,13 @@ public class PersonOfInterest
 		System.out.println(ps.DoomsDay());
 		System.out.print("\n");
 //////////////////////////////////////////////////////////////////////////
-		ps.Question();
-		System.out.print(question + "\n");
-		for(int i = 0; i < answers.length; i++)
+		String[] str1 = ps.Question();
+		for(String str: str1)
 		{
-			System.out.print(answers[i] + "\n");
-		} // do this brian to call the questions
+			System.out.print(str + "\n");
+		}
+		 // do this brian to call the questions
+//////////////////////////////////////////////////////////////////////////
 	}
 		
 }

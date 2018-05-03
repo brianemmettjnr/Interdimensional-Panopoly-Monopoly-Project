@@ -115,6 +115,12 @@ class LocationLabel
         {
             Rentable rentable=((Rentable) location);
             Player owner= (Player) rentable.getOwner();
+            
+            
+            //CHLOE TEST GROUP
+            HTML += rentable.getGroup().getIdentifier() + "<br>";
+            
+            
             if(owner==null) {
                 HTML +="Unowned" + "<br>";
                 HTML +="For sale for: "+GUI.symbol + rentable.getPrice() + "<br>";

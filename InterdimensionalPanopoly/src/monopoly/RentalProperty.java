@@ -20,6 +20,12 @@ public abstract class RentalProperty extends PrivateProperty implements Rentable
 		this.group = group;
 		group.addMember(this);
 	}
+	
+	public void reset()
+	{
+		setOwner(null);
+		mortgaged = false;
+	}
 
 	//returns cost to mortgage
 	@Override

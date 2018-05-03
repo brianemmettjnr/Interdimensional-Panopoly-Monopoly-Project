@@ -17,6 +17,8 @@ public class Group implements Identifiable
 	Group (String name)
 	{
 		this.name = name;
+		color = new Color(ThreadLocalRandom.current().nextInt(0, 255 + 1),ThreadLocalRandom.current().nextInt(0, 255 + 1)
+				,ThreadLocalRandom.current().nextInt(0, 255 + 1));
 	}
 
 	@Override
@@ -35,9 +37,8 @@ public class Group implements Identifiable
 		return members;
 	}
 
-    public Color getColor() {
-		if(color==null)
-        	color= new Color(ThreadLocalRandom.current().nextInt(0, 255 + 1),ThreadLocalRandom.current().nextInt(0, 255 + 1)
-				,ThreadLocalRandom.current().nextInt(0, 255 + 1));
-		return color;}
+    public Color getColor() 
+    {
+        return color;
+	}
 }

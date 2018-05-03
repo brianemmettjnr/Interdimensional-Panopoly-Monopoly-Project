@@ -30,14 +30,10 @@ public class Main
 		System.out.println(ps.TimeTravel());
 		System.out.println(ps.DoomsDay());
 
-		ps.Question();
-		System.out.print(ps.question + "\n");
-		for(int i = 0; i < ps.answers.length; i++)
+		String[] str1 = ps.Question();
+		for(String str: str1)
 		{
-			System.out.print(ps.answers[i] + "\n");
-		} // do this brian to call the questions
-		// possibility to add cards based on whether a certain property type is in the game, e.g. star trek planet = card "Beem me up Scotty" and move
-		// to location
+			System.out.print(str + "\n");
+		}
 	}
 }
-// impending doom 

@@ -17,6 +17,14 @@ public class InvestmentProperty extends RentalProperty implements Improvable{
 	}
 	
 	@Override
+	public void reset()
+	{
+		super.reset();
+		houses = 0;
+		hotels = 0;
+	}
+	
+	@Override
 	public int getValue()
 	{
 		return super.getValue() + getNumBuildings()*buildPrice;
