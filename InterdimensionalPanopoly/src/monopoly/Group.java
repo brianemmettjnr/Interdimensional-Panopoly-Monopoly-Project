@@ -36,7 +36,8 @@ public class Group implements Identifiable
 	}
 
     public Color getColor() {
-
-        return new Color(ThreadLocalRandom.current().nextInt(0, 255 + 1),ThreadLocalRandom.current().nextInt(0, 255 + 1)
-				,ThreadLocalRandom.current().nextInt(0, 255 + 1)); }
+		if(color==null)
+        	color= new Color(ThreadLocalRandom.current().nextInt(0, 255 + 1),ThreadLocalRandom.current().nextInt(0, 255 + 1)
+				,ThreadLocalRandom.current().nextInt(0, 255 + 1));
+		return color;}
 }

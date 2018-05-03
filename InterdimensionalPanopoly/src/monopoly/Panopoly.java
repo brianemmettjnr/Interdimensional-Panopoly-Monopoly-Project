@@ -41,6 +41,7 @@ public class Panopoly
 		players = playerArray;
 		currentPlayer = players.get(0);
 		gui = new GUI(board.getNumLocations(),this,players);
+		GUI gui2 = new GUI(board.getNumLocations(),this,players);
 		gui.updateGUI();
 	}
 	

@@ -22,7 +22,7 @@ public class GameBot extends Player{
         if(gui.rollButton.isVisible()) {
             gui.rollFunction();
         } //to buy if you have the money
-        else if(gui.buyButton.isVisible() && balance>90){
+        else if(gui.buyButton.isVisible()){
             gui.buyPropertyFunction();
         }
         else if(gui.endButton.isVisible()){

@@ -1,6 +1,5 @@
 package monopoly;
 
-import tabular.BucketTable;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,8 +11,8 @@ public class GUIButton {
 
     public GUIButton(String name, int x, int y,MouseAdapter mouseAdapter,GUI gui)
     {
-        name="<html><center>"+name+"</center></html>";
-        button=new JButton(name);
+        String htmlname="<html><center>"+name+"</center></html>";
+        button=new JButton(htmlname);
         button.setFocusPainted(false);
         button.setVisible(false);
         button.setBounds(x,y,gui.getOffset(),30);
@@ -21,7 +20,14 @@ public class GUIButton {
         button.setBorder(BorderFactory.createBevelBorder(1,Color.red,Color.red.darker()));
         button.setBackground(Color.black);
         button.setForeground(Color.lightGray);
-        button.setFont(new Font("Courier",Font.BOLD,14));
+        int size = 20;
+        button.setFont(new Font("Courier", Font.BOLD,  size));
+
+        while(button.getFontMetrics(new Font("Courier", Font.BOLD,  size)).stringWidth(name+"1") >= button.getWidth())
+        {
+            size--;
+            button.setFont(new Font("Courier", Font.BOLD,  size));
+        }
         if(mouseAdapter!=null)
             button.addMouseListener(mouseAdapter);
         gui.getMainPane().add(button);

@@ -1,6 +1,7 @@
 package monopoly;
 
 import interfaces.Locatable;
+import interfaces.Mortgageable;
 import interfaces.Rentable;
 
 import javax.swing.*;
@@ -44,7 +45,12 @@ public class PlayerLabel
                 gui.setSelectedLabel(null);
                 for(Rentable property:player.getProperties())
                 {
-                    gui.getLocationLabel(((Locatable)property)).setTempBorder(BorderFactory.createLineBorder(Color.blue,4));
+                    if(((RentalProperty) property).isMortgaged())
+                        gui.getLocationLabel(((Locatable)property)).setTempBorder(BorderFactory.createCompoundBorder(
+                        BorderFactory.createLineBorder(Color.red,4),BorderFactory.createLineBorder(Color.red.darker(),2)));
+                    else
+                        gui.getLocationLabel(((Locatable)property)).setTempBorder(BorderFactory.createCompoundBorder(
+                                BorderFactory.createLineBorder(Color.green,4),BorderFactory.createLineBorder(Color.green.darker(),2)));
                 }
             }
             @Override

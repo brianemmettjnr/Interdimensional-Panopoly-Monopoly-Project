@@ -298,7 +298,7 @@ class GUI implements InteractionAPI {
 			//unowned property and player has rolled at least once
 			gui.endCommand = (!gui.rollCommand && panopoly.getCurrentPlayer().getBalance() >= 0);
 		}
-    	
+    	hideAnswers();
     	rollButton.setVisible(rollCommand);
     	endButton.setVisible(endCommand);
     	if (panopoly.getCurrentPlayer().isInJail()) {
