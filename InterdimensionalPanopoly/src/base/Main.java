@@ -30,10 +30,10 @@ public class Main
 		System.out.println(ps.TimeTravel());
 		System.out.println(ps.DoomsDay());
 
-		String[] str1 = ps.Question();
-		for(String str: str1)
-		{
-			System.out.print(str + "\n");
-		}
+//		String[] str1 = ps.Question();
+//		for(String str: str1)
+//		{
+//			System.out.print(str + "\n");
+//		}
 	}
 }
