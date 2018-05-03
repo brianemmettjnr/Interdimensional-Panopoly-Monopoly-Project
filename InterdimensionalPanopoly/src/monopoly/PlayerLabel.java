@@ -32,10 +32,19 @@ public class PlayerLabel
         this.gui=gui;
         this.player=player;
         this.index=i;
-        this.icon=new JLabel(image);
+        int width=(int)((this.gui.getFRAME_SIZE().width-this.gui.getFRAME_SIZE().height)/4)-10;
+        //if(width*gui.getPlayers().size()>gui.getFRAME_SIZE().height)
 
+
+        BufferedImage bi = new BufferedImage(image.getIconWidth(), image.getIconHeight(), BufferedImage.TYPE_INT_ARGB);
+        Graphics g = bi.createGraphics();
+        image.paintIcon(null, g, 0,0);
+        g.dispose();
+        scale=(int)(width);
+        ImageIcon newIcon =new ImageIcon(bi.getScaledInstance(scale,scale,1));
+        this.icon=new JLabel(newIcon);
         //noinspection SuspiciousNameCombination
-        icon.setBounds(this.gui.getFRAME_SIZE().height,i*110+10,100,100);
+        icon.setBounds(this.gui.getFRAME_SIZE().height,10+i*width,width,width);
         icon.setVisible(true);
         icon.setBackground(Color.DARK_GRAY);
         icon.setOpaque(true);
@@ -71,7 +80,7 @@ public class PlayerLabel
 
         name.setText(player.getIdentifier());
         name.setFont(new Font("Arial",Font.BOLD,32));
-        name.setBounds(this.gui.getFRAME_SIZE().height+100,i*110+10,200,100);
+        name.setBounds(this.gui.getFRAME_SIZE().height+width,10+i*width,2*width,width);
         name.setVisible(true);
         name.setBackground(Color.DARK_GRAY);
         name.setForeground(Color.white);
@@ -79,19 +88,19 @@ public class PlayerLabel
 
         balance.setText("$"+player.getBalance());
         balance.setFont(new Font("Times New Roman",Font.ITALIC,32));
-        balance.setBounds(this.gui.getFRAME_SIZE().height+300,i*110+10,100,100);
+        balance.setBounds(this.gui.getFRAME_SIZE().height+3*width,10+i*width,width,width);
         balance.setVisible(true);
         balance.setOpaque(true);
         balance.setBackground(Color.DARK_GRAY);
         balance.setForeground(Color.WHITE);
         gui.getMainPane().add(balance);
 
-        BufferedImage bi = new BufferedImage(image.getIconWidth(), image.getIconHeight(), BufferedImage.TYPE_INT_ARGB);
-        Graphics g = bi.createGraphics();
+        BufferedImage bi2 = new BufferedImage(image.getIconWidth(), image.getIconHeight(), BufferedImage.TYPE_INT_ARGB);
+        Graphics g2 = bi2.createGraphics();
         image.paintIcon(null, g, 0,0);
-        g.dispose();
+        g2.dispose();
         scale=(int)((gui.getOffset())*.5);
-        ImageIcon newIcon =new ImageIcon(bi.getScaledInstance(scale,scale,1));
+        newIcon =new ImageIcon(bi.getScaledInstance(scale,scale,1));
         positionIcon= new JLabel(newIcon);
         positionIcon.setBounds(gui.getLocationLabel(player.getPosition()).getX()+(index%3*(gui.getOffset()/4)),
                 gui.getLocationLabel(player.getPosition()).getY()+1+(index%2*(gui.getOffset()/2)),scale,scale);

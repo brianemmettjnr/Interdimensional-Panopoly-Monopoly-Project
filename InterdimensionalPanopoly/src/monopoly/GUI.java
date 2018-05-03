@@ -14,6 +14,7 @@ import java.util.ArrayList;
 class GUI implements InteractionAPI {
 
     public static String symbol="Q";
+    private Player assignedPlayer;
     private final int SquaresOnSide;
     private final JFrame mainFrame;
     private int BOARD_SIZE;
@@ -60,12 +61,14 @@ class GUI implements InteractionAPI {
     private JLabel thirdAction=new JLabel("",SwingConstants.CENTER);
     private GUI gui=this;
 
-    GUI(int BoardSize,Panopoly panopoly,ArrayList<Player> players)
+    GUI(int BoardSize,Panopoly panopoly,ArrayList<Player> players,Player player)
     {
+        //FRAME_SIZE=new Dimension((int)(50+(FRAME_SIZE.width/2)),(int)(50+FRAME_SIZE.height/2));//temp code
         this.setPanopoly(panopoly);
         this.setPlayers(players);
+        assignedPlayer=player;
         BOARD_SIZE=BoardSize;
-        mainFrame = new JFrame("Interdimensional Panopoly");
+        mainFrame = new JFrame("Interdimensional Panopoly: "+assignedPlayer.getIdentifier());
         mainFrame.setSize(FRAME_SIZE);
         mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         LocationLabels=new LocationLabel[BOARD_SIZE];
@@ -81,34 +84,42 @@ class GUI implements InteractionAPI {
         PlaceBoard();
         PlacePlayers();
         setupbuttons();
-
-        image=new JLabel(new ImageIcon(GUI.class.getResource("media/Logo.png")));
-        image.setBounds((((int)(FRAME_SIZE.getHeight()*.9))/2)-190,10+Offset+10,400,400);
+        ImageIcon scaleImage=new ImageIcon(GUI.class.getResource("media/Logo.png"));
+        BufferedImage bi = new BufferedImage(scaleImage.getIconWidth(), scaleImage.getIconHeight(), BufferedImage.TYPE_INT_ARGB);
+        Graphics g = bi.createGraphics();
+        scaleImage.paintIcon(null, g, 0,0);
+        g.dispose();
+        int scale=(int)(Offset*(SquaresOnSide-4));
+        ImageIcon newIcon =new ImageIcon(bi.getScaledInstance(scale,scale,1));
+        image=new JLabel(newIcon);
+        image.setBounds(10+2*Offset,10+Offset+10,scale,scale);
         image.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
         MainPane.add(image);
 
-        latestAction.setBounds(10+Offset,(((int)(FRAME_SIZE.getHeight()*.9))/2)+210,Offset*(SquaresOnSide-2),30);
-        latestAction.setVisible(true);
-        latestAction.setFont(new Font("Times New Roman",Font.BOLD,20));
-        latestAction.setForeground(Color.white);
-        latestAction.setText("Welcome To Interdimensional Panopoly");
-        MainPane.add(latestAction);
-
-        secondAction.setBounds(10+Offset,(((int)(FRAME_SIZE.getHeight()*.9))/2)+180,Offset*(SquaresOnSide-2),30);
-        secondAction.setVisible(true);
-        secondAction.setFont(new Font("times new roman",Font.BOLD,20));
-        secondAction.setForeground(Color.white);
-        secondAction.setText("Enjoy!");
-        MainPane.add(secondAction);
-
-        thirdAction.setBounds(10+Offset,(((int)(FRAME_SIZE.getHeight()*.9))/2)+150,Offset*(SquaresOnSide-2),30);
+        thirdAction.setBounds(10+Offset,10+image.getY()+image.getHeight()+10,Offset*(SquaresOnSide-2),30);
         thirdAction.setVisible(true);
         thirdAction.setFont(new Font("times new roman",Font.BOLD,20));
         thirdAction.setForeground(Color.white);
         thirdAction.setText("");
         MainPane.add(thirdAction);
 
-        locationWindow.setBounds(10+3*Offset,(((int)(FRAME_SIZE.getHeight()*.9))/2)-240,200,380);
+        secondAction.setBounds(10+Offset,thirdAction.getY()+30,Offset*(SquaresOnSide-2),30);
+        secondAction.setVisible(true);
+        secondAction.setFont(new Font("times new roman",Font.BOLD,20));
+        secondAction.setForeground(Color.white);
+        secondAction.setText("Enjoy!");
+        MainPane.add(secondAction);
+
+        latestAction.setBounds(10+Offset,secondAction.getY()+30,Offset*(SquaresOnSide-2),30);
+        latestAction.setVisible(true);
+        latestAction.setFont(new Font("Times New Roman",Font.BOLD,20));
+        latestAction.setForeground(Color.white);
+        latestAction.setText("Welcome To Interdimensional Panopoly");
+        MainPane.add(latestAction);
+
+
+
+        locationWindow.setBounds(10+3*Offset,10+Offset,Offset*(SquaresOnSide-6),Offset*(SquaresOnSide-4));
         locationWindow.setBackground(Color.WHITE);
         locationWindow.setForeground(Color.BLACK);
         locationWindow.setBorder(BorderFactory.createLineBorder(Color.black,4));
@@ -194,7 +205,7 @@ class GUI implements InteractionAPI {
 
     private void setupbuttons()
     {
-        helpButton=new GUIButton("?", (int)FRAME_SIZE.getWidth() - 40, 10, new MouseAdapter() {
+        helpButton=new GUIButton("?", 10+Offset*SquaresOnSide, 10, new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 SetupGUI.getHelp();
@@ -217,7 +228,7 @@ class GUI implements InteractionAPI {
                     }
                 },this);
 
-        buyButton=new GUIButton("Buy",10+4*Offset+200,2*Offset+10,
+        buyButton=new GUIButton("Buy",10+Offset+(SquaresOnSide-4)*Offset,2*Offset+10,
                 new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
@@ -225,14 +236,14 @@ class GUI implements InteractionAPI {
                     }
                 },this);
 
-        mortgageButton=new GUIButton("Mortgage",10+4*Offset+200,2*Offset+10+30,
+        mortgageButton=new GUIButton("Mortgage",10+Offset+(SquaresOnSide-4)*Offset,2*Offset+10+30,
                 new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
                         mortgagePropertyFunction();
                     }
                 },this);
-        redeemButton =new GUIButton("Redeem",10+4*Offset+200,2*Offset+10+30,
+        redeemButton =new GUIButton("Redeem",10+Offset+(SquaresOnSide-4)*Offset,2*Offset+10+30,
                 new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
@@ -240,7 +251,7 @@ class GUI implements InteractionAPI {
                     }
                 },this);
 
-        buildButton =new GUIButton("Build",10+4*Offset+200,2*Offset+10+60,
+        buildButton =new GUIButton("Build",10+Offset+(SquaresOnSide-4)*Offset,2*Offset+10+60,
                 new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
@@ -248,7 +259,7 @@ class GUI implements InteractionAPI {
                     }
                 },this);
 
-        demolishButton =new GUIButton("Demolish",10+4*Offset+200,2*Offset+10+90,
+        demolishButton =new GUIButton("Demolish",10+Offset+(SquaresOnSide-4)*Offset,2*Offset+10+90,
                 new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
@@ -283,7 +294,7 @@ class GUI implements InteractionAPI {
     
     private void setVisibleButtons()
     {
-    	if(panopoly.getCurrentPlayer().isInJail())
+    	if(panopoly.getCurrentPlayer().isInJail()||assignedPlayer!=panopoly.getCurrentPlayer())
 		{
 			gui.rollCommand = false;
 			gui.endCommand = false;
@@ -458,7 +469,7 @@ class GUI implements InteractionAPI {
             {
                 buyButton.setEnabled(true);
                 RentalProperty locationCheck = (RentalProperty) location.getLocation();
-                if (locationCheck.getOwner() == panopoly.getCurrentPlayer())
+                if (locationCheck.getOwner() == panopoly.getCurrentPlayer()&&panopoly.getCurrentPlayer()==assignedPlayer)
                 {
                     Boolean mortgageable=true;
 
@@ -473,7 +484,7 @@ class GUI implements InteractionAPI {
                 }
                 else
                 {
-                    if(locationCheck.getOwner()==null &&panopoly.getCurrentPlayer().getPosition()==location.getIndex())
+                    if(locationCheck.getOwner()==null &&panopoly.getCurrentPlayer().getPosition()==location.getIndex()&&panopoly.getCurrentPlayer()==assignedPlayer)
                     {
                         if(panopoly.getCurrentPlayer().getBalance()<((RentalProperty) location.getLocation()).getPrice())
                         {
@@ -490,7 +501,7 @@ class GUI implements InteractionAPI {
                 if(location.getLocation() instanceof InvestmentProperty)
                 {
                     InvestmentProperty investment=(InvestmentProperty)location.getLocation();
-                    if(locationCheck.getOwner()==panopoly.getCurrentPlayer())
+                    if(locationCheck.getOwner()==panopoly.getCurrentPlayer()&&panopoly.getCurrentPlayer()==assignedPlayer)
                     {
                         Boolean buildable=true;//((Player)investment.getOwner()).ownsGroup(locationCheck.getGroup());
                         for(Groupable groupLocation:locationCheck.getGroup().getMembers())

@@ -19,7 +19,7 @@ public class Panopoly
 	private ArrayList<Player> players;
 	private Player currentPlayer;
 	private Board board;
-	private GUI gui;
+	private GUI[] gui;
 	private Dice dice = new Dice();
 	private boolean clockwiseMovement = true;
 	private long startTime;
@@ -40,11 +40,48 @@ public class Panopoly
 	{
 		players = playerArray;
 		currentPlayer = players.get(0);
-		gui = new GUI(board.getNumLocations(),this,players);
-		GUI gui2 = new GUI(board.getNumLocations(),this,players);
-		gui.updateGUI();
+		int index=0;
+		gui=new GUI[playerArray.size()];
+		for(Player player: players)
+		{
+			gui[index]=new GUI(board.getNumLocations(),this,players,player);
+			index++;
+		}
+		System.out.println(gui.length);
+		updateGUI();
 	}
-	
+
+	private void updateGUI() {
+		for(GUI gui:this.gui) {
+			gui.updateGUI();
+		}
+	}
+	private void updateAction(String action)
+	{
+		for(GUI gui:this.gui)
+		{
+			gui.updateAction(action);
+		}
+	}
+	private void resetCommands() {
+		for(GUI gui:this.gui)
+		{
+			gui.resetCommands();
+		}
+	}
+	private void leaveGame(Player currentPlayer) {
+		for(GUI gui:this.gui)
+		{
+			gui.leaveGame(currentPlayer);
+		}
+	}
+	private void guiEndGame() {
+		for(GUI gui:this.gui)
+		{
+			gui.endGame();
+		}
+	}
+
 	//GETTER METHODS
 	public Board getBoard()
 	{
@@ -99,8 +136,8 @@ public class Panopoly
 			
 		countdownTimer.addActionListener(timerListener);
 		countdownTimer.start();
-		gui.updateAction("COUNTDOWN STARTED");
-		gui.updateAction("Elapsed Time in secs: " + (System.currentTimeMillis() - startTime) / 1000);
+		updateAction("COUNTDOWN STARTED");
+		updateAction("Elapsed Time in secs: " + (System.currentTimeMillis() - startTime) / 1000);
 	}
 	
 	public void startPlayerTurn(Player player)
@@ -112,23 +149,25 @@ public class Panopoly
 			currentPlayer.rollComplete = false;
 			currentPlayer = player;
 
-			gui.updateGUI();
-			gui.updateAction(currentPlayer.getIdentifier() + "'s turn");
-			((GameBot) player).makeGameDecision(gui);
+			updateGUI();
+			updateAction(currentPlayer.getIdentifier() + "'s turn");
+			//todo fix
+			//((GameBot) player).makeGameDecision(gui);
 		}else{
 			currentPlayer.doubles = 0;
 			currentPlayer.canRoll = true;
 			currentPlayer.rollComplete = false;
 			currentPlayer = player;
 
-			gui.resetCommands();
-			gui.updateGUI();
+			resetCommands();
+			updateGUI();
 
-			gui.updateAction(currentPlayer.getIdentifier() + "'s turn");
+			updateAction(currentPlayer.getIdentifier() + "'s turn");
 		}
 
 	}
-	
+
+
 	public String roll()
 	{
 		currentPlayer.canRoll = false;
@@ -154,10 +193,10 @@ public class Panopoly
 
 		msg += getSquareAction();
 		
-		gui.resetCommands();
-		gui.updateGUI();
+		resetCommands();
+		updateGUI();
 		if(currentPlayer instanceof GameBot)
-			((GameBot) currentPlayer).makeGameDecision(gui);
+		{}//todo fix ((GameBot) currentPlayer).makeGameDecision(gui);
 		return msg;
 	}
 	
@@ -165,7 +204,7 @@ public class Panopoly
 	public String buyProperty(Rentable property)
 	{
 		currentPlayer.buyProperty(property, property.getPrice());
-		gui.updateGUI();
+		updateGUI();
 		
 		return currentPlayer.getIdentifier() + " has bought " + property.getIdentifier() + " for " + property.getPrice() + ".";
 	}
@@ -197,10 +236,10 @@ public class Panopoly
 	//if one
 	public void leaveGame()
 	{
-		gui.updateAction(currentPlayer.getIdentifier() + " has left the game.");
+		updateAction(currentPlayer.getIdentifier() + " has left the game.");
 		int index = players.indexOf(currentPlayer);
 		players.remove(currentPlayer);
-		gui.leaveGame(currentPlayer);
+		leaveGame(currentPlayer);
 		
 		//if one player left, they win automatically and game ends
 		if(players.size() == 1)
@@ -209,7 +248,8 @@ public class Panopoly
 		else
 			startPlayerTurn(players.get(index % players.size()));
 	}
-	
+
+
 	public ArrayList<Player> decideWinners()
 	{
 		 int winningWorth = 0;
@@ -239,7 +279,7 @@ public class Panopoly
 		
 		//if one distinct winner
 		if(winners.size() == 1)
-			gui.updateAction(winners.get(0).getIdentifier() + " has won!");
+			updateAction(winners.get(0).getIdentifier() + " has won!");
 		
 		//if there is a draw
 		else
@@ -250,9 +290,10 @@ public class Panopoly
 
 			draw = draw.substring(0, draw.length() - 2);
 			draw += " and " + winners.get(winners.size() - 1).getIdentifier() + ".";
-			gui.updateAction(draw);
+			updateAction(draw);
 
 		}
-		gui.endGame();
+		guiEndGame();
 	}
+
 }
