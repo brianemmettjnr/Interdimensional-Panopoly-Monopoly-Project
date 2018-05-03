@@ -1,7 +1,8 @@
 package monopoly;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.concurrent.ThreadLocalRandom;
 
 import base.PersonOfInterest;
@@ -13,7 +14,7 @@ public class Board
 	private ArrayList<String> currentSet;
 	private Group currentGroup;
 
-	HashMap<Group, ArrayList<String>> possibleLocations = new HashMap<Group, ArrayList<String>>();
+	LinkedHashMap<String, ArrayList<String>> possibleLocations = new LinkedHashMap<String, ArrayList<String>>();
 	private int index = 0;
 	
 	private int minPrice = 50;
@@ -75,8 +76,6 @@ public class Board
 					if(setIndex == currentSet.size() || setIndex == 3)
 					{
 						currentGroup = getNextSet();
-						//System.out.print(currentGroup.getIdentifier());
-						//System.out.print(setIndex);
 						setIndex = 0;
 					}
 					
@@ -93,48 +92,36 @@ public class Board
 	
 	private void generateLocations()
 	{
-		HashMap<String, String> temp = new HashMap<String, String>();
 		ArrayList<String> locs = new PersonOfInterest().locations;
 		String[] splitLoc = null;
 		
+		Collections.shuffle(locs);
+		
 		for(String loc : locs)
 		{
-			System.out.println(loc);
 			splitLoc = loc.split(" \\(");
-			if(!splitLoc[0].equals("") && splitLoc[1] != null)
+			if(splitLoc[1] != null)
 			{
-				//key = address, value = group
-				temp.put(splitLoc[0], splitLoc[1].replaceAll("\\)", ""));
+				ArrayList<String> temp = new ArrayList<String>();
+				String group = splitLoc[1].replaceAll("\\)", "");
+				
+				//key = group, value += address
+				if(possibleLocations.containsKey(group))
+					temp = possibleLocations.get(group);
+								
+				temp.add(splitLoc[0]);
+				possibleLocations.put(group, temp);
 			}
-		}		
-		
-		System.out.println(temp);
-		
-		ArrayList<String> addresses = new ArrayList<String>();
-		
-		for(String group : temp.values())
-		{
-			for(String address : temp.keySet())
-			{
-				if(temp.get(address).equals(group))
-				{
-					System.out.print(group + " " + address);
-					addresses.add(address);
-				}
-			}
-			
-			System.out.print("\n");
-			possibleLocations.put(new Group(group), addresses);
-			addresses = new ArrayList<String>();
 		}
 	}
 	
 	private Group getNextSet()
 	{
-		Group nextKey = (Group) possibleLocations.keySet().toArray()[index];
+		String nextKey = (String) possibleLocations.keySet().toArray()[index];
 		currentSet = possibleLocations.get(nextKey);
 		index++;
-		return nextKey;
+		Group group = new Group(nextKey);
+		return group;
 	}
 	
 	public Locatable getLocation(int squareLocation)
