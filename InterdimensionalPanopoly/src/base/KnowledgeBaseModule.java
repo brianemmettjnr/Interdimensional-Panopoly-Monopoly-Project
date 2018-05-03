@@ -143,7 +143,8 @@ public class KnowledgeBaseModule
 
 				if (values != null && values.contains(value))
 				{
-					matchingKeys.add(key +" " + "(" +value +")");
+					if(!key.equals(""))
+						matchingKeys.add(key +" " + "(" +value +")");
 				}
 			}
 		}

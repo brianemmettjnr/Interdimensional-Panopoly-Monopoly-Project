@@ -91,10 +91,10 @@ public class PersonOfInterest
 			String world = (String) checkers.get(q);
 			allPeople = NOC1.getAllKeysWithFieldValue("Domains", world);
 			
-			//int rands = DICE.nextInt(3)+1; // change to get number of in world properties 
-			if(allPeople.size() >= 3)	// must match number in () line above
+			int rands = DICE.nextInt(1)+2; // change to get number of in world properties 
+			if(allPeople.size() >= 2)	// must match number in () line above
 			{		
-				for(int z = 0; z < allPeople.size(); z++)
+				for(int z = 0; z < rands; z++)
 				{
 					
 					int n = DICE.nextInt(allPeople.size());
