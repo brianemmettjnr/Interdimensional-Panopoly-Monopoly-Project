@@ -1,6 +1,7 @@
 package base;
 
 import java.awt.*;
+import java.lang.reflect.Array;
 import java.util.Random;
 import java.util.Set;
 import java.util.Vector;
@@ -47,7 +48,9 @@ public class PersonOfInterest
 	private static Vector<String> tests				= null;
 	private static Vector<String> magic				= null;
 	private static Vector<String> placeholder		= null;
-	private static Vector<String> getPlaceholder2	= null;
+	private static Vector<String> placeholder2		= null;
+	private static Vector<String> placeholder3		= null;
+	private static Vector<String> removed			= null;
 
 	public static ArrayList<String> locations = new ArrayList<String>();
 	Set<String> removes = new HashSet<>();
@@ -85,7 +88,8 @@ public class PersonOfInterest
 		sportstar 	= NOC.getAllKeysWithFieldValueNon("Category", "Athlete");
 		tests 		= NOC2.getAllKeys("Vehicle of Choice");
 		magic 		= NOC.getAllKeysWithFieldValueNon("Category", "Wizard");
-		
+
+
 		for(int q = 0; q <= checkers.size()-1; q++)
 		{
 			String world = (String) checkers.get(q);
@@ -109,6 +113,13 @@ public class PersonOfInterest
 		locations.addAll(removes); // removes duplicates
 		locations.remove(0);		
 
+	}
+
+	public ArrayList<String> placenames (ArrayList<String> locations)
+	{
+		ArrayList<String> places = new ArrayList<String>();
+		places.addAll(locations);
+		return places;
 	}
 	
 	public String CriminalCardsBalancePos()
@@ -174,12 +185,24 @@ public class PersonOfInterest
 	{
 		int rands = DICE.nextInt(blackmail.size());
 		opponents = NOC3.getAllKeysWithFieldValueNon("Character", blackmail.get(rands));
-		double moneyValues[] = {50,100,150,200,250};
-		int mons = DICE.nextInt(moneyValues.length);
-		String output = "You catch " + blackmail.get(rands) + " in bed with " + opponents + " you blackmail them, revieve Q" + moneyValues[mons];
-		output = output.replace("]", "");
-		output = output.replace("[", "");
-		return output;
+		if (opponents.equals(""))
+		{
+			double moneyValues[] = {50,100,150,200,250};
+			int mons = DICE.nextInt(moneyValues.length);
+			String output = "You catch " + blackmail.get(rands) + " in bed with Donald Trump you blackmail them, revieve Q" + moneyValues[mons];
+			output = output.replace("]", "");
+			output = output.replace("[", "");
+			return output;
+		}
+		else
+			{
+			double moneyValues[] = {50, 100, 150, 200, 250};
+			int mons = DICE.nextInt(moneyValues.length);
+			String output = "You catch " + blackmail.get(rands) + " in bed with " + opponents + " you blackmail them, revieve Q" + moneyValues[mons];
+			output = output.replace("]", "");
+			output = output.replace("[", "");
+			return output;
+			}
 	}
 	
 	public String BlackmailerBr()
@@ -212,7 +235,7 @@ public class PersonOfInterest
 		double moneyValues[] = {50,100,150,200,250};
 		int mons = DICE.nextInt(moneyValues.length);
 		People = NOC4.getAllKeysWithFieldValueNon("Character", weapons.get(rands));
-		String output = "You pawn " + weapons.get(rands) + "'s " + People + ", recieve pay Q" + moneyValues[mons];
+		String output = "You pawn " + weapons.get(rands) + "'s " + People + ", recieve Q" + moneyValues[mons];
 		output = output.replace("]", "");
 		output = output.replace("[", "");
 		return output;
@@ -333,6 +356,7 @@ public class PersonOfInterest
 		String endWorld[] = {"zombie apocalypse", "nuclear weapons", "one-inch punch", " virus", "infinity gauntlet", "elderwand", "asteroid", "plague", "Death Star", "robot killing machines", "terminators", "alien invaders"};
 		int ends = DICE.nextInt(endWorld.length);
 		String output = "The end of the world is nigh, " + villain.get(rands) + " and their " + endWorld[ends] + " have brought about armageddon in t-minus 5 minutes, spend your remaining time wisely";
+		placeholder = NOC2.getAllKeysWithFieldValueNon("Characters", cars.get(rands));
 		return output;
 	}
 
@@ -342,32 +366,30 @@ public class PersonOfInterest
 		int probability = DICE.nextInt(5);
 		if(probability == 0)
 		{
-			int rands = DICE.nextInt(tests.size());
-			qandA[0] = ("Who does this iconic vehicle the '" + tests.get(rands) + "' belong to?");
-			placeholder = NOC.getAllKeysWithFieldValueNon("Vehicle of Choice", tests.get(rands));
-			int rands2a = DICE.nextInt(placeholder.size());
-			String output = "" + placeholder.get(rands2a);
-			output = output.replace("]", "");
-			output = output.replace("[", "");
-			placeholder = NOC.getAllKeysWithoutFieldValue("Vehicle of Choice", tests.get(rands));
+			int rands = DICE.nextInt(cars.size());
+			qandA[0] = (cars.get(rands) + "is associated with which vehicle?");
+			placeholder = NOC2.getAllKeysWithoutFieldValue("Characters", cars.get(rands));
 			for (int i = 1; i < 4; i++)
 			{
 				int rands2 = DICE.nextInt(placeholder.size());
 				qandA[i] = (placeholder.get(rands2));
 				placeholder.removeElementAt(rands2);
 			}
-			qandA[4] = output;
+			placeholder = NOC2.getAllKeysWithFieldValueNon("Characters", cars.get(rands));
+			if(placeholder.firstElement().matches(""))
+			{
+				Question();
+			}
+			String output = "" + placeholder;
+			output = output.replace("]", "");
+			output = output.replace("[", "");
+			qandA[4] = (output);
 		}
 		if(probability == 1)
 		{
 			opponents = NOC3.getAllKeys("Opponent");
 			int rands = DICE.nextInt(opponents.size());
 			qandA[0] = ("Who calls '" + opponents.get(rands) + "' their opponent(s)?");
-			placeholder = NOC.getAllKeysWithFieldValueNon("Opponent", opponents.get(rands));
-			int rands2a = DICE.nextInt(placeholder.size());
-			String output = "" + placeholder.get(rands2a);
-			output = output.replace("]", "");
-			output = output.replace("[", "");
 			placeholder = NOC.getAllKeysWithoutFieldValue("Opponent", opponents.get(rands));
 			for (int i = 1; i < 4; i++)
 			{
@@ -375,6 +397,14 @@ public class PersonOfInterest
 				qandA[i] = (placeholder.get(rands2));
 				placeholder.removeElementAt(rands2);
 			}
+			placeholder = NOC.getAllKeysWithFieldValueNon("Opponent", opponents.get(rands));
+			if(placeholder.firstElement().matches(""))
+			{
+				Question();
+			}
+			String output = "" + placeholder.firstElement();
+			output = output.replace("]", "");
+			output = output.replace("[", "");
 			qandA[4] = (output);
 		}
 		if(probability == 2)
@@ -383,8 +413,11 @@ public class PersonOfInterest
 			int rands = DICE.nextInt(opponents.size());
 			qandA[0] = ("Which of the following calls " + opponents.get(rands) + " home?");
 			placeholder = NOC.getAllKeysWithFieldValueNon("Address 3", opponents.get(rands));
-			int rands2a = DICE.nextInt(placeholder.size());
-			String output = "" + placeholder.get(rands2a);
+			if(placeholder.firstElement().matches(""))
+			{
+				Question();
+			}
+			String output = "" + placeholder.firstElement();
 			output = output.replace("]", "");
 			output = output.replace("[", "");
 			placeholder = NOC.getAllKeysWithoutFieldValue("Address 3", opponents.get(rands));
@@ -409,7 +442,11 @@ public class PersonOfInterest
 				placeholder.removeElementAt(rands2);
 			}
 			placeholder = NOC.getAllKeysWithFieldValueNon("Creator", opponents.get(rands));
-			String output = "" + placeholder.get(0);
+			if(placeholder.firstElement().matches(""))
+			{
+				Question();
+			}
+			String output = "" + placeholder.firstElement();
 			output = output.replace("]", "");
 			output = output.replace("[", "");
 			qandA[4] = (output);
@@ -427,7 +464,11 @@ public class PersonOfInterest
 				placeholder.removeElementAt(rands2);
 			}
 			placeholder = NOC.getAllKeysWithFieldValueNon("Portrayed By", opponents.get(rands));
-			String output = "" + placeholder.get(0);
+			if(placeholder.firstElement().matches(""))
+			{
+				Question();
+			}
+			String output = "" + placeholder;
 			output = output.replace("]", "");
 			output = output.replace("[", "");
 			qandA[4] = (output);
@@ -435,20 +476,12 @@ public class PersonOfInterest
 		return qandA;
 	}
 
-	public ArrayList<String> placenames (ArrayList<String> locations)
-	{
-		ArrayList<String> places = new ArrayList<String>();
-		places.addAll(locations);
-		return places;
-	}
-
-	
 	public static void main(String[] args)
 	{
 		PersonOfInterest ps = new PersonOfInterest();	
-		System.out.println(locations + "\n");	
+		System.out.println(locations + "\n");
 		System.out.println(ps.CriminalCardsBalancePos());
-		System.out.println(ps.CriminalCardsPosition());	
+		System.out.println(ps.CriminalCardsPosition());
 		System.out.println(ps.CriminalCardsBalanceNeg());
 		System.out.println(ps.Opponents());
 		System.out.println(ps.Murderer());
@@ -471,13 +504,14 @@ public class PersonOfInterest
 		System.out.println(ps.TimeTravel() + "\n");
 		System.out.println(ps.DoomsDay());
 		System.out.print("\n");
+
 //////////////////////////////////////////////////////////////////////////
 		String[] str1 = ps.Question();
 		for(String str: str1)
 		{
 			System.out.print(str + "\n");
 		}
-		 // do this brian to call the questions
+//		  do this brian to call the questions
 //////////////////////////////////////////////////////////////////////////
 	}
 		
