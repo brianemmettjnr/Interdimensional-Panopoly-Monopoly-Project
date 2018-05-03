@@ -5,6 +5,7 @@ import java.util.Random;
 import java.util.Set;
 import java.util.Vector;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 
 public class PersonOfInterest
@@ -48,7 +49,6 @@ public class PersonOfInterest
 	private static Vector<String> placeholder		= null;
 	private static Vector<String> getPlaceholder2	= null;
 
-
 	public static ArrayList<String> locations = new ArrayList<String>();
 	Set<String> removes = new HashSet<>();
 	public static ArrayList<String> places = new ArrayList<String>();
@@ -90,16 +90,20 @@ public class PersonOfInterest
 		{
 			String world = (String) checkers.get(q);
 			allPeople = NOC1.getAllKeysWithFieldValue("Domains", world);
+			
+			//int rands = DICE.nextInt(3)+1; // change to get number of in world properties 
 			if(allPeople.size() >= 3)	// must match number in () line above
 			{		
-				for(int z = 0; z < 3; z++)
+				for(int z = 0; z < allPeople.size(); z++)
 				{
+					
 					int n = DICE.nextInt(allPeople.size());
 					locations.add((String) allPeople.get(n));
 					allPeople.remove(n);
 				}
 			}
-		}	
+		}		
+		
 		removes.addAll(locations);
 		locations.clear();
 		locations.addAll(removes); // removes duplicates
