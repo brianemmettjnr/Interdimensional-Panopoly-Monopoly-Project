@@ -14,7 +14,7 @@ public class Player extends Thread implements Playable {
 	private int playerIndex;
 
 	protected String name;
-	private int balance;
+	protected int balance;
 	private ArrayList<Rentable> properties = new ArrayList<>();
 	private int position;
 	private int imageIndex=0;

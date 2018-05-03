@@ -109,10 +109,7 @@ public class Panopoly
 			currentPlayer.doubles = 0;
 			currentPlayer.canRoll = true;
 			currentPlayer.rollComplete = false;
-			currentPlayer = (GameBot)player;
-
-			//gui.resetCommands();
-			//gui.rollCommand=true;
+			currentPlayer = player;
 
 			gui.updateGUI();
 			gui.updateAction(currentPlayer.getIdentifier() + "'s turn");

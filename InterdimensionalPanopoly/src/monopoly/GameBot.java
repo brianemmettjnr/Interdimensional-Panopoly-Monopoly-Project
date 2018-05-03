@@ -18,9 +18,20 @@ public class GameBot extends Player{
     }
 
     public void makeGameDecision(GUI gui){
-        if(gui.rollButton.isVisible())
+
+        if(gui.rollButton.isVisible()) {
             gui.rollFunction();
-        else if(gui.endButton.isVisible())
+        } //to buy if you have the money
+        else if(gui.buyButton.isVisible() && balance>90){
+            gui.buyPropertyFunction();
+        }
+        else if(gui.endButton.isVisible()){
             gui.endTurnFunction();
+        }//for the pussies who cant answer a question
+        else if(!gui.rollButton.isVisible() && !gui.endButton.isVisible()){
+            gui.leaveGameFunction();
+
+        }
+
     }
 }
