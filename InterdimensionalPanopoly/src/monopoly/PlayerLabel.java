@@ -79,16 +79,30 @@ public class PlayerLabel
         gui.getMainPane().add(name);
 
         name.setText(player.getIdentifier());
-        name.setFont(new Font("Arial",Font.BOLD,32));
         name.setBounds(this.gui.getFRAME_SIZE().height+width,10+i*width,2*width,width);
+        int size = 32;
+        name.setFont(new Font("Arial",Font.BOLD,32));
+
+        while(name.getFontMetrics(new Font("Arial",Font.BOLD,size)).stringWidth(name.getText()) >2*width)
+        {
+            size--;
+            name.setFont(new Font("Arial",Font.BOLD,size));
+        }
         name.setVisible(true);
         name.setBackground(Color.DARK_GRAY);
         name.setForeground(Color.white);
         name.setOpaque(true);
 
         balance.setText("$"+player.getBalance());
-        balance.setFont(new Font("Times New Roman",Font.ITALIC,32));
         balance.setBounds(this.gui.getFRAME_SIZE().height+3*width,10+i*width,width,width);
+        size = 32;
+        balance.setFont(new Font("Times New Roman",Font.ITALIC,32));
+
+        while(balance.getFontMetrics(new Font("Times New Roman",Font.ITALIC,size)).stringWidth(balance.getText()) > width)
+        {
+            size--;
+            balance.setFont(new Font("Times New Roman",Font.ITALIC,size));
+        }
         balance.setVisible(true);
         balance.setOpaque(true);
         balance.setBackground(Color.DARK_GRAY);
@@ -109,6 +123,14 @@ public class PlayerLabel
      void updateLabel()
     {
         balance.setText(GUI.symbol+player.getBalance());
+        int size = 32;
+        balance.setFont(new Font("Times New Roman",Font.ITALIC,32));
+
+        while(balance.getFontMetrics(new Font("Times New Roman",Font.ITALIC,size)).stringWidth(balance.getText()) > gui.getOffset())
+        {
+            size--;
+            balance.setFont(new Font("Times New Roman",Font.ITALIC,size));
+        }
         positionIcon.updateUI();
         positionIcon.setBounds(gui.getLocationLabel(player.getPosition()).getX()+(index%3*(gui.getOffset()/4)),
                 gui.getLocationLabel(player.getPosition()).getY()+1+(index%2*(gui.getOffset()/2)),scale,scale);

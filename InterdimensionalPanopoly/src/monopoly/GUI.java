@@ -63,7 +63,7 @@ class GUI implements InteractionAPI {
 
     GUI(int BoardSize,Panopoly panopoly,ArrayList<Player> players,Player player)
     {
-        //FRAME_SIZE=new Dimension((int)(50+(FRAME_SIZE.width/2)),(int)(50+FRAME_SIZE.height/2));//temp code
+        FRAME_SIZE=new Dimension((int)(50+(FRAME_SIZE.width/2)),(int)(50+FRAME_SIZE.height/2));//temp code
         this.setPanopoly(panopoly);
         this.setPlayers(players);
         assignedPlayer=player;
@@ -92,11 +92,20 @@ class GUI implements InteractionAPI {
         int scale=(int)(Offset*(SquaresOnSide-4));
         ImageIcon newIcon =new ImageIcon(bi.getScaledInstance(scale,scale,1));
         image=new JLabel(newIcon);
-        image.setBounds(10+2*Offset,10+Offset+10,scale,scale);
+        image.setBounds(10+2*Offset,10+Offset,scale,scale);
         image.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
         MainPane.add(image);
 
-        thirdAction.setBounds(10+Offset,10+image.getY()+image.getHeight()+10,Offset*(SquaresOnSide-2),30);
+
+        locationWindow.setBounds(10+3*Offset,10+Offset,Offset*(SquaresOnSide-6),Offset*(SquaresOnSide-4));
+        locationWindow.setBackground(Color.WHITE);
+        locationWindow.setForeground(Color.BLACK);
+        locationWindow.setBorder(BorderFactory.createLineBorder(Color.black,4));
+        locationWindow.setVerticalAlignment(JLabel.TOP);
+        locationWindow.setVisible(false);
+        MainPane.add(locationWindow);
+
+        thirdAction.setBounds(10+Offset,locationWindow.getY()+locationWindow.getHeight(),Offset*(SquaresOnSide-2),30);
         thirdAction.setVisible(true);
         thirdAction.setFont(new Font("times new roman",Font.BOLD,20));
         thirdAction.setForeground(Color.white);
@@ -119,14 +128,6 @@ class GUI implements InteractionAPI {
 
 
 
-        locationWindow.setBounds(10+3*Offset,10+Offset,Offset*(SquaresOnSide-6),Offset*(SquaresOnSide-4));
-        locationWindow.setBackground(Color.WHITE);
-        locationWindow.setForeground(Color.BLACK);
-        locationWindow.setBorder(BorderFactory.createLineBorder(Color.black,4));
-        locationWindow.setVerticalAlignment(JLabel.TOP);
-        locationWindow.setVisible(false);
-        MainPane.add(locationWindow);
-
         questionWindow.setBounds((int)(10+(Offset*((SquaresOnSide)/2.0)))-200,(((int)(FRAME_SIZE.getHeight()*.9))/2)-140,400,80);
         questionWindow.setBackground(Color.WHITE);
         questionWindow.setForeground(Color.BLACK);
@@ -148,7 +149,7 @@ class GUI implements InteractionAPI {
     }
 
     public void rollFunction(){
-        gui.updateAction(panopoly.roll());
+        panopoly.roll();
         if(getSelectedLocation()!=getLocationLabel(panopoly.getCurrentPlayer().getPosition())) {
             setSelectedLabel(getLocationLabel(panopoly.getCurrentPlayer().getPosition()));
         }
@@ -312,7 +313,7 @@ class GUI implements InteractionAPI {
     	hideAnswers();
     	rollButton.setVisible(rollCommand);
     	endButton.setVisible(endCommand);
-    	if (panopoly.getCurrentPlayer().isInJail()) {
+    	if (panopoly.getCurrentPlayer().isInJail()&&panopoly.getCurrentPlayer()==assignedPlayer) {
             setSelectedLabel(null);
             setSelectedLabel(getLocationLabel(panopoly.getCurrentPlayer().getPosition()));
 
