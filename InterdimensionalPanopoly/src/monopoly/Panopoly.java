@@ -2,7 +2,13 @@ package monopoly;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.sql.Time;
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 import javax.swing.Timer;
 
@@ -79,7 +85,7 @@ public class Panopoly
 		{
 			currentPlayer.sendToJail();
 			ret = "\n" + currentPlayer.getIdentifier() + " has landed on Go to Jail and been sent to jail.";
-			ret += startPlayerTurn(getNextPlayer());
+			//ret += startPlayerTurn(getNextPlayer());
 		}
 
 		return ret;
@@ -99,17 +105,29 @@ public class Panopoly
 		gui.updateAction("Elapsed Time in secs: " + (System.currentTimeMillis() - startTime) / 1000);
 	}
 	
-	public String startPlayerTurn(Player player)
+	public void startPlayerTurn(Player player)
 	{
-		currentPlayer.doubles = 0;
-		currentPlayer.canRoll = true;
-		currentPlayer.rollComplete = false;
-		currentPlayer = player;
-		
-		gui.resetCommands();
-		gui.updateGUI();
-		
-		return currentPlayer.getIdentifier() + "'s turn";
+		if(player.getClass()==GameBot.class){
+			System.out.println(player.getIdentifier());
+			currentPlayer.doubles = 0;
+			currentPlayer.canRoll = true;
+			currentPlayer.rollComplete = false;
+			currentPlayer = player;
+
+			gui.updateGUI();
+			gui.updateAction(currentPlayer.getIdentifier() + "'s turn");
+			((GameBot) player).makeGameDecision(gui);
+		}else{
+			currentPlayer.doubles = 0;
+			currentPlayer.canRoll = true;
+			currentPlayer.rollComplete = false;
+			currentPlayer = player;
+
+			gui.resetCommands();
+			gui.updateGUI();
+
+			gui.updateAction(currentPlayer.getIdentifier() + "'s turn");
+		}
 	}
 	
 	public String roll()
@@ -140,7 +158,8 @@ public class Panopoly
 		
 		gui.resetCommands();
 		gui.updateGUI();
-		
+		if(currentPlayer instanceof GameBot)
+			((GameBot) currentPlayer).makeGameDecision(gui);
 		return msg;
 	}
 	
