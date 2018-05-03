@@ -28,9 +28,12 @@ public class Main
 		System.out.println(ps.Sports()); // 20 here
 		System.out.println(ps.TestDrive());
 		System.out.println(ps.TimeTravel());
-		
-		// possibility to add cards based on whether a certain property type is in the game, e.g. star trek planet = card "Beem me up Scotty" and move
-		// to location
+		System.out.println(ps.DoomsDay());
+
+		String[] str1 = ps.Question();
+		for(String str: str1)
+		{
+			System.out.print(str + "\n");
+		}
 	}
 }
-// impending doom 
