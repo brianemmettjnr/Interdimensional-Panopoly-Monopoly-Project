@@ -4,12 +4,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.ThreadLocalRandom;
 
+import base.PersonOfInterest;
 import interfaces.Locatable;
 
 public class Board 
 {
 	private ArrayList<Locatable> locations = new ArrayList<Locatable>();
-	private Group brown = new Group("brown");
+	private ArrayList<String> currentSet;
+	private Group currentGroup;
+
+	HashMap<Group, ArrayList<String>> possibleLocations = new HashMap<Group, ArrayList<String>>();
+	private int index = 0;
 	
 	private int minPrice = 50;
 	private int maxPrice = 100;
@@ -17,6 +22,11 @@ public class Board
 	Board(int numLocations)
 	{
 		int priceIncrease = 44/ numLocations;
+		int setIndex = 0;
+
+		
+		generateLocations();
+		currentGroup = getNextSet();
 		
 		//Fill in locations for board - hard-coded Named Locations/Tax and Utilities
 		for(int i = 0; i < numLocations; i++)
@@ -62,9 +72,18 @@ public class Board
 					else
 						buildCost = 200;					
 					
+					if(setIndex == currentSet.size() || setIndex == 3)
+					{
+						currentGroup = getNextSet();
+						//System.out.print(currentGroup.getIdentifier());
+						//System.out.print(setIndex);
+						setIndex = 0;
+					}
 					
-					locations.add(new InvestmentProperty("Investment", price, generateRentArray(price), (price/2), buildCost, new Group("name")));
+					locations.add(new InvestmentProperty(currentSet.get(setIndex), price, generateRentArray(price), (price/2), buildCost, currentGroup));
 					
+					setIndex++;
+
 					minPrice += priceIncrease * 10;
 					maxPrice += priceIncrease * 15;
 				}
@@ -72,10 +91,51 @@ public class Board
 		}
 	}
 	
-//	private HashMap<String, String> generateLocations()
-//	{
-//		
-//	}
+	private void generateLocations()
+	{
+		HashMap<String, String> temp = new HashMap<String, String>();
+		ArrayList<String> locs = new PersonOfInterest().locations;
+		String[] splitLoc = null;
+		
+		for(String loc : locs)
+		{
+			System.out.println(loc);
+			splitLoc = loc.split(" \\(");
+			if(!splitLoc[0].equals("") && splitLoc[1] != null)
+			{
+				//key = address, value = group
+				temp.put(splitLoc[0], splitLoc[1].replaceAll("\\)", ""));
+			}
+		}		
+		
+		System.out.println(temp);
+		
+		ArrayList<String> addresses = new ArrayList<String>();
+		
+		for(String group : temp.values())
+		{
+			for(String address : temp.keySet())
+			{
+				if(temp.get(address).equals(group))
+				{
+					System.out.print(group + " " + address);
+					addresses.add(address);
+				}
+			}
+			
+			System.out.print("\n");
+			possibleLocations.put(new Group(group), addresses);
+			addresses = new ArrayList<String>();
+		}
+	}
+	
+	private Group getNextSet()
+	{
+		Group nextKey = (Group) possibleLocations.keySet().toArray()[index];
+		currentSet = possibleLocations.get(nextKey);
+		index++;
+		return nextKey;
+	}
 	
 	public Locatable getLocation(int squareLocation)
 	{

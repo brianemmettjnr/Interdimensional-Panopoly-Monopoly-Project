@@ -5,6 +5,7 @@ import java.util.Random;
 import java.util.Set;
 import java.util.Vector;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 
 public class PersonOfInterest
@@ -48,7 +49,7 @@ public class PersonOfInterest
 	private static Vector<String> placeholder		= null;
 	private static Vector<String> getPlaceholder2	= null;
 
-	static ArrayList<String> locations = new ArrayList<String>();
+	public static ArrayList<String> locations = new ArrayList<String>();
 	Set<String> removes = new HashSet<>();
 	static ArrayList<String> places = new ArrayList<String>();
 
@@ -85,21 +86,49 @@ public class PersonOfInterest
 		tests 		= NOC2.getAllKeys("Vehicle of Choice");
 		magic 		= NOC.getAllKeysWithFieldValueNon("Category", "Wizard");
 		
+		
+		HashMap<String, ArrayList<String>> locs = new HashMap<String, ArrayList<String>>();
+		ArrayList<String> temp = new ArrayList<String>();
+		
 		for(int q = 0; q <= checkers.size()-1; q++)
 		{
 			String world = (String) checkers.get(q);
 			allPeople = NOC1.getAllKeysWithFieldValue("Domains", world);
-			int rands = DICE.nextInt(2)+1; // change to get number of in world properties 
-			if(allPeople.size() >= 2)	// must match number in () line above
+			//allPeople = NOC1.getAllKeysWithFieldValueNon("Domains", world);
+			
+			
+			//int rands = DICE.nextInt(3)+1; // change to get number of in world properties 
+			if(allPeople.size() >= 3)	// must match number in () line above
 			{		
-				for(int z = 0; z < rands; z++)
+				for(int z = 0; z < allPeople.size(); z++)
 				{
+					
 					int n = DICE.nextInt(allPeople.size());
 					locations.add((String) allPeople.get(n));
+					
+					if(locs.containsKey(world))
+					{	
+						temp = locs.get(world);
+						temp.add(allPeople.get(n));
+						locs.put(world, temp);
+					}
+					
+					else
+					{
+						temp.add(allPeople.get(n));
+						locs.put(world, temp);
+					}
+					
+					temp = new ArrayList<String>();
 					allPeople.remove(n);
 				}
 			}
 		}	
+		
+		System.out.print("LOCS: " + locs);
+		System.out.print("\n");
+		
+		
 		removes.addAll(locations);
 		locations.clear();
 		locations.addAll(removes); // removes duplicates

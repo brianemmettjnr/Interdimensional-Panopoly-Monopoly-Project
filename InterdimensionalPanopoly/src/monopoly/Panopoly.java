@@ -196,7 +196,6 @@ public class Panopoly
 		return redeemProperty.redeem();	
 	}
 	
-	//if one
 	public void leaveGame()
 	{
 		gui.updateAction(currentPlayer.getIdentifier() + " has left the game.");
