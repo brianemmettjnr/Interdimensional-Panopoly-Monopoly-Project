@@ -5,6 +5,9 @@ import java.lang.reflect.Array;
 import java.util.Random;
 import java.util.Set;
 import java.util.Vector;
+
+import monopoly.Card;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -122,18 +125,18 @@ public class PersonOfInterest
 		return places;
 	}
 	
-	public String CriminalCardsBalancePos()
+	public Card CriminalCardsBalancePos()
 	{
 		int rands = DICE.nextInt(criminals.size());
-		double moneyValues[] = {50,100,150,200,250};
+		int moneyValues[] = {50,100,150,200,250};
 		int mons = DICE.nextInt(moneyValues.length);
-		String robbedLoc[] = {"a bank", "a safe", "a cryptocurrency excahnge", "a mansion", "the CIA", "the FBI", "the White House", "Trump Tower"};
+		String robbedLoc[] = {"a bank", "a safe", "a cryptocurrency exchange", "a mansion", "the CIA", "the FBI", "the White House", "Trump Tower"};
 		int locs = DICE.nextInt(robbedLoc.length);		
 		String output = "You help " + criminals.get(rands) + " rob " + robbedLoc[locs] + ", gain Q" + moneyValues[mons];
-		return output;
+		return new Card(Card.BAL_PLUS, output, moneyValues[mons]);
 	}
 	
-	public String CriminalCardsPosition()
+	public Card CriminalCardsPosition()
 	{
 		int rands = DICE.nextInt(criminals.size()-1);
 		int moves = DICE.nextInt(14)+1;
@@ -141,225 +144,219 @@ public class PersonOfInterest
 		String output = "You are in a police chase with " + criminals.get(rands) + " in their " + criminalsCars + ", move forward " + moves + " space(s)"; 
 		output = output.replace("]", "");
 		output = output.replace("[", "");
-		return output;
+		return new Card(Card.POSITION_PLUS, output, moves);
 	}
 	
-	public String CriminalCardsBalanceNeg()
+	public Card CriminalCardsBalanceNeg()
 	{
 		int rands = DICE.nextInt(criminals.size());
-		double moneyValues[] = {50,100,150,200,250};
+		int moneyValues[] = {50,100,150,200,250};
 		int mons = DICE.nextInt(moneyValues.length);
 		String output = "You get busted while with " + criminals.get(rands) + ", pay Q" + moneyValues[mons] + " in bail money";  
-		return output; // possible to go to jail otherwise
+		return new Card(Card.BAL_MINUS, output, moneyValues[mons]); // possible to go to jail otherwise
 	}
 	
-	public String Opponents()
+	public Card Opponents()
 	{
 		int rands = DICE.nextInt(enemies.size());
-		double moneyValues[] = {50,100,150,200,250};
+		int moneyValues[] = {50,100,150,200,250};
 		int mons = DICE.nextInt(moneyValues.length);
 		opponents = NOC3.getAllKeysWithFieldValueNon("Character", enemies.get(rands));
-		String output = "You help " + enemies.get(rands) + " defeat their opponent(s) " + opponents + ", recieve Q" + moneyValues[mons];
+		String output = "You help " + enemies.get(rands) + " defeat their opponent(s) " + opponents + ", receive Q" + moneyValues[mons];
 		output = output.replace("]", "");
 		output = output.replace("[", "");
-		return output;
+		return new Card(Card.BAL_PLUS, output, moneyValues[mons]);
 	}
 	
-	public String Murderer()
+	public Card Murderer()
 	{
 		int rands = DICE.nextInt(murder.size());
 		String output = "You kill the evil " + murder.get(rands) + " your reward is:  go to jail :)";
-		return output;
+		return  new Card(Card.GO_TO_JAIL, output);
 	}
 	
-	public String Wealth()
+	public Card Wealth()
 	{
 		int rands = DICE.nextInt(wealthy.size());
-		double moneyValues[] = {50,100,150,200,250};
+		int moneyValues[] = {50,100,150,200,250};
 		int mons = DICE.nextInt(moneyValues.length);
 		String output = "You aid " + wealthy.get(rands) + ", they reward you with Q" + moneyValues[mons];
-		return output;
+		return new Card(Card.BAL_PLUS, output, moneyValues[mons]);
 	}
 	
-	public String Blackmailer()
+	public Card Blackmailer()
 	{
 		int rands = DICE.nextInt(blackmail.size());
 		opponents = NOC3.getAllKeysWithFieldValueNon("Character", blackmail.get(rands));
+		
+		int moneyValues[] = {50,100,150,200,250};
+		int mons = DICE.nextInt(moneyValues.length);
+		String output = "";
+		
 		if (opponents.equals(""))
-		{
-			double moneyValues[] = {50,100,150,200,250};
-			int mons = DICE.nextInt(moneyValues.length);
-			String output = "You catch " + blackmail.get(rands) + " in bed with Donald Trump you blackmail them, revieve Q" + moneyValues[mons];
-			output = output.replace("]", "");
-			output = output.replace("[", "");
-			return output;
-		}
+			output = "You catch " + blackmail.get(rands) + " in bed with Donald Trump; you blackmail them, receive Q" + moneyValues[mons];
 		else
-			{
-			double moneyValues[] = {50, 100, 150, 200, 250};
-			int mons = DICE.nextInt(moneyValues.length);
-			String output = "You catch " + blackmail.get(rands) + " in bed with " + opponents + " you blackmail them, revieve Q" + moneyValues[mons];
-			output = output.replace("]", "");
-			output = output.replace("[", "");
-			return output;
-			}
+			output = "You catch " + blackmail.get(rands) + " in bed with " + opponents + "; you blackmail them, receive Q" + moneyValues[mons];
+		
+		output = output.replace("]", "");
+		output = output.replace("[", "");
+		return new Card(Card.BAL_PLUS, output, moneyValues[mons]);
+
 	}
 	
-	public String BlackmailerBr()
+	public Card BlackmailerBr()
 	{
 		int rands = DICE.nextInt(blackmailBritish.size());
 		opponents = NOC3.getAllKeysWithFieldValueNon("Character", blackmailBritish.get(rands));
 		double moneyValues[] = {50,100,150,200,250};
 		int mons = DICE.nextInt(moneyValues.length);
-		String output = "You catch " + blackmailBritish.get(rands) + " in bed with " + opponents + ", recieve a free pardon from prison";
+		String output = "You catch " + blackmailBritish.get(rands) + " in bed with " + opponents + ", receive a free pardon from prison";
 		output = output.replace("]", "");
 		output = output.replace("[", "");
-		return output;
+		return new Card(Card.GET_OUT_OF_JAIL, output);
 	}
 	
-	public String Weapons()
+	public Card Weapons()
 	{
 		int rands = DICE.nextInt(weapons.size());
-		double moneyValues[] = {50,100,150,200,250};
+		int moneyValues[] = {50,100,150,200,250};
 		int mons = DICE.nextInt(moneyValues.length);
 		People = NOC4.getAllKeysWithFieldValueNon("Character", weapons.get(rands));
-		String output = "You purchase " + weapons.get(rands) + "'s " + People + " at auction pay Q" + moneyValues[mons];
+		String output = "You purchase " + weapons.get(rands) + "'s " + People + " at auction, pay Q" + moneyValues[mons];
 		output = output.replace("]", "");
 		output = output.replace("[", "");
-		return output;
-	}
+		return new Card(Card.BAL_MINUS, output, moneyValues[mons]);
+		}
 	
-	public String Pawns()
+	public Card Pawns()
 	{
 		int rands = DICE.nextInt(weapons.size());
-		double moneyValues[] = {50,100,150,200,250};
+		int moneyValues[] = {50,100,150,200,250};
 		int mons = DICE.nextInt(moneyValues.length);
 		People = NOC4.getAllKeysWithFieldValueNon("Character", weapons.get(rands));
 		String output = "You pawn " + weapons.get(rands) + "'s " + People + ", recieve Q" + moneyValues[mons];
 		output = output.replace("]", "");
 		output = output.replace("[", "");
-		return output;
+		return new Card(Card.BAL_PLUS, output, moneyValues[mons]);
 	}
 	
-	public String CarCrash()
+	public Card CarCrash()
 	{
 		int rands = DICE.nextInt(cars.size());
-		double moneyValues[] = {50,100,150,200,250};
+		int moneyValues[] = {50,100,150,200,250};
 		int mons = DICE.nextInt(moneyValues.length);
 		People = NOC2.getAllKeysWithFieldValueNon("Character", cars.get(rands));
 		String output = "You total " + cars.get(rands) + "'s " + People + " while test driving it, pay Q" + moneyValues[mons];
 		output = output.replace("]", "");
 		output = output.replace("[", "");
-		return output;
+		return new Card(Card.BAL_MINUS, output, moneyValues[mons]);
 	}
 	
-	public String Inherit()
+	public Card Inherit()
 	{
 		int rands = DICE.nextInt(inheritance.size());
-		double moneyValues[] = {50,100,150,200,250};
+		int moneyValues[] = {50,100,150,200,250};
 		int mons = DICE.nextInt(moneyValues.length);
-		String output = "You inherit the right to " + inheritance.get(rands) + "'s novels, recieve Q" + moneyValues[mons];
-		return output;
+		String output = "You inherit the right to " + inheritance.get(rands) + "'s novels, receive Q" + moneyValues[mons];
+		return new Card(Card.BAL_PLUS, output, moneyValues[mons]);
 	}
 	
-	public String Parties()
+	public Card Parties()
 	{
 		int rands = DICE.nextInt(actor.size());
-		double moneyValues[] = {50,100,150,200,250};
+		int moneyValues[] = {50,100,150,200,250};
 		int mons = DICE.nextInt(moneyValues.length);
 		String family[] = {"niece", "nephew", "cousin", "son", "daughter"};
 		int fams = DICE.nextInt(family.length);
 		String output = "You pay Q" + moneyValues[mons] + " for " + actor.get(rands) + " to attend your " + family[fams] +"'s birthday party";
- 		return output;
+		return new Card(Card.BAL_MINUS, output, moneyValues[mons]);
 	}
 	
-	public String Wedding()
+	public Card Wedding()
 	{
 		int rands = DICE.nextInt(wedding.size());
-		double moneyValues[] = {50,100,150,200,250};
+		int moneyValues[] = {50,100,150,200,250};
 		int mons = DICE.nextInt(moneyValues.length);
 		String output = "You attend " + wedding.get(rands) + "'s wedding, pay Q" + moneyValues[mons] + " for the wedding gift";
-		return output;
+		return new Card(Card.BAL_MINUS, output, moneyValues[mons]);
 	}
 	
-	public String Scammed()
+	public Card Scammed()
 	{
 		int rands = DICE.nextInt(scam.size());
-		double moneyValues[] = {50,100,150,200,250};
+		int moneyValues[] = {50,100,150,200,250};
 		int mons = DICE.nextInt(moneyValues.length);
-		String output = "You get caught in " + scam.get(rands) + "'s pyraimid scheme scam, pay Q" + moneyValues[mons];
-		return output;
+		String output = "You get caught in " + scam.get(rands) + "'s pyramid scheme scam, pay Q" + moneyValues[mons];
+		return new Card(Card.BAL_MINUS, output, moneyValues[mons]);
 	}
 	
-	public String Lectured()
+	public Card Lectured()
 	{
 		int rands = DICE.nextInt(lecture.size());
-		double moneyValues[] = {50,100,150,200,250};
+		int moneyValues[] = {50,100,150,200,250};
 		int mons = DICE.nextInt(moneyValues.length);
-		String output = "You are attending a lecture presided over by " + lecture.get(rands) + " pay Q" + moneyValues[mons] + " for tickets";
-		return output;
+		String output = "You are attending a lecture presided over by " + lecture.get(rands) + ", pay Q" + moneyValues[mons] + " for tickets";
+		return new Card(Card.BAL_MINUS, output, moneyValues[mons]);
 	}
 	
-	public String Villainy()
+	public Card Villainy()
 	{
 		int rands = DICE.nextInt(villain.size());
 		String output = "You are caught aiding " + villain.get(rands) + ", go to jail"; 
-		return output;
+		return new Card(Card.GO_TO_JAIL, output);
 	}
 	
-	public String Terrorism()
+	public Card Terrorism()
 	{
 		int rands = DICE.nextInt(terrorist.size());
-		double moneyValues[] = {50,100,150,200,250};
+		int moneyValues[] = {50,100,150,200,250};
 		int mons = DICE.nextInt(moneyValues.length);
 		String output = "You punch the known terrorist " + terrorist.get(rands) + " in the face, pay Q" + moneyValues[mons] + " for a doctor's vist";
-		return output;
+		return new Card(Card.BAL_MINUS, output, moneyValues[mons]);
 	}
 	
-	public String Royalty()
+	public Card Royalty()
 	{
 		int rands = DICE.nextInt(royalty.size());
 		String output = "You are knighted by " + royalty.get(rands) + " for your services to business, recieve a royal pardon for future offences";
-		return output;
+		return new Card(Card.GET_OUT_OF_JAIL, output);
 	}
 	
-	public String Sports()
+	public Card Sports()
 	{
 		int rands = DICE.nextInt(sportstar.size());
-		double moneyValues[] = {50,100,150,200,250};
+		int moneyValues[] = {50,100,150,200,250};
 		int mons = DICE.nextInt(moneyValues.length);
-		String sportTypes[] = {"American Footbal franchise", "Football club", "Hurling club", "Basketball franchise", "Baseball franchise", "Lacrosse franchise", "Hockey franchise", "Ice Hockey franchise", "Golf club"};
+		String sportTypes[] = {"American Football franchise", "Football club", "Hurling club", "Basketball franchise", "Baseball franchise", "Lacrosse franchise", "Hockey franchise", "Ice Hockey franchise", "Golf club"};
 		int spts = DICE.nextInt(sportTypes.length);
-		String output = "You invest in a new " + sportTypes[spts] + " with " + sportstar.get(rands) + " pay Q" + moneyValues[mons];
-		return output;
+		String output = "You invest in a new " + sportTypes[spts] + " with " + sportstar.get(rands) + ", pay Q" + moneyValues[mons];
+		return new Card(Card.BAL_MINUS, output, moneyValues[mons]);
 	}
 	
-	public String TestDrive()
+	public Card TestDrive()
 	{
 		int rands = DICE.nextInt(tests.size());
 		int moves = DICE.nextInt(14)+1;
 		String output = "You test drive the new " + tests.get(rands) + " advance " + moves + " space(s) forward";
-		return output;
+		return new Card(Card.POSITION_PLUS, output, moves);
 	}
 	
-	public String TimeTravel()
+	public Card TimeTravel()
 	{
 		int rands = DICE.nextInt(magic.size());
 		int moves = DICE.nextInt(14)+1;
 		String output = "You time travel with " + magic.get(rands) + " move back " + moves + " space(s)";
-		return output;
+		return new Card(Card.POSITION_MINUS, output, moves);
 	}
 
-	public String DoomsDay()
+	public Card DoomsDay()
 	{
 		int rands = DICE.nextInt(villain.size());
-		String endWorld[] = {"zombie apocalypse", "nuclear weapons", "one-inch punch", " virus", "infinity gauntlet", "elderwand", "asteroid", "plague", "Death Star", "robot killing machines", "terminators", "alien invaders"};
+		String endWorld[] = {"zombie apocalypse", "nuclear weapons", "one-inch punch", "virus", "infinity gauntlet", "elderwand", "asteroid", "plague", "Death Star", "robot killing machines", "terminators", "alien invaders"};
 		int ends = DICE.nextInt(endWorld.length);
 		String output = "The end of the world is nigh, " + villain.get(rands) + " and their " + endWorld[ends] + " have brought about armageddon in t-minus 5 minutes, spend your remaining time wisely";
 		placeholder = NOC2.getAllKeysWithFieldValueNon("Characters", cars.get(rands));
-		questions = NOC.getAllKeys("Opponent");
-
-		return output;
+		return new Card(Card.DOOMSDAY, output);
 	}
 
 	public String[] Question()

@@ -19,7 +19,7 @@ public class PanopolyServer {
 
     void BeginServer() throws Exception {
         players=new ArrayList<>();
-        System.out.println("Sarting server...");
+        System.out.println("Starting server...");
         serverSocket = new ServerSocket(7777);
         int i=0;
 

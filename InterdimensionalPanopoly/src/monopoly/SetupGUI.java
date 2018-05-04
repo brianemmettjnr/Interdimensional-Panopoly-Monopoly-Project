@@ -202,7 +202,7 @@ public class SetupGUI
         players.add(new GameBot("Cian",2,2,panopoly));
         players.add(new GameBot("Mossy",3,3,panopoly));
         players.add(new GameBot("Tony",4,4,panopoly));
-//        players.add(new GameBot("Christ.........",5,5,panopoly));
+        players.add(new GameBot("Christ.........",5,5,panopoly));
         panopoly.createGUI(players);
     }
 

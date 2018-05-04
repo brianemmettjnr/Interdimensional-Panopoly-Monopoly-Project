@@ -19,11 +19,12 @@ public class Panopoly
 	private ArrayList<Player> players;
 	private Player currentPlayer;
 	private Board board;
-	private GUI gui;
+	private GUI[] gui;
 	private Dice dice = new Dice();
 	private boolean clockwiseMovement = true;
 	private long startTime;
 	private Timer countdownTimer;
+	private CommunityChest deck = new CommunityChest();
 	
 	Panopoly(int numLocations)
 	{
@@ -40,10 +41,52 @@ public class Panopoly
 	{
 		players = playerArray;
 		currentPlayer = players.get(0);
-		gui = new GUI(board.getNumLocations(),this,players);
-		gui.updateGUI();
+		int index=0;
+		gui=new GUI[playerArray.size()];
+		for(Player player: players)
+		{
+			gui[index]=new GUI(board.getNumLocations(),this,players,player);
+			if(player instanceof GameBot)
+			{
+				((GameBot) player).setGUI(gui[index]);
+			}
+			index++;
+		}
+		System.out.println(gui.length);
+		updateGUI();
 	}
-	
+
+	private void updateGUI() {
+		for(GUI gui:this.gui) {
+			gui.updateGUI();
+		}
+	}
+	private void updateAction(String action)
+	{
+		for(GUI gui:this.gui)
+		{
+			gui.updateAction(action);
+		}
+	}
+	private void resetCommands() {
+		for(GUI gui:this.gui)
+		{
+			gui.resetCommands();
+		}
+	}
+	private void leaveGameGui(Player currentPlayer) {
+		for(GUI gui:this.gui)
+		{
+			gui.leaveGame(currentPlayer);
+		}
+	}
+	private void guiEndGame() {
+		for(GUI gui:this.gui)
+		{
+			gui.endGame();
+		}
+	}
+
 	//GETTER METHODS
 	public Board getBoard()
 	{
@@ -87,6 +130,11 @@ public class Panopoly
 			ret = "\n" + currentPlayer.getIdentifier() + " has landed on Go to Jail and been sent to jail.";
 			//ret += startPlayerTurn(getNextPlayer());
 		}
+		
+		else if(square instanceof CommunityChest || square instanceof Chance)
+		{
+			ret += deck.getCard(this);
+		}
 
 		return ret;
 	}
@@ -101,8 +149,8 @@ public class Panopoly
 			
 		countdownTimer.addActionListener(timerListener);
 		countdownTimer.start();
-		gui.updateAction("COUNTDOWN STARTED");
-		gui.updateAction("Elapsed Time in secs: " + (System.currentTimeMillis() - startTime) / 1000);
+		updateAction("COUNTDOWN STARTED");
+		updateAction("Elapsed Time in secs: " + (System.currentTimeMillis() - startTime) / 1000);
 	}
 	
 	public void startPlayerTurn(Player player)
@@ -114,23 +162,25 @@ public class Panopoly
 			currentPlayer.rollComplete = false;
 			currentPlayer = player;
 
-			gui.updateGUI();
-			gui.updateAction(currentPlayer.getIdentifier() + "'s turn");
-			((GameBot) player).makeGameDecision(gui);
+			updateGUI();
+			updateAction(currentPlayer.getIdentifier() + "'s turn");
+			//todo fix
+			((GameBot) player).makeGameDecision();
 		}else{
 			currentPlayer.doubles = 0;
 			currentPlayer.canRoll = true;
 			currentPlayer.rollComplete = false;
 			currentPlayer = player;
 
-			gui.resetCommands();
-			gui.updateGUI();
+			resetCommands();
+			updateGUI();
 
-			gui.updateAction(currentPlayer.getIdentifier() + "'s turn");
+			updateAction(currentPlayer.getIdentifier() + "'s turn");
 		}
 	}
-	
-	public String roll()
+
+
+	public void roll()
 	{
 		currentPlayer.canRoll = false;
 		currentPlayer.rollComplete = true;
@@ -156,18 +206,19 @@ public class Panopoly
 
 		msg += getSquareAction();
 		
-		gui.resetCommands();
-		gui.updateGUI();
+		resetCommands();
+		updateGUI();
+		updateAction(msg);
 		if(currentPlayer instanceof GameBot)
-			((GameBot) currentPlayer).makeGameDecision(gui);
-		return msg;
+		//todo fix
+		 ((GameBot) currentPlayer).makeGameDecision();
 	}
 	
 	//PROPERTY METHODS
 	public String buyProperty(Rentable property)
 	{
 		currentPlayer.buyProperty(property, property.getPrice());
-		gui.updateGUI();
+		updateGUI();
 		
 		return currentPlayer.getIdentifier() + " has bought " + property.getIdentifier() + " for " + property.getPrice() + ".";
 	}
@@ -196,19 +247,25 @@ public class Panopoly
 		return redeemProperty.redeem();	
 	}
 	
-	public void leaveGame()
+	public void leaveGame(Player player)
 	{
-		gui.updateAction(currentPlayer.getIdentifier() + " has left the game.");
-		
-		for(Rentable property: currentPlayer.getProperties())
+
+		for(Rentable property: player.getProperties())
 		{
 			property.reset();
 		}
+		updateAction(player.getIdentifier() + " has left the game.");
 		
-		int index = players.indexOf(currentPlayer);
-		players.remove(currentPlayer);
-		gui.leaveGame(currentPlayer);
-		
+		for(Rentable property: player.getProperties())
+		{
+			property.reset();
+		}
+
+		int index = players.indexOf(player);
+		if(player==currentPlayer)
+			currentPlayer=getNextPlayer();
+		players.remove(player);
+		leaveGameGui(player);
 		//if one player left, they win automatically and game ends
 		if(players.size() == 1)
 			endGame();
@@ -216,7 +273,8 @@ public class Panopoly
 		else
 			startPlayerTurn(players.get(index % players.size()));
 	}
-	
+
+
 	public ArrayList<Player> decideWinners()
 	{
 		 int winningWorth = 0;
@@ -246,7 +304,7 @@ public class Panopoly
 		
 		//if one distinct winner
 		if(winners.size() == 1)
-			gui.updateAction(winners.get(0).getIdentifier() + " has won!");
+			updateAction(winners.get(0).getIdentifier() + " has won!");
 		
 		//if there is a draw
 		else
@@ -257,9 +315,10 @@ public class Panopoly
 
 			draw = draw.substring(0, draw.length() - 2);
 			draw += " and " + winners.get(winners.size() - 1).getIdentifier() + ".";
-			gui.updateAction(draw);
+			updateAction(draw);
 
 		}
-		gui.endGame();
+		guiEndGame();
 	}
+
 }
