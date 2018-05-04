@@ -1,16 +1,8 @@
 package base;
 
-import java.awt.*;
-import java.lang.reflect.Array;
-import java.util.Random;
-import java.util.Set;
-import java.util.Vector;
-
 import monopoly.Card;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.*;
 
 public class PersonOfInterest
 {
@@ -120,12 +112,12 @@ public class PersonOfInterest
 
 	}
 
-	public String stations()
+	public String Surnames()
 	{
 		stations 	= NOC.getAllKeys("Character");
 		int rand = 0;
+		int rand2 = 0;
 		String stationName = "";
-
 		do {
 			rand = DICE.nextInt(stations.size() - 2) + 1;
 			String hold[] = stations.get(rand).split(" ");
@@ -134,6 +126,26 @@ public class PersonOfInterest
 		
 		stationNames.add(stationName);
 		return stationName;
+	}
+
+	public String TransportLinks()
+	{
+		Surnames();
+		int rand2 = 0;
+		String[] statNames = {"Hyperloop", "Teleportation Station", "Monorail", "Metro Station", "Jetpack Station", "Hovercar Depot", "Portal Gun Rental", "Bifrost Gate"};
+		rand2 = DICE.nextInt(statNames.length);
+		String TranLink = Surnames() + " " + statNames[rand2];
+		return TranLink;
+
+	}
+
+	public String utility()
+	{
+		String[] utilityNames = {"cryptocurrency enchanges", "data bank", "hydroelectric dam", "wind turbines", "nuclear power station", "lightning farm", "solar panels"};
+		int rand = 0;
+		rand = DICE.nextInt(utilityNames.length);
+		String utility = Surnames() + " " + utilityNames[rand];
+		return utility;
 	}
 
 	public ArrayList<String> placenames (ArrayList<String> locations)
@@ -460,8 +472,8 @@ public class PersonOfInterest
 	{
 		PersonOfInterest ps = new PersonOfInterest();
 //		int j = 0;
-
-		System.out.print(ps.stations());
+		System.out.print(ps.TransportLinks() + "\n");
+		System.out.print(ps.utility());
 //		while(j < 1000)
 //		{
 //			String[] str1 = ps.Question();
