@@ -17,20 +17,20 @@ public class PersonOfInterest
 	static Random DICE = new Random();
 	
 	private KnowledgeBaseModule NOC			= null;
-	private KnowledgeBaseModule NOC1          = null;
+	private KnowledgeBaseModule NOC1       = null;
 	private KnowledgeBaseModule NOC2		= null;
 	private KnowledgeBaseModule NOC3		= null;
 	private KnowledgeBaseModule NOC4		= null;
 	private KnowledgeBaseModule NOC5		= null;
 	private KnowledgeBaseModule NOC6		= null;
 	private KnowledgeBaseModule NOC7		= null;
-	private KnowledgeBaseModule WORLDS       = null;
+	private KnowledgeBaseModule WORLDS     = null;
 
 	private static Vector<String> People			= null;
 	private static Vector<String> allPeople			= null;
 	private static Vector<String> checkers			= null;
 	private static Vector<String> criminals 		= null;
-	private static Vector<String> criminalsCars		= null;
+	private static Vector<String> criminalsCars	= null;
 	private static Vector<String> enemies			= null;
 	private static Vector<String> opponents 		= null;
 	private static Vector<String> murder 			= null;
@@ -51,9 +51,9 @@ public class PersonOfInterest
 	private static Vector<String> tests				= null;
 	private static Vector<String> magic				= null;
 	private static Vector<String> placeholder		= null;
-	private static Vector<String> placeholder2		= null;
-	private static Vector<String> placeholder3		= null;
-	private static Vector<String> removed			= null;
+	private static Vector<String> questions			= null;
+	private static Vector<String> answers			= null;
+	private static Vector<String> wrongs			= null;
 
 	public static ArrayList<String> locations = new ArrayList<String>();
 	Set<String> removes = new HashSet<>();
@@ -362,116 +362,21 @@ public class PersonOfInterest
 	public String[] Question()
 	{
 		String qandA[] = new String[5];
-		int probability = DICE.nextInt(5);
-		if(probability == 0)
+		questions = NOC.getAllKeys("Opponent");
+		int rand = 0;
+		rand = DICE.nextInt(questions.size()-2)+1;
+		qandA[0] = "Which of the following is an opponet(s) of " + questions.get(rand) + "?";
+		answers = NOC3.getAllKeysWithFieldValueNon("Character", questions.get(rand));
+		qandA[1] = "" + answers.firstElement();
+		wrongs = NOC3.getAllKeysWithoutFieldValue("Character", questions.get(rand));
+		int rand2 = 0;
+		for(int i = 2; i < 5; i++)
 		{
-			int rands = DICE.nextInt(cars.size());
-			qandA[0] = (cars.get(rands) + "is associated with which vehicle?");
-			placeholder = NOC2.getAllKeysWithoutFieldValue("Characters", cars.get(rands));
-			for (int i = 1; i < 4; i++)
-			{
-				int rands2 = DICE.nextInt(placeholder.size());
-				qandA[i] = (placeholder.get(rands2));
-				placeholder.removeElementAt(rands2);
-			}
-			placeholder = NOC2.getAllKeysWithFieldValueNon("Characters", cars.get(rands));
-			if(placeholder.firstElement().matches(""))
-			{
-				Question();
-			}
-			String output = "" + placeholder;
-			output = output.replace("]", "");
-			output = output.replace("[", "");
-			qandA[4] = (output);
+			rand2 = DICE.nextInt(wrongs.size() - 2) + 1;
+			String temp = wrongs.get(rand2);
+			qandA[i] = temp;
 		}
-		if(probability == 1)
-		{
-			opponents = NOC3.getAllKeys("Opponent");
-			int rands = DICE.nextInt(opponents.size());
-			qandA[0] = ("Who calls '" + opponents.get(rands) + "' their opponent(s)?");
-			placeholder = NOC.getAllKeysWithoutFieldValue("Opponent", opponents.get(rands));
-			for (int i = 1; i < 4; i++)
-			{
-				int rands2 = DICE.nextInt(placeholder.size());
-				qandA[i] = (placeholder.get(rands2));
-				placeholder.removeElementAt(rands2);
-			}
-			placeholder = NOC.getAllKeysWithFieldValueNon("Opponent", opponents.get(rands));
-			if(placeholder.firstElement().matches(""))
-			{
-				Question();
-			}
-			String output = "" + placeholder.firstElement();
-			output = output.replace("]", "");
-			output = output.replace("[", "");
-			qandA[4] = (output);
-		}
-		if(probability == 2)
-		{
-			opponents = NOC5.getAllKeys("Address 3");
-			int rands = DICE.nextInt(opponents.size());
-			qandA[0] = ("Which of the following calls " + opponents.get(rands) + " home?");
-			placeholder = NOC.getAllKeysWithFieldValueNon("Address 3", opponents.get(rands));
-			if(placeholder.firstElement().matches(""))
-			{
-				Question();
-			}
-			String output = "" + placeholder.firstElement();
-			output = output.replace("]", "");
-			output = output.replace("[", "");
-			placeholder = NOC.getAllKeysWithoutFieldValue("Address 3", opponents.get(rands));
-			for (int i = 1; i < 4; i++)
-			{
-				int rands2 = DICE.nextInt(placeholder.size());
-				qandA[i] = (placeholder.get(rands2));
-				placeholder.removeElementAt(rands2);
-			}
-			qandA[4] = output;
-		}
-		if(probability == 3)
-		{
-			opponents = NOC6.getAllKeys("Creator");
-			int rands = DICE.nextInt(opponents.size());
-			qandA[0] = (opponents.get(rands) + " created which of the following characters?");
-			placeholder = NOC.getAllKeysWithoutFieldValue("Creator", opponents.get(rands));
-			for (int i = 1; i < 4; i++)
-			{
-				int rands2 = DICE.nextInt(placeholder.size());
-				qandA[i] = (placeholder.get(rands2));
-				placeholder.removeElementAt(rands2);
-			}
-			placeholder = NOC.getAllKeysWithFieldValueNon("Creator", opponents.get(rands));
-			if(placeholder.firstElement().matches(""))
-			{
-				Question();
-			}
-			String output = "" + placeholder.firstElement();
-			output = output.replace("]", "");
-			output = output.replace("[", "");
-			qandA[4] = (output);
-		}
-		if(probability == 4)
-		{
-			opponents = NOC7.getAllKeys("Portrayed By");
-			int rands = DICE.nextInt(opponents.size());
-			qandA[0] = (opponents.get(rands) + " portrayed which of the following characters?");
-			placeholder = NOC.getAllKeysWithoutFieldValue("Portrayed By", opponents.get(rands));
-			for (int i = 1; i < 4; i++)
-			{
-				int rands2 = DICE.nextInt(placeholder.size());
-				qandA[i] = (placeholder.get(rands2));
-				placeholder.removeElementAt(rands2);
-			}
-			placeholder = NOC.getAllKeysWithFieldValueNon("Portrayed By", opponents.get(rands));
-			if(placeholder.firstElement().matches(""))
-			{
-				Question();
-			}
-			String output = "" + placeholder;
-			output = output.replace("]", "");
-			output = output.replace("[", "");
-			qandA[4] = (output);
-		}
+
 		return qandA;
 	}
 
@@ -503,6 +408,9 @@ public class PersonOfInterest
 		System.out.println(ps.TimeTravel() + "\n");
 		System.out.println(ps.DoomsDay());
 		System.out.print("\n");
+		//System.out.print(questions);
+		System.out.print("\n");
+
 
 //////////////////////////////////////////////////////////////////////////
 		String[] str1 = ps.Question();
@@ -515,3 +423,5 @@ public class PersonOfInterest
 	}
 		
 }
+
+// station names as surnames

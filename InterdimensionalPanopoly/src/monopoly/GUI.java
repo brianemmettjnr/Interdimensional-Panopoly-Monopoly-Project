@@ -35,19 +35,14 @@ class GUI implements InteractionAPI {
 	private MouseAdapter correct=new MouseAdapter() {
         @Override
         public void mouseClicked(MouseEvent e) {
-            updateAction("Correct answer.");
-            panopoly.getCurrentPlayer().releaseFromJail();
-            gui.hideAnswers();
+            answerCorrectlyFunction();
         }
     };
-
 
     private MouseAdapter incorrect=new MouseAdapter() {
         @Override
         public void mouseClicked(MouseEvent e) {
-            updateAction("Wrong answer.");
-            panopoly.startPlayerTurn(panopoly.getNextPlayer());
-            gui.hideAnswers();
+            answerIncorrectlyFunction();
         }
     };
     
@@ -190,6 +185,20 @@ class GUI implements InteractionAPI {
     @Override
     public void leaveGameFunction() {
         panopoly.leaveGame();
+    }
+
+    @Override
+    public void answerCorrectlyFunction() {
+        updateAction("Correct answer.");
+        panopoly.getCurrentPlayer().releaseFromJail();
+        gui.hideAnswers();
+    }
+
+    @Override
+    public void answerIncorrectlyFunction() {
+        updateAction("Wrong answer.");
+        panopoly.startPlayerTurn(panopoly.getNextPlayer());
+        gui.hideAnswers();
     }
 
     private void setupbuttons()
