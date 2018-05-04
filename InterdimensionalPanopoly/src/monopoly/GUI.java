@@ -170,6 +170,8 @@ class GUI implements InteractionAPI {
         Rentable buyProperty= (Rentable)panopoly.getBoard().getLocation(panopoly.getCurrentPlayer().getPosition());
         gui.updateAction(panopoly.buyProperty(buyProperty));
         gui.updateGUI();
+        if(assignedPlayer instanceof GameBot)
+            ((GameBot)assignedPlayer).makeGameDecision();
     }
 
     @Override
@@ -338,19 +340,19 @@ class GUI implements InteractionAPI {
                 setSelectedLabel(getLocationLabel(panopoly.getCurrentPlayer().getPosition()));
                 if(noQuestion) {
                     noQuestion=false;
-                    //todo fix
-                    String[] question = {"1","2","3","4","Correct"};//personOfInterest.Question();
+
+                    String[] question =personOfInterest.Question();
                     questionWindow.setText("<html><center>" + question[0] + "</center></html>");
                     int rand = ThreadLocalRandom.current().nextInt(0, 3 + 1);
                     int wrongcount = 1;
                     for (int i = 0; i < 4; i++) {
                         answers[i].setVisible(true);
                         if (i == rand) {
-                            answers[i].setText(question[4]);
+                            answers[i].setText(question[1]);
                             answers[i].setMouseEvent(correct);
                         } else {
                             answers[i].setMouseEvent(incorrect);
-                            answers[i].setText("|"+question[wrongcount]);
+                            answers[i].setText("|"+question[1+wrongcount]);
                             wrongcount++;
                         }
                     }

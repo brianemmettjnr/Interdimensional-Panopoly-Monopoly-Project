@@ -8,6 +8,8 @@ import java.util.ArrayList;
 public class GameBot extends Player{
 
 
+    private GUI gui;
+
     public GameBot(String name, int imageIndex, int playerIndex, Panopoly panopoly) {
         super(name, imageIndex, playerIndex, panopoly);
     }
@@ -17,7 +19,7 @@ public class GameBot extends Player{
         return name+"(BOT)";
     }
 
-    public void makeGameDecision(GUI gui){
+    public void makeGameDecision(){
 
         if(gui.rollButton.isVisible()) {
             gui.rollFunction();
@@ -27,11 +29,13 @@ public class GameBot extends Player{
             gui.endTurnFunction();
         } else if(balance<0){
             gui.leaveGameFunction();
-        } else if(!gui.rollButton.isVisible() && !gui.endButton.isVisible()){
-            gui.answerCorrectlyFunction();
-        } else{
+        } else {
             gui.leaveGameFunction();
         }
 
+    }
+    public void setGUI(GUI gui)
+    {
+        this.gui=gui;
     }
 }

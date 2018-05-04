@@ -45,6 +45,10 @@ public class Panopoly
 		for(Player player: players)
 		{
 			gui[index]=new GUI(board.getNumLocations(),this,players,player);
+			if(player instanceof GameBot)
+			{
+				((GameBot) player).setGUI(gui[index]);
+			}
 			index++;
 		}
 		System.out.println(gui.length);
@@ -69,7 +73,7 @@ public class Panopoly
 			gui.resetCommands();
 		}
 	}
-	private void leaveGame(Player currentPlayer) {
+	private void leaveGameGui(Player currentPlayer) {
 		for(GUI gui:this.gui)
 		{
 			gui.leaveGame(currentPlayer);
@@ -155,7 +159,7 @@ public class Panopoly
 			updateGUI();
 			updateAction(currentPlayer.getIdentifier() + "'s turn");
 			//todo fix
-			//((GameBot) player).makeGameDecision(gui);
+			((GameBot) player).makeGameDecision();
 		}else{
 			currentPlayer.doubles = 0;
 			currentPlayer.canRoll = true;
@@ -200,7 +204,8 @@ public class Panopoly
 		updateGUI();
 		updateAction(msg);
 		if(currentPlayer instanceof GameBot)
-		{}//todo fix ((GameBot) currentPlayer).makeGameDecision(gui);
+		//todo fix
+		 ((GameBot) currentPlayer).makeGameDecision();
 	}
 	
 	//PROPERTY METHODS
@@ -236,24 +241,25 @@ public class Panopoly
 		return redeemProperty.redeem();	
 	}
 	
-	public void leaveGame()
+	public void leaveGame(Player player)
 	{
 
-		for(Rentable property: currentPlayer.getProperties())
+		for(Rentable property: player.getProperties())
 		{
 			property.reset();
 		}
-		updateAction(currentPlayer.getIdentifier() + " has left the game.");
+		updateAction(player.getIdentifier() + " has left the game.");
 		
-		for(Rentable property: currentPlayer.getProperties())
+		for(Rentable property: player.getProperties())
 		{
 			property.reset();
 		}
 
-		int index = players.indexOf(currentPlayer);
-		players.remove(currentPlayer);
-		leaveGame(currentPlayer);
-		
+		int index = players.indexOf(player);
+		if(player==currentPlayer)
+			currentPlayer=getNextPlayer();
+		players.remove(player);
+		leaveGameGui(player);
 		//if one player left, they win automatically and game ends
 		if(players.size() == 1)
 			endGame();
