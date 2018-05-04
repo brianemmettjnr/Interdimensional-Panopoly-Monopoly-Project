@@ -1,17 +1,8 @@
 package base;
 
-import java.awt.*;
-import java.lang.reflect.Array;
-import java.util.Random;
-import java.util.Set;
-import java.util.Vector;
-
 import monopoly.Card;
-import monopoly.Dice;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.*;
 
 public class PersonOfInterest
 {
@@ -141,7 +132,7 @@ public class PersonOfInterest
 	{
 		Surnames();
 		int rand2 = 0;
-		String[] statNames = {"Hyperloop", "Teleportation Station", "Monorail", "Metro Station", "Jetpack Station", "Hovercar Depo", "Portal Gun Rental", "Bifrosrt Gate"};
+		String[] statNames = {"Hyperloop", "Teleportation Station", "Monorail", "Metro Station", "Jetpack Station", "Hovercar Depot", "Portal Gun Rental", "Bifrost Gate"};
 		rand2 = DICE.nextInt(statNames.length);
 		String TranLink = Surnames() + " " + statNames[rand2];
 		return TranLink;
