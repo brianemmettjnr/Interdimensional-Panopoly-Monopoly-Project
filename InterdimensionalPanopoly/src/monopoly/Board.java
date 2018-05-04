@@ -117,9 +117,9 @@ public class Board
 	
 	private Station generateStation()
 	{
-		String stationName = " Station";
-		
-		stationName = new PersonOfInterest().stations() + stationName;
+
+		String stationName;
+		stationName = new PersonOfInterest().TransportLinks();
 		
 		return new Station(stationName);
 	}

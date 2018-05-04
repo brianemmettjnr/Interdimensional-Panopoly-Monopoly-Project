@@ -121,12 +121,12 @@ public class PersonOfInterest
 
 	}
 
-	public String stations()
+	public String Surnames()
 	{
 		stations 	= NOC.getAllKeys("Character");
 		int rand = 0;
+		int rand2 = 0;
 		String stationName = "";
-
 		do {
 			rand = DICE.nextInt(stations.size() - 2) + 1;
 			String hold[] = stations.get(rand).split(" ");
@@ -137,12 +137,23 @@ public class PersonOfInterest
 		return stationName;
 	}
 
+	public String TransportLinks()
+	{
+		Surnames();
+		int rand2 = 0;
+		String[] statNames = {"Hyperloop", "Teleportation Station", "Monorail", "Metro Station", "Jetpack Station", "Hovercar Depo", "Portal Gun Rental", "Bifrosrt Gate"};
+		rand2 = DICE.nextInt(statNames.length);
+		String TranLink = Surnames() + " " + statNames[rand2];
+		return TranLink;
+
+	}
+
 	public String utility()
 	{
 		String[] utilityNames = {"cryptocurrency enchanges", "data bank", "hydroelectric dam", "wind turbines", "nuclear power station", "lightning farm", "solar panels"};
 		int rand = 0;
 		rand = DICE.nextInt(utilityNames.length);
-		String utility = stations() + " " + utilityNames[rand];
+		String utility = Surnames() + " " + utilityNames[rand];
 		return utility;
 	}
 
@@ -470,7 +481,7 @@ public class PersonOfInterest
 	{
 		PersonOfInterest ps = new PersonOfInterest();
 //		int j = 0;
-		System.out.print(ps.stations() + "\n");
+		System.out.print(ps.TransportLinks() + "\n");
 		System.out.print(ps.utility());
 //		while(j < 1000)
 //		{
