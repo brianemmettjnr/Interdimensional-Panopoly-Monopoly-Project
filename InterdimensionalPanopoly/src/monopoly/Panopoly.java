@@ -123,8 +123,17 @@ public class Panopoly
 		
 		else if(square.getIdentifier() == "Go to Jail")
 		{
-			currentPlayer.sendToJail();
 			ret = "\n" + currentPlayer.getIdentifier() + " has landed on Go to Jail and been sent to jail.";
+			currentPlayer.sendToJail();
+		}
+		else if(square instanceof Chance || square instanceof CommunityChest)
+		{
+			Player player=currentPlayer;
+			String card=deck.getCard(this);
+			if(currentPlayer!=player)
+				gui[player.getPlayerIndex()].displayCard(card);
+			else
+				gui[currentPlayer.getPlayerIndex()].displayCard(card);
 		}
 
 		return ret;
@@ -196,10 +205,10 @@ public class Panopoly
 		//pass GO message
 		msg += currentPlayer.move(movePositions, clockwiseMovement);
 
-		msg += getSquareAction();
 		
 		resetCommands();
 		updateGUI();
+		msg += getSquareAction();
 		updateAction(msg);
 		if(currentPlayer instanceof GameBot)
 		//todo fix

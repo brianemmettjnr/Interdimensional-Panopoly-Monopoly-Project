@@ -30,6 +30,7 @@ class GUI implements InteractionAPI {
     private JLabel image;
     private ArrayList<Player> players=new ArrayList<>();
     private boolean noQuestion=true;
+    private CardDeck deck=new CardDeck();
 	
     boolean rollCommand,endCommand;
 	public GUIButton helpButton,buyButton, rollButton, endButton, mortgageButton,
@@ -95,7 +96,7 @@ class GUI implements InteractionAPI {
         MainPane.add(image);
 
 
-        locationWindow.setBounds(10+3*Offset,10+Offset,Offset*(SquaresOnSide-6),Offset*(SquaresOnSide-4));
+        locationWindow.setBounds(10+3*Offset,10+Offset,Offset*(SquaresOnSide-6),Offset*(SquaresOnSide-5));
         locationWindow.setBackground(Color.WHITE);
         locationWindow.setForeground(Color.BLACK);
         locationWindow.setBorder(BorderFactory.createLineBorder(Color.black,4));
@@ -103,7 +104,7 @@ class GUI implements InteractionAPI {
         locationWindow.setVisible(false);
         MainPane.add(locationWindow);
 
-        thirdAction.setBounds(10+Offset,locationWindow.getY()+locationWindow.getHeight(),Offset*(SquaresOnSide-2),20);
+        thirdAction.setBounds(10+Offset,locationWindow.getY()+locationWindow.getHeight()+Offset,Offset*(SquaresOnSide-2),20);
         thirdAction.setVisible(true);
         thirdAction.setFont(new Font("times new roman",Font.BOLD,16));
         thirdAction.setForeground(Color.white);
@@ -152,7 +153,9 @@ class GUI implements InteractionAPI {
 
     public void rollFunction(){
         panopoly.roll();
-        if(getSelectedLocation()!=getLocationLabel(panopoly.getCurrentPlayer().getPosition())) {
+        if(getSelectedLocation()!=getLocationLabel(panopoly.getCurrentPlayer().getPosition())
+                &&!(getLocationLabel(panopoly.getCurrentPlayer().getPosition()).getLocation() instanceof CommunityChest
+                ||getLocationLabel(panopoly.getCurrentPlayer().getPosition()).getLocation() instanceof Chance)) {
             setSelectedLabel(getLocationLabel(panopoly.getCurrentPlayer().getPosition()));
         }
     }
@@ -342,7 +345,6 @@ class GUI implements InteractionAPI {
                     noQuestion=false;
 
                     String[] question =personOfInterest.Question();
-                    questionWindow.setText("<html><center>" + question[0] + "</center></html>");
                     int rand = ThreadLocalRandom.current().nextInt(0, 3 + 1);
                     int wrongcount = 1;
                     for (int i = 0; i < 4; i++) {
@@ -356,6 +358,7 @@ class GUI implements InteractionAPI {
                             wrongcount++;
                         }
                     }
+                    questionWindow.setText("<html><center>" + question[0] + "</center></html>");
 
                 }
                 else
@@ -364,9 +367,30 @@ class GUI implements InteractionAPI {
                         button.setVisible(true);
                 }
         }
+
         //leaveButton.setVisible(!rollCommand&&!endCommand);
     }
 
+    void displayCard(String msg)
+    {
+        setSelectedLabel(null);
+        image.setVisible(false);
+        JLabel card=new JLabel("<html><center>"+msg+"<br>Click to Close.</center></html>");
+        card.setBounds(10+Offset+10,locationWindow.getY()+locationWindow.getHeight(),-20+(SquaresOnSide-2)*Offset,Offset);
+        card.setVisible(true);
+        card.setOpaque(true);
+        getMainPane().add(card);
+        card.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                card.setVisible(false);
+                getMainPane().remove(card);
+                setSelectedLabel(null);
+                setSelectedLabel(getLocationLabel(assignedPlayer.getPosition()));
+            }
+        });
+
+    }
     void resetCommands()
     {
     	rollCommand = false;
@@ -636,9 +660,6 @@ class GUI implements InteractionAPI {
             secondAction.setText(latestAction.getText());
             latestAction.setText(action);
         }
-        LocationLabel label=getSelectedLocation();
-        setSelectedLabel(label);
-        setSelectedLabel(label);
         updateGUI();
     }
 
