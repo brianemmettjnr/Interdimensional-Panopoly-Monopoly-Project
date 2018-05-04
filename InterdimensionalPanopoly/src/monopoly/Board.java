@@ -53,7 +53,7 @@ public class Board
 			{
 				int rnd = ThreadLocalRandom.current().nextInt(1, 8 + 1);
 				if(rnd == 1) 
-					locations.add(new Station("Surname Station"));
+					locations.add(generateStation());
 				else if(rnd == 2)
 					locations.add(new Chance());
 				else if(rnd == 3)
@@ -115,6 +115,15 @@ public class Board
 		}
 	}
 	
+	private Station generateStation()
+	{
+		String stationName = " Station";
+		
+		stationName = new PersonOfInterest().stations().get(0) + stationName;
+		
+		return new Station(stationName);
+	}
+	
 	private Group getNextSet()
 	{
 		String nextKey = (String) possibleLocations.keySet().toArray()[index];
@@ -133,28 +142,15 @@ public class Board
 	{
 		return locations;
 	}
-
-	private Locatable newLocation() 
-	{
-		// TODO generate new location?
-		String name = newPropertyName();
-		return null;
-	}
 	
-	private String newPropertyName()
-	{
-		//TODO generate property names?
-		return null;
-	}
-	
-	public int generatePrice()
+	private int generatePrice()
 	{
 		return ThreadLocalRandom.current().nextInt(minPrice, maxPrice + 1);
 		
 	}
 	
 	//REFERENCE: http://www.jdawiseman.com/papers/trivia/monopoly-rents.html
-	public int[] generateRentArray(int price)
+	private int[] generateRentArray(int price)
 	{
 		int rent = price/10 - 4;
 		int oneHouseRent = (price/2) - 20;
