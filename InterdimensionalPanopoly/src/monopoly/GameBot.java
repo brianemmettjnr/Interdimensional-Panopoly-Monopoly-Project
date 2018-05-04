@@ -26,7 +26,7 @@ public class GameBot extends Player{
         }
         else if(gui.rollButton.isVisible()) {
             gui.rollFunction();
-        } else if(gui.buyButton.isVisible() && balance>90){
+        } else if(gui.buyButton.isVisible()){
             gui.buyPropertyFunction();
         } else if(gui.endButton.isVisible()){
             gui.endTurnFunction();
