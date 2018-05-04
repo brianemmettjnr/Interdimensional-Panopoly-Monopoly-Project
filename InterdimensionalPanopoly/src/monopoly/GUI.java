@@ -1,4 +1,6 @@
 package monopoly;
+import base.KnowledgeBaseModule;
+import base.PersonOfInterest;
 import interfaces.Groupable;
 import interfaces.InteractionAPI;
 import interfaces.Locatable;
@@ -10,6 +12,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.concurrent.ThreadLocalRandom;
 
 class GUI implements InteractionAPI {
 
@@ -27,6 +30,7 @@ class GUI implements InteractionAPI {
     static String[] characters={"boat","car","dog","hat","iron","thimble"};
     private JLabel image;
     private ArrayList<Player> players=new ArrayList<>();
+    private boolean noQuestion=true;
 	
     boolean rollCommand,endCommand;
 	public GUIButton helpButton,buyButton, rollButton, endButton, mortgageButton,
@@ -48,6 +52,7 @@ class GUI implements InteractionAPI {
     };
     
     private Panopoly panopoly;
+    private PersonOfInterest personOfInterest=new PersonOfInterest();
     static BufferedImage[] images = new BufferedImage[6];
     private JLabel locationWindow=new JLabel(" ",SwingConstants.CENTER);
     private JLabel questionWindow=new JLabel(" ",SwingConstants.CENTER);
@@ -78,7 +83,6 @@ class GUI implements InteractionAPI {
         Offset=(frameSize)/SquaresOnSide;
         PlaceBoard();
         PlacePlayers();
-        setupbuttons();
         ImageIcon scaleImage=new ImageIcon(GUI.class.getResource("media/Logo.png"));
         BufferedImage bi = new BufferedImage(scaleImage.getIconWidth(), scaleImage.getIconHeight(), BufferedImage.TYPE_INT_ARGB);
         Graphics g = bi.createGraphics();
@@ -100,30 +104,30 @@ class GUI implements InteractionAPI {
         locationWindow.setVisible(false);
         MainPane.add(locationWindow);
 
-        thirdAction.setBounds(10+Offset,locationWindow.getY()+locationWindow.getHeight(),Offset*(SquaresOnSide-2),30);
+        thirdAction.setBounds(10+Offset,locationWindow.getY()+locationWindow.getHeight(),Offset*(SquaresOnSide-2),20);
         thirdAction.setVisible(true);
-        thirdAction.setFont(new Font("times new roman",Font.BOLD,20));
+        thirdAction.setFont(new Font("times new roman",Font.BOLD,16));
         thirdAction.setForeground(Color.white);
         thirdAction.setText("");
         MainPane.add(thirdAction);
 
-        secondAction.setBounds(10+Offset,thirdAction.getY()+30,Offset*(SquaresOnSide-2),30);
+        secondAction.setBounds(10+Offset,thirdAction.getY()+20,Offset*(SquaresOnSide-2),20);
         secondAction.setVisible(true);
-        secondAction.setFont(new Font("times new roman",Font.BOLD,20));
+        secondAction.setFont(new Font("times new roman",Font.BOLD,16));
         secondAction.setForeground(Color.white);
         secondAction.setText("Enjoy!");
         MainPane.add(secondAction);
 
-        latestAction.setBounds(10+Offset,secondAction.getY()+30,Offset*(SquaresOnSide-2),30);
+        latestAction.setBounds(10+Offset,secondAction.getY()+20,Offset*(SquaresOnSide-2),20);
         latestAction.setVisible(true);
-        latestAction.setFont(new Font("Times New Roman",Font.BOLD,20));
+        latestAction.setFont(new Font("Times New Roman",Font.BOLD,16));
         latestAction.setForeground(Color.white);
         latestAction.setText("Welcome To Interdimensional Panopoly");
         MainPane.add(latestAction);
 
 
 
-        questionWindow.setBounds((int)(10+(Offset*((SquaresOnSide)/2.0)))-200,(((int)(FRAME_SIZE.getHeight()*.9))/2)-140,400,80);
+        questionWindow.setBounds(10+Offset+10,10+Offset+10,-20+(SquaresOnSide-2)*Offset,80);
         questionWindow.setBackground(Color.WHITE);
         questionWindow.setForeground(Color.BLACK);
         questionWindow.setBorder(BorderFactory.createLineBorder(Color.black,4));
@@ -132,6 +136,7 @@ class GUI implements InteractionAPI {
         MainPane.add(questionWindow);
         mainFrame.setVisible(true);
         mainFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        setupbuttons();
 
     }
 
@@ -203,6 +208,7 @@ class GUI implements InteractionAPI {
     public void answerCorrectlyFunction() {
         updateAction("Correct answer.");
         panopoly.getCurrentPlayer().releaseFromJail();
+        noQuestion=true;
         gui.hideAnswers();
     }
 
@@ -210,6 +216,7 @@ class GUI implements InteractionAPI {
     public void answerIncorrectlyFunction() {
         updateAction("Wrong answer.");
         panopoly.startPlayerTurn(panopoly.getNextPlayer());
+        noQuestion=true;
         gui.hideAnswers();
     }
 
@@ -292,12 +299,13 @@ class GUI implements InteractionAPI {
                     }
                 },this);
         quitButton.setVisible(true);
-        int x=-Offset;
+        int x=0;
         for(int i=0;i<4;i++)
         {
-            answers[i]=new GUIButton("Answer",(int)(10+(Offset*((SquaresOnSide-2)/2.0)))+x,(((int)(FRAME_SIZE.getHeight()*.9))/2)-60,
+            answers[i]=new GUIButton("Answer",(int)(questionWindow.getX())+x,questionWindow.getY()+questionWindow.getHeight(),
                    null,this);
-            x+=Offset;
+            answers[i].setSize(questionWindow.getWidth()/4,30);
+            x+=questionWindow.getWidth()/4;
         }
 
     }
@@ -323,17 +331,32 @@ class GUI implements InteractionAPI {
     	rollButton.setVisible(rollCommand);
     	endButton.setVisible(endCommand);
     	if (panopoly.getCurrentPlayer().isInJail()&&panopoly.getCurrentPlayer()==assignedPlayer) {
-            setSelectedLabel(null);
-            setSelectedLabel(getLocationLabel(panopoly.getCurrentPlayer().getPosition()));
+                setSelectedLabel(null);
+                setSelectedLabel(getLocationLabel(panopoly.getCurrentPlayer().getPosition()));
+                if(noQuestion) {
+                    noQuestion=false;
+                    String[] question = personOfInterest.Question();
+                    questionWindow.setText("<html><center>" + question[0] + "</center></html>");
+                    int rand = ThreadLocalRandom.current().nextInt(0, 3 + 1);
+                    int wrongcount = 1;
+                    for (int i = 0; i < 4; i++) {
+                        answers[i].setVisible(true);
+                        if (i == rand) {
+                            answers[i].setText(question[4]);
+                            answers[i].setMouseEvent(correct);
+                        } else {
+                            answers[i].setMouseEvent(incorrect);
+                            answers[i].setText("|"+question[wrongcount]);
+                            wrongcount++;
+                        }
+                    }
 
-            for(GUIButton button:answers)
-            {
-                button.setVisible(true);
-                button.setMouseEvent(incorrect);
-            }
-            answers[0].setMouseEvent(correct);
-            //todo get cian stuff here
-            questionWindow.setText("Hey Choose the left one okay");
+                }
+                else
+                {
+                    for(GUIButton button:answers)
+                        button.setVisible(true);
+                }
         }
         //leaveButton.setVisible(!rollCommand&&!endCommand);
     }

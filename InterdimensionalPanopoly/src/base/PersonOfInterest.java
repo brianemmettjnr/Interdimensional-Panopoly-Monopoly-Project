@@ -442,7 +442,7 @@ public class PersonOfInterest
 				placeholder.removeElementAt(rands2);
 			}
 			placeholder = NOC.getAllKeysWithFieldValueNon("Creator", opponents.get(rands));
-			if(placeholder.firstElement().matches(""))
+			if(placeholder.firstElement()==null)
 			{
 				Question();
 			}
