@@ -124,12 +124,10 @@ public class PersonOfInterest
 	{
 		stations 	= NOC.getAllKeys("Character");
 		int rand = 0;
-		for(int i = 0; i < stations.size(); i++)
-		{
-			rand = DICE.nextInt(stations.size() - 2) + 1;
-			String hold[] = stations.get(rand).split(" ");
-			stationName.add(hold[hold.length-1]);
-		}
+
+		rand = DICE.nextInt(stations.size() - 2) + 1;
+		String hold[] = stations.get(rand).split(" ");
+		stationName.add(hold[hold.length-1]);
 		return stationName;
 	}
 
