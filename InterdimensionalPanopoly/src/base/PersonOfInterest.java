@@ -63,7 +63,7 @@ public class PersonOfInterest
 		NOC2		  = new KnowledgeBaseModule("Veale's The NOC List.txt", 10);
 		NOC3 		  = new KnowledgeBaseModule("Veale's The NOC List.txt", 8);
 		NOC4 		  = new KnowledgeBaseModule("Veale's The NOC List.txt", 11);
-		NOC5		  = new KnowledgeBaseModule("Veale's The NOC List.txt", 5);
+		NOC5		  = new KnowledgeBaseModule("Veale's The NOC List.txt", 4);
 		NOC6		  = new KnowledgeBaseModule("Veale's The NOC List.txt", 17);
 		NOC7		  = new KnowledgeBaseModule("Veale's The NOC List.txt", 16);
 		WORLDS        = new KnowledgeBaseModule("Veale's domains.txt", 0);
@@ -364,20 +364,78 @@ public class PersonOfInterest
 
 	public String[] Question()
 	{
+		int chance = 0;
+		chance = DICE.nextInt(4);
 		String qandA[] = new String[5];
-		questions = NOC.getAllKeys("Opponent");
-		int rand = 0;
-		rand = DICE.nextInt(questions.size()-2)+1;
-		qandA[0] = "Which of the following is an opponet(s) of " + questions.get(rand) + "?";
-		answers = NOC3.getAllKeysWithFieldValueNon("Character", questions.get(rand));
-		qandA[1] = "" + answers.firstElement();
-		wrongs = NOC3.getAllKeysWithoutFieldValue("Character", questions.get(rand));
-		int rand2 = 0;
-		for(int i = 2; i < 5; i++)
+
+		if(chance == 0)
 		{
-			rand2 = DICE.nextInt(wrongs.size() - 2) + 1;
-			String temp = wrongs.get(rand2);
-			qandA[i] = temp;
+			questions = NOC.getAllKeys("Opponent");
+			int rand = 0;
+			rand = DICE.nextInt(questions.size() - 2) + 1;
+			qandA[0] = "Which of the following is an opponet(s) of " + questions.get(rand) + "?";
+			answers = NOC3.getAllKeysWithFieldValueNon("Character", questions.get(rand));
+			qandA[1] = "" + answers.firstElement();
+			wrongs = NOC3.getAllKeysWithoutFieldValue("Character", questions.get(rand));
+			int rand2 = 0;
+			for (int i = 2; i < 5; i++) {
+				rand2 = DICE.nextInt(wrongs.size() - 2) + 1;
+				String temp = wrongs.get(rand2);
+				qandA[i] = temp;
+			}
+		}
+
+		else if(chance == 1)
+		{
+			questions = NOC.getAllKeys("Vehicle of Choice");
+			int rand = 0;
+			rand = DICE.nextInt(questions.size()-2)+1;
+			qandA[0] = questions.get(rand) + "is associated with which of the following modes of transport?";
+			answers = NOC2.getAllKeysWithFieldValueNon("Character", questions.get(rand));
+			qandA[1] = "" + answers.firstElement();
+			wrongs = NOC2.getAllKeysWithoutFieldValue("Character", questions.get(rand));
+			int rand2 = 0;
+			for (int i = 2; i < 5; i++)
+			{
+				rand2 = DICE.nextInt(wrongs.size() - 2) + 1;
+				String temp = wrongs.get(rand2);
+				qandA[i] = temp;
+			}
+		}
+
+		else if(chance == 2)
+		{
+			questions = NOC.getAllKeys("Creator");
+			int rand = 0;
+			rand = DICE.nextInt(questions.size()-2)+1;
+			qandA[0] = questions.get(rand) + " is a creation of which of the following?";
+			answers = NOC6.getAllKeysWithFieldValueNon("Character", questions.get(rand));
+			qandA[1] = "" + answers.firstElement();
+			wrongs = NOC6.getAllKeysWithoutFieldValue("Character", questions.get(rand));
+			int rand2 = 0;
+			for (int i = 2; i < 5; i++)
+			{
+				rand2 = DICE.nextInt(wrongs.size() - 2) + 1;
+				String temp = wrongs.get(rand2);
+				qandA[i] = temp;
+			}
+		}
+		else if(chance == 3)
+		{
+			questions = NOC.getAllKeys("Portrayed By");
+			int rand = 0;
+			rand = DICE.nextInt(questions.size()-2)+1;
+			qandA[0] = questions.get(rand) + " is portrayed by which of the following?";
+			answers = NOC7.getAllKeysWithFieldValueNon("Character", questions.get(rand));
+			qandA[1] = "" + answers.firstElement();
+			wrongs = NOC7.getAllKeysWithoutFieldValue("Character", questions.get(rand));
+			int rand2 = 0;
+			for (int i = 2; i < 5; i++)
+			{
+				rand2 = DICE.nextInt(wrongs.size() - 2) + 1;
+				String temp = wrongs.get(rand2);
+				qandA[i] = temp;
+			}
 		}
 
 		return qandA;
@@ -416,10 +474,13 @@ public class PersonOfInterest
 
 
 //////////////////////////////////////////////////////////////////////////
-		String[] str1 = ps.Question();
-		for(String str: str1)
-		{
-			System.out.print(str + "\n");
+		int j = 0;
+		while(j < 1000) {
+			String[] str1 = ps.Question();
+			for (String str : str1) {
+				System.out.print(str + "\n");
+			}
+			j++;
 		}
 //		  do this brian to call the questions
 //////////////////////////////////////////////////////////////////////////
