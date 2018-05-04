@@ -119,7 +119,7 @@ public class Board
 	{
 		String stationName = " Station";
 		
-		stationName = new PersonOfInterest().stations().get(0) + stationName;
+		stationName = new PersonOfInterest().stations() + stationName;
 		
 		return new Station(stationName);
 	}
