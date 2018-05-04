@@ -30,10 +30,8 @@ public class Panopoly
 	{
 		board = new Board(numLocations);
 		SetupGUI.PlayerCountGui(this);
-		
-		startTime = System.currentTimeMillis();
 
-		countdownTimer = new Timer(10 * 60 * 10, null);
+		countdownTimer = new Timer(300000, null);	//5 minute countdown
 		countdownTimer.setRepeats(false);
 	}
 	
@@ -103,7 +101,6 @@ public class Panopoly
 		return players.get((players.indexOf(currentPlayer)+1)%players.size());
 	}
 	
-	//TO DO: DRAW CARD
 	private String getSquareAction()
 	{
 		Locatable square = board.getLocation(currentPlayer.getPosition());
@@ -129,11 +126,6 @@ public class Panopoly
 			currentPlayer.sendToJail();
 			ret = "\n" + currentPlayer.getIdentifier() + " has landed on Go to Jail and been sent to jail.";
 		}
-		
-		else if(square instanceof CommunityChest || square instanceof Chance)
-		{
-			ret += deck.getCard(this);
-		}
 
 		return ret;
 	}
@@ -147,6 +139,7 @@ public class Panopoly
 			}};
 			
 		countdownTimer.addActionListener(timerListener);
+		startTime = System.currentTimeMillis();
 		countdownTimer.start();
 		updateAction("COUNTDOWN STARTED");
 		updateAction("Elapsed Time in secs: " + (System.currentTimeMillis() - startTime) / 1000);
