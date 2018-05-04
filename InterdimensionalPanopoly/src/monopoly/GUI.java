@@ -4,6 +4,7 @@ import interfaces.Groupable;
 import interfaces.InteractionAPI;
 import interfaces.Locatable;
 import interfaces.Rentable;
+import org.omg.Messaging.SYNC_WITH_TRANSPORT;
 
 import javax.swing.*;
 
@@ -70,7 +71,13 @@ class GUI implements InteractionAPI {
         BOARD_SIZE=BoardSize;
         mainFrame = new JFrame("Interdimensional Panopoly: "+assignedPlayer.getIdentifier());
         mainFrame.setSize(FRAME_SIZE);
-        mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        mainFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        mainFrame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                leaveGameFunction();
+            }
+        });
         LocationLabels=new LocationLabel[BOARD_SIZE];
         MainPane = new JLayeredPane();
         MainPane.setLayout(null);
@@ -218,6 +225,7 @@ class GUI implements InteractionAPI {
         panopoly.getCurrentPlayer().releaseFromJail();
         noQuestion=true;
         gui.hideAnswers();
+        setSelectedLabel(null);
     }
 
     @Override
@@ -226,6 +234,7 @@ class GUI implements InteractionAPI {
         panopoly.startPlayerTurn(panopoly.getNextPlayer());
         noQuestion=true;
         gui.hideAnswers();
+        setSelectedLabel(null);
     }
 
     private void setupbuttons()
@@ -373,6 +382,7 @@ class GUI implements InteractionAPI {
 
     void displayCard(String msg)
     {
+        System.out.println(msg);
         setSelectedLabel(null);
         image.setVisible(false);
         JLabel card=new JLabel("<html><center>"+msg+"<br>Click to Close.</center></html>");
@@ -705,6 +715,7 @@ class GUI implements InteractionAPI {
                     @Override
                     public void mouseClicked(MouseEvent e) {
                         mainFrame.dispose();
+                        System.exit(0);
                     }
                 },this);
         exit.setVisible(true);
