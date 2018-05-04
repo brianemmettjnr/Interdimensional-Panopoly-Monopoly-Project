@@ -132,7 +132,7 @@ public class PersonOfInterest
 	{
 		Surnames();
 		int rand2 = 0;
-		String[] statNames = {"Hyperloop", "Teleportation Station", "Monorail", "Metro Station", "Jetpack Station", "Hovercar Depo", "Portal Gun Rental", "Bifrost Gate"};
+		String[] statNames = {"Hyperloop", "Teleportation Station", "Monorail", "Metro Station", "Jetpack Station", "Hovercar Depot", "Portal Gun Rental", "Bifrost Gate"};
 		rand2 = DICE.nextInt(statNames.length);
 		String TranLink = Surnames() + " " + statNames[rand2];
 		return TranLink;
