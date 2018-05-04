@@ -7,6 +7,7 @@ import java.util.Set;
 import java.util.Vector;
 
 import monopoly.Card;
+import monopoly.Dice;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -134,6 +135,15 @@ public class PersonOfInterest
 		
 		stationNames.add(stationName);
 		return stationName;
+	}
+
+	public String utility()
+	{
+		String[] utilityNames = {"cryptocurrency enchanges", "data bank", "hydroelectric dam", "wind turbines", "nuclear power station", "lightning farm", "solar panels"};
+		int rand = 0;
+		rand = DICE.nextInt(utilityNames.length);
+		String utility = stations() + " " + utilityNames[rand];
+		return utility;
 	}
 
 	public ArrayList<String> placenames (ArrayList<String> locations)
@@ -460,8 +470,8 @@ public class PersonOfInterest
 	{
 		PersonOfInterest ps = new PersonOfInterest();
 //		int j = 0;
-
-		System.out.print(ps.stations());
+		System.out.print(ps.stations() + "\n");
+		System.out.print(ps.utility());
 //		while(j < 1000)
 //		{
 //			String[] str1 = ps.Question();
