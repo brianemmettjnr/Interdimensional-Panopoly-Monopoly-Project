@@ -16,12 +16,14 @@ public class Card
 	
 	public Card(int type, String message, int consequence)
 	{
+		this.type = type;
 		this.message = message;
 		this.consequence = consequence;
 	}
 	
 	public Card(int type, String message)
 	{
+		this.type = type;
 		this.message = message;
 	}
 	
@@ -30,7 +32,6 @@ public class Card
 		return message;
 	}
 	
-	//TO DO: GOOJ AND DOOMSDAY
 	void performConsequence(Panopoly panopoly)
 	{
 		switch(type) 

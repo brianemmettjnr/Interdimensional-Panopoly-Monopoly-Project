@@ -142,7 +142,7 @@ class LocationLabel
         }
         else if(location instanceof TaxableProperty)
         {
-            HTML+="Tax: £"+((TaxableProperty) location).getFlatAmount()+"<br>";
+            HTML+="Tax: Q"+((TaxableProperty) location).getFlatAmount()+"<br>";
         }
         boolean playerOnTile=false;
         for(Player player:gui.getPlayers())
