@@ -57,7 +57,7 @@ public class PersonOfInterest
 	private static Vector<String> stations			= null;
 
 	public static ArrayList<String> locations = new ArrayList<String>();
-	public static ArrayList<String> stationName = new ArrayList<String>();
+	public static ArrayList<String> stationNames = new ArrayList<String>();
 	Set<String> removes = new HashSet<>();
 	public static ArrayList<String> places = new ArrayList<String>();
 
@@ -120,16 +120,19 @@ public class PersonOfInterest
 
 	}
 
-	public ArrayList<String> stations()
+	public String stations()
 	{
 		stations 	= NOC.getAllKeys("Character");
 		int rand = 0;
-		for(int i = 0; i < stations.size(); i++)
-		{
+		String stationName = "";
+
+		do {
 			rand = DICE.nextInt(stations.size() - 2) + 1;
 			String hold[] = stations.get(rand).split(" ");
-			stationName.add(hold[hold.length-1]);
-		}
+			stationName = hold[hold.length-1];
+		}	while(stationNames.contains(stationName));
+		
+		stationNames.add(stationName);
 		return stationName;
 	}
 
