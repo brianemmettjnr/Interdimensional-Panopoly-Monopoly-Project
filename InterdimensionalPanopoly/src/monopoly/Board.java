@@ -119,9 +119,7 @@ public class Board
 	
 	private Station generateStation()
 	{
-		String stationName = " Station";
-		
-		stationName = ps.stations() + stationName;
+		String stationName = ps.TransportLinks();
 		
 		return new Station(stationName);
 	}
