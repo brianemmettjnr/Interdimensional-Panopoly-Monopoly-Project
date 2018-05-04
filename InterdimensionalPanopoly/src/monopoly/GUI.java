@@ -343,7 +343,6 @@ class GUI implements InteractionAPI {
                     noQuestion=false;
 
                     String[] question =personOfInterest.Question();
-                    questionWindow.setText("<html><center>" + question[0] + "</center></html>");
                     int rand = ThreadLocalRandom.current().nextInt(0, 3 + 1);
                     int wrongcount = 1;
                     for (int i = 0; i < 4; i++) {
@@ -357,6 +356,7 @@ class GUI implements InteractionAPI {
                             wrongcount++;
                         }
                     }
+                    questionWindow.setText("<html><center>" + question[0] + "</center></html>");
 
                 }
                 else
@@ -368,9 +368,13 @@ class GUI implements InteractionAPI {
         else if((getLocationLabel(panopoly.getCurrentPlayer().getPosition()).getLocation() instanceof CommunityChest ||
                 getLocationLabel(panopoly.getCurrentPlayer().getPosition()).getLocation() instanceof Chance )&&panopoly.getCurrentPlayer()==assignedPlayer)
         {
+            setSelectedLabel(null);
+            setSelectedLabel(getLocationLabel(panopoly.getCurrentPlayer().getPosition()));
+            locationWindow.setVisible(false);
             String msg=deck.getCard(panopoly);
             questionWindow.setText("<html><center>" + msg + "</center></html>");
             questionWindow.setVisible(true);
+            questionWindow.setOpaque(true);
         }
 
         //leaveButton.setVisible(!rollCommand&&!endCommand);
