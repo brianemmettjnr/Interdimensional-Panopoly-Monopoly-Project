@@ -54,8 +54,10 @@ public class PersonOfInterest
 	private static Vector<String> questions			= null;
 	private static Vector<String> answers			= null;
 	private static Vector<String> wrongs			= null;
+	private static Vector<String> stations			= null;
 
 	public static ArrayList<String> locations = new ArrayList<String>();
+	public static ArrayList<String> stationName = new ArrayList<String>();
 	Set<String> removes = new HashSet<>();
 	public static ArrayList<String> places = new ArrayList<String>();
 
@@ -116,6 +118,19 @@ public class PersonOfInterest
 		locations.addAll(removes); // removes duplicates
 		locations.remove(0);		
 
+	}
+
+	public ArrayList<String> stations()
+	{
+		stations 	= NOC.getAllKeys("Character");
+		int rand = 0;
+		for(int i = 0; i < stations.size(); i++)
+		{
+			rand = DICE.nextInt(stations.size() - 2) + 1;
+			String hold[] = stations.get(rand).split(" ");
+			stationName.add(hold[hold.length-1]);
+		}
+		return stationName;
 	}
 
 	public ArrayList<String> placenames (ArrayList<String> locations)
@@ -387,7 +402,7 @@ public class PersonOfInterest
 			questions = NOC.getAllKeys("Vehicle of Choice");
 			int rand = 0;
 			rand = DICE.nextInt(questions.size()-2)+1;
-			qandA[0] = questions.get(rand) + "is associated with which of the following modes of transport?";
+			qandA[0] = questions.get(rand) + " is associated with which of the following modes of transport?";
 			answers = NOC2.getAllKeysWithFieldValueNon("Character", questions.get(rand));
 			qandA[1] = "" + answers.firstElement();
 			wrongs = NOC2.getAllKeysWithoutFieldValue("Character", questions.get(rand));
@@ -440,47 +455,19 @@ public class PersonOfInterest
 
 	public static void main(String[] args)
 	{
-		PersonOfInterest ps = new PersonOfInterest();	
-		System.out.println(locations + "\n");
-		System.out.println(ps.CriminalCardsBalancePos());
-		System.out.println(ps.CriminalCardsPosition());
-		System.out.println(ps.CriminalCardsBalanceNeg());
-		System.out.println(ps.Opponents());
-		System.out.println(ps.Murderer());
-		System.out.println(ps.Wealth());
-		System.out.println(ps.Blackmailer());
-		System.out.println(ps.BlackmailerBr());
-		System.out.println(ps.Weapons());
-		System.out.println(ps.CarCrash()); // 10 here
-		System.out.println(ps.Inherit());
-		System.out.println(ps.Pawns());
-		System.out.println(ps.Parties());
-		System.out.println(ps.Wedding());
-		System.out.println(ps.Scammed()); // 15 here
-		System.out.println(ps.Lectured());
-		System.out.println(ps.Villainy());
-		System.out.println(ps.Terrorism());
-		System.out.println(ps.Royalty());
-		System.out.println(ps.Sports()); // 20 here
-		System.out.println(ps.TestDrive());
-		System.out.println(ps.TimeTravel() + "\n");
-		System.out.println(ps.DoomsDay());
-		System.out.print("\n");
-		//System.out.print(questions);
-		System.out.print("\n");
+		PersonOfInterest ps = new PersonOfInterest();
+//		int j = 0;
 
+		System.out.print(ps.stations());
+//		while(j < 1000)
+//		{
+//			String[] str1 = ps.Question();
+//			for (String str : str1) {
+//				System.out.print(str + "\n");
+//			}
+//			j++;
+//		}
 
-//////////////////////////////////////////////////////////////////////////
-		int j = 0;
-		while(j < 1000) {
-			String[] str1 = ps.Question();
-			for (String str : str1) {
-				System.out.print(str + "\n");
-			}
-			j++;
-		}
-//		  do this brian to call the questions
-//////////////////////////////////////////////////////////////////////////
 	}
 		
 }
