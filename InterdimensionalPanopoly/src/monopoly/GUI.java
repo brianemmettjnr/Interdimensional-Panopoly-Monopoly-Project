@@ -30,6 +30,7 @@ class GUI implements InteractionAPI {
     private JLabel image;
     private ArrayList<Player> players=new ArrayList<>();
     private boolean noQuestion=true;
+    private CardDeck deck=new CardDeck();
 	
     boolean rollCommand,endCommand;
 	public GUIButton helpButton,buyButton, rollButton, endButton, mortgageButton,
@@ -364,9 +365,12 @@ class GUI implements InteractionAPI {
                         button.setVisible(true);
                 }
         }
-        else if(getLocationLabel(panopoly.getCurrentPlayer().getPosition()).getLocation() instanceof CommunityChest || getLocationLabel(panopoly.getCurrentPlayer().getPosition()).getLocation() instanceof Chance )
+        else if((getLocationLabel(panopoly.getCurrentPlayer().getPosition()).getLocation() instanceof CommunityChest ||
+                getLocationLabel(panopoly.getCurrentPlayer().getPosition()).getLocation() instanceof Chance )&&panopoly.getCurrentPlayer()==assignedPlayer)
         {
-
+            String msg=deck.getCard(panopoly);
+            questionWindow.setText("<html><center>" + msg + "</center></html>");
+            questionWindow.setVisible(true);
         }
 
         //leaveButton.setVisible(!rollCommand&&!endCommand);

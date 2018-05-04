@@ -122,11 +122,6 @@ public class Panopoly
 			currentPlayer.sendToJail();
 			ret = "\n" + currentPlayer.getIdentifier() + " has landed on Go to Jail and been sent to jail.";
 		}
-		
-		else if(square instanceof CommunityChest || square instanceof Chance)
-		{
-			ret += deck.getCard(this);
-		}
 
 		return ret;
 	}
