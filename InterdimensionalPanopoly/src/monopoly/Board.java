@@ -17,6 +17,8 @@ public class Board
 	LinkedHashMap<String, ArrayList<String>> possibleLocations = new LinkedHashMap<String, ArrayList<String>>();
 	private int index = 0;
 	
+	private PersonOfInterest ps = new PersonOfInterest();
+	
 	private int minPrice = 50;
 	private int maxPrice = 100;
 	
@@ -37,11 +39,11 @@ public class Board
 			else if(i == numLocations/4)
 				locations.add(new NamedLocation("Jail/Just Visiting"));
 			else if(i == numLocations/4 + 2)
-				locations.add(new Utility("Utility1"));
+				locations.add(generateUtility());
 			else if(i == (numLocations*3)/4)
 				locations.add(new NamedLocation("Go to Jail"));
 			else if(i == ((numLocations*3)/4)-2)
-				locations.add(new Utility("Utility2"));
+				locations.add(generateUtility());
 			else if(i == numLocations/2)
 				locations.add(new NamedLocation("Free Parking"));
 			else if(i == 4)
@@ -92,7 +94,7 @@ public class Board
 	
 	private void generateLocations()
 	{
-		ArrayList<String> locs = new PersonOfInterest().locations;
+		ArrayList<String> locs = ps.locations;
 		String[] splitLoc = null;
 		
 		Collections.shuffle(locs);
@@ -119,9 +121,14 @@ public class Board
 	{
 		String stationName = " Station";
 		
-		stationName = new PersonOfInterest().stations() + stationName;
+		stationName = ps.stations() + stationName;
 		
 		return new Station(stationName);
+	}
+	
+	private Utility generateUtility()
+	{
+		return new Utility(ps.utility());
 	}
 	
 	private Group getNextSet()
