@@ -6,7 +6,6 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import interfaces.Groupable;
 import interfaces.Identifiable;
-import interfaces.Rentable;
 
 public class Group implements Identifiable
 {
