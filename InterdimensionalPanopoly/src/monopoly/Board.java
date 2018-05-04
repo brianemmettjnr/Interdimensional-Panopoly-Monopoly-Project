@@ -115,6 +115,9 @@ public class Board
 				possibleLocations.put(group, temp);
 			}
 		}
+		
+		System.out.println(possibleLocations.get("American politics"));
+		System.out.println(possibleLocations.get("American politics").size());
 	}
 	
 	private Station generateStation()
