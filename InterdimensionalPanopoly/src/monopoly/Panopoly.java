@@ -2,14 +2,7 @@ package monopoly;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.sql.Time;
 import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
-
 import javax.swing.Timer;
 
 import interfaces.*;
@@ -24,7 +17,7 @@ public class Panopoly
 	private boolean clockwiseMovement = true;
 	private long startTime;
 	private Timer countdownTimer;
-	private CommunityChest deck = new CommunityChest();
+	private CardDeck deck = new CardDeck();
 	
 	Panopoly(int numLocations)
 	{
@@ -128,7 +121,6 @@ public class Panopoly
 		{
 			currentPlayer.sendToJail();
 			ret = "\n" + currentPlayer.getIdentifier() + " has landed on Go to Jail and been sent to jail.";
-			//ret += startPlayerTurn(getNextPlayer());
 		}
 		
 		else if(square instanceof CommunityChest || square instanceof Chance)

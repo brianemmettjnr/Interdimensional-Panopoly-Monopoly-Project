@@ -1,5 +1,8 @@
 package interfaces;
 
-public interface Cardable {
-	public Actionable getCardAction();
+import monopoly.Panopoly;
+
+public interface Cardable 
+{
+	public String getCard(Panopoly panopoly);
 }
