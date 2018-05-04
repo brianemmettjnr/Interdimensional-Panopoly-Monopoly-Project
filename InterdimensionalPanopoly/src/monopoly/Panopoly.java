@@ -24,6 +24,7 @@ public class Panopoly
 	private boolean clockwiseMovement = true;
 	private long startTime;
 	private Timer countdownTimer;
+	private CommunityChest deck = new CommunityChest();
 	
 	Panopoly(int numLocations)
 	{
@@ -86,6 +87,11 @@ public class Panopoly
 			currentPlayer.sendToJail();
 			ret = "\n" + currentPlayer.getIdentifier() + " has landed on Go to Jail and been sent to jail.";
 			//ret += startPlayerTurn(getNextPlayer());
+		}
+		
+		else if(square instanceof CommunityChest || square instanceof Chance)
+		{
+			ret += deck.getCard(this);
 		}
 
 		return ret;

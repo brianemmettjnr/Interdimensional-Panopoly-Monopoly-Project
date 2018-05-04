@@ -3,7 +3,6 @@ package monopoly;
 import java.util.ArrayList;
 
 import interfaces.Groupable;
-import interfaces.Identifiable;
 import interfaces.Ownable;
 import interfaces.Playable;
 import interfaces.Rentable;
@@ -22,6 +21,7 @@ public class Player extends Thread implements Playable {
 	boolean canRoll = true;
 	boolean rollComplete = false;
 	private boolean inJail = false;
+	private int GOOJFree;
 	int doubles;
 	
 	public Player(String name, int imageIndex, int playerIndex,Panopoly panopoly)
@@ -33,6 +33,7 @@ public class Player extends Thread implements Playable {
 		balance = STARTING_BALANCE;
 		position = 0;
 		doubles = 0;
+		GOOJFree = 0;
 	}
 
 	@Override
@@ -81,7 +82,6 @@ public class Player extends Thread implements Playable {
 	
 	public String move(int squares, boolean clockwise)
 	{
-		boolean passedGO = false;
 		String ret = "";
 		
 		if(clockwise)
@@ -188,6 +188,25 @@ public class Player extends Thread implements Playable {
 	}
 	
 	//JAIL METHODS
+	public void addGOOJFree()
+	{
+		GOOJFree += 1;
+	}
+	
+	public void useGOOJFree()
+	{
+		GOOJFree -= 1;
+		releaseFromJail();
+	}
+	
+	public boolean hasGOOJFree()
+	{
+		if(GOOJFree == 0)
+			return false;
+		else
+			return true;
+	}
+	
 	public boolean isInJail()
 	{
 		return inJail;
