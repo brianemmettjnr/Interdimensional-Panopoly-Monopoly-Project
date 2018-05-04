@@ -364,6 +364,11 @@ class GUI implements InteractionAPI {
                         button.setVisible(true);
                 }
         }
+        else if(getLocationLabel(panopoly.getCurrentPlayer().getPosition()).getLocation() instanceof CommunityChest || getLocationLabel(panopoly.getCurrentPlayer().getPosition()).getLocation() instanceof Chance )
+        {
+
+        }
+
         //leaveButton.setVisible(!rollCommand&&!endCommand);
     }
 
