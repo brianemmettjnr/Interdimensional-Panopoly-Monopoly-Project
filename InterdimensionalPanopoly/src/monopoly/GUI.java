@@ -1,5 +1,4 @@
 package monopoly;
-import base.KnowledgeBaseModule;
 import base.PersonOfInterest;
 import interfaces.Groupable;
 import interfaces.InteractionAPI;
@@ -63,7 +62,7 @@ class GUI implements InteractionAPI {
 
     GUI(int BoardSize,Panopoly panopoly,ArrayList<Player> players,Player player)
     {
-        FRAME_SIZE=new Dimension((int)(50+(FRAME_SIZE.width/2)),(int)(50+FRAME_SIZE.height/2));//temp code
+        //FRAME_SIZE=new Dimension((int)(50+(FRAME_SIZE.width/2)),(int)(50+FRAME_SIZE.height/2));//temp code
         this.setPanopoly(panopoly);
         this.setPlayers(players);
         assignedPlayer=player;
@@ -134,7 +133,10 @@ class GUI implements InteractionAPI {
         questionWindow.setVerticalAlignment(JLabel.TOP);
         questionWindow.setVisible(false);
         MainPane.add(questionWindow);
-        mainFrame.setVisible(true);
+        if(assignedPlayer instanceof GameBot)
+            mainFrame.setVisible(false);
+        else
+            mainFrame.setVisible(true);
         mainFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         setupbuttons();
 
@@ -201,7 +203,8 @@ class GUI implements InteractionAPI {
 
     @Override
     public void leaveGameFunction() {
-        panopoly.leaveGame();
+        panopoly.leaveGame(assignedPlayer);
+        mainFrame.dispose();
     }
 
     @Override
@@ -335,7 +338,8 @@ class GUI implements InteractionAPI {
                 setSelectedLabel(getLocationLabel(panopoly.getCurrentPlayer().getPosition()));
                 if(noQuestion) {
                     noQuestion=false;
-                    String[] question = personOfInterest.Question();
+                    //todo fix
+                    String[] question = {"1","2","3","4","Correct"};//personOfInterest.Question();
                     questionWindow.setText("<html><center>" + question[0] + "</center></html>");
                     int rand = ThreadLocalRandom.current().nextInt(0, 3 + 1);
                     int wrongcount = 1;
