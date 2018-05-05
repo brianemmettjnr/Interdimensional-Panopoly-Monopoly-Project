@@ -108,7 +108,7 @@ public class PersonOfInterest
 		locations.clear();
 		locations.addAll(removes); // removes duplicates
 		locations.remove(0);		
-
+		System.out.println(locations);
 	}
 
 	public String Surnames()

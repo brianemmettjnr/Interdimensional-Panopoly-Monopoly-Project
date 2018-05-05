@@ -20,10 +20,13 @@ public class GameBot extends Player{
     }
 
     public void makeGameDecision(){
-
-        if(gui.rollButton.isVisible()) {
+        if(this.isInJail())
+        {
+            gui.answerCorrectlyFunction();
+        }
+        else if(gui.rollButton.isVisible()) {
             gui.rollFunction();
-        } else if(gui.buyButton.isVisible() && balance>90){
+        } else if(gui.buyButton.isVisible()){
             gui.buyPropertyFunction();
         } else if(gui.endButton.isVisible()){
             gui.endTurnFunction();
