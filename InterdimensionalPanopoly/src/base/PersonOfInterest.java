@@ -1,7 +1,6 @@
 package base;
 
 import monopoly.Card;
-
 import java.util.*;
 
 public class PersonOfInterest
@@ -37,8 +36,8 @@ public class PersonOfInterest
 	private static Vector<String> scam				= null;
 	private static Vector<String> lecture			= null;
 	private static Vector<String> villain			= null;
-	private static Vector<String> terrorist			= null; // only 3 variations
-	private static Vector<String> royalty			= null; // only 4 variations
+	private static Vector<String> terrorist			= null;
+	private static Vector<String> royalty			= null;
 	private static Vector<String> sportstar			= null;
 	private static Vector<String> tests				= null;
 	private static Vector<String> magic				= null;
@@ -468,8 +467,7 @@ public class PersonOfInterest
 		return qandA;
 	}
 
-	public static void main(String[] args)
-	{
+	public static void main(String[] args) {
 		PersonOfInterest ps = new PersonOfInterest();
 //		int j = 0;
 		System.out.print(ps.TransportLinks() + "\n");
@@ -484,7 +482,4 @@ public class PersonOfInterest
 //		}
 
 	}
-		
 }
-
-// station names as surnames
