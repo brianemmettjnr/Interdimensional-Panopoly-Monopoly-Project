@@ -36,6 +36,7 @@ class GUI implements InteractionAPI {
     private JLabel secondAction=new JLabel("",SwingConstants.CENTER);
     private JLabel thirdAction=new JLabel("",SwingConstants.CENTER);
     private JLabel auctionTimer=new JLabel("",SwingConstants.CENTER);
+    private JLabel doomsdayTimer=new JLabel("",SwingConstants.CENTER);
     private JTextField bidBox=new JTextField();
 
     //Arrays of objects
@@ -45,15 +46,15 @@ class GUI implements InteractionAPI {
 
     //Buttons
     private boolean rollCommand,endCommand;
-    private GUIButton buyButton;
-    private GUIButton rollButton;
-    private GUIButton endButton;
+    GUIButton buyButton;
+    GUIButton rollButton;
+    GUIButton endButton;
     private GUIButton mortgageButton;
     private GUIButton leaveButton;
     private GUIButton redeemButton;
     private GUIButton buildButton;
-    private GUIButton demolishButton;
-    private GUIButton quitButton;
+    GUIButton demolishButton;
+    GUIButton quitButton;
     private GUIButton[] answers =new GUIButton[4];
 	private MouseAdapter correct=new MouseAdapter() {
         @Override
@@ -233,6 +234,13 @@ class GUI implements InteractionAPI {
         auctionTimer.setForeground(Color.WHITE);
         auctionTimer.setVisible(false);
         auctionTimer.setBorder(BorderFactory.createLineBorder(Color.red.brighter(),1));
+
+        doomsdayTimer.setBounds((int)(10+(OFFSET *((squaresOnSide -3))))+OFFSET,-20+(squaresOnSide -1)* OFFSET, OFFSET,30);
+        doomsdayTimer.setFont(new Font("Digital",Font.BOLD,20));
+        doomsdayTimer.setBackground(Color.BLACK);
+        doomsdayTimer.setForeground(Color.WHITE);
+        doomsdayTimer.setVisible(false);
+        doomsdayTimer.setBorder(BorderFactory.createLineBorder(Color.red.brighter(),1));
     }
     private void setupButtons()
     {
@@ -449,7 +457,6 @@ class GUI implements InteractionAPI {
 
     void displayCard(String msg)
     {
-        System.out.println(msg);
         setSelectedLabel(null);
         image.setVisible(false);
         JLabel card=new JLabel("<html><center>"+msg+"<br>Click to Close.</center></html>");
@@ -519,6 +526,10 @@ class GUI implements InteractionAPI {
     void updateAuctionClock(String time)
     {
         auctionTimer.setText("<html><center>"+time+"</center></html>");
+    }
+    void updateDoomsdayClock(String time)
+    {
+
     }
 
     void endAuction()
