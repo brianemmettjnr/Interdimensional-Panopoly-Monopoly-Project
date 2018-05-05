@@ -250,7 +250,8 @@ public class Panopoly
 	
 	public void leaveGame(Player player)
 	{
-
+		if(players.size()==1)
+			return;
 		for(Rentable property: player.getProperties())
 		{
 			property.reset();
