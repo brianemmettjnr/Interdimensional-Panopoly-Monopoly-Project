@@ -157,7 +157,7 @@ public class Panopoly
 	public void startPlayerTurn(Player player)
 	{
 		if(player.getClass()==GameBot.class){
-			System.out.println(player.getIdentifier());
+			//System.out.println(player.getIdentifier());
 			currentPlayer.doubles = 0;
 			currentPlayer.canRoll = true;
 			currentPlayer.rollComplete = false;

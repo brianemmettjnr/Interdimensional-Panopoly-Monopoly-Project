@@ -4,7 +4,7 @@ import interfaces.Groupable;
 import interfaces.InteractionAPI;
 import interfaces.Locatable;
 import interfaces.Rentable;
-import org.omg.Messaging.SYNC_WITH_TRANSPORT;
+//import org.omg.Messaging.SYNC_WITH_TRANSPORT;
 
 import javax.swing.*;
 
