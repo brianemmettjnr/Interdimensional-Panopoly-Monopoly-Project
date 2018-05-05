@@ -58,11 +58,16 @@ class GUI implements InteractionAPI {
     private JLabel latestAction=new JLabel("",SwingConstants.CENTER);
     private JLabel secondAction=new JLabel("",SwingConstants.CENTER);
     private JLabel thirdAction=new JLabel("",SwingConstants.CENTER);
+    
+    private JPanel cardPanel = new JPanel();
+    
+    
+    
     private GUI gui=this;
-
+    
     GUI(int BoardSize,Panopoly panopoly,ArrayList<Player> players,Player player)
     {
-        //FRAME_SIZE=new Dimension((int)(50+(FRAME_SIZE.width/2)),(int)(50+FRAME_SIZE.height/2));//temp code
+        FRAME_SIZE=new Dimension((int)(50+(FRAME_SIZE.width/2)),(int)(50+FRAME_SIZE.height/2));//temp code
         this.setPanopoly(panopoly);
         this.setPlayers(players);
         assignedPlayer=player;
@@ -99,8 +104,7 @@ class GUI implements InteractionAPI {
         image.setBounds(10+2*Offset,10+Offset,scale,scale);
         image.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
         MainPane.add(image);
-
-
+        
         locationWindow.setBounds(10+3*Offset,10+Offset,Offset*(SquaresOnSide-6),Offset*(SquaresOnSide-5));
         locationWindow.setBackground(Color.WHITE);
         locationWindow.setForeground(Color.BLACK);
@@ -129,7 +133,13 @@ class GUI implements InteractionAPI {
         latestAction.setForeground(Color.white);
         latestAction.setText("Welcome To Interdimensional Panopoly");
         MainPane.add(latestAction);
-
+        
+        
+        
+        MainPane.add(cardPanel);
+        cardPanel.setVisible(false);
+        cardPanel.setBounds(10+Offset+10,locationWindow.getY()+locationWindow.getHeight(),-20+(SquaresOnSide-2)*Offset,Offset);
+        cardPanel.setLayout(new OverlayLayout(cardPanel));
 
 
         questionWindow.setBounds(10+Offset+10,10+Offset+10,-20+(SquaresOnSide-2)*Offset,80);
@@ -387,12 +397,17 @@ class GUI implements InteractionAPI {
         card.setBounds(10+Offset+10,locationWindow.getY()+locationWindow.getHeight(),-20+(SquaresOnSide-2)*Offset,Offset);
         card.setVisible(true);
         card.setOpaque(true);
-        getMainPane().add(card);
+        //getMainPane().add(card);
+        cardPanel.add(card);
+        cardPanel.setVisible(true);
         card.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 card.setVisible(false);
-                getMainPane().remove(card);
+                //getMainPane().remove(card);
+                cardPanel.remove(card);
+                if(cardPanel.getComponentCount() == 0)
+                	cardPanel.setVisible(false);
                 setSelectedLabel(null);
                 setSelectedLabel(getLocationLabel(assignedPlayer.getPosition()));
             }

@@ -53,7 +53,7 @@ public class Board
 			//one in 8 chance that property is station, 1 in 4 card or 5 in 8 investment
 			else
 			{
-				int rnd = ThreadLocalRandom.current().nextInt(1, 4 + 1);//todo fix
+				int rnd = ThreadLocalRandom.current().nextInt(1, 3 + 1);//todo fix
 				if(rnd == 1) 
 					locations.add(generateStation());
 				else if(rnd == 2)
