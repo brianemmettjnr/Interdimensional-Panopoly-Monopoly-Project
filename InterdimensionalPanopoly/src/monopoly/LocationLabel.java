@@ -11,8 +11,6 @@ import static java.awt.Color.BLACK;
 
 class LocationLabel
 {
-    private final int width;
-    private final int height;
     private GUI gui;
     private Border BorderColour=BorderFactory.createLineBorder(BLACK, 2);
     private JLabel label=new JLabel();
@@ -29,10 +27,8 @@ class LocationLabel
         gui = guiObj;
         this.x=x;
         this.y=y;
-        this.width=gui.getOffset()*(1+((int)(index/(gui.getSquaresOnSide()-1)))%2);
-        this.height=gui.getOffset()*(1+(1+((int)(index/(gui.getSquaresOnSide()-1)))%2)%2);
         String name=location.getIdentifier().replace(" ","\n");
-        String text="<html><center><p1><body style='width: "+gui.getOffset()+"px'>"+ name + "</center></body></p1></html>";
+        String text="<html><center><p1><body style='width: "+gui.getOFFSET()+"px'>"+ name + "</center></body></p1></html>";
         label = new JLabel(text, SwingConstants.CENTER);
         label.addMouseListener(new MouseAdapter() {
             @Override
@@ -49,9 +45,8 @@ class LocationLabel
             }
         });
         if(location instanceof InvestmentProperty)
-        {
-            label.setBounds(x, y + (gui.getOffset() / 5)-1, width, (int) (height * .9)+2);
-            colourLabel.setBounds(x, y ,width, (int) (height * .2));
+        {label.setBounds(x, y + (gui.getOFFSET() / 5)-1, gui.getOFFSET(), (int) (gui.getOFFSET() * .8)+2);
+            colourLabel.setBounds(x, y , gui.getOFFSET(), (int) (gui.getOFFSET() * .2));
             colourLabel.setBorder(BorderColour);
             colourLabel.setVisible(true);
             colourLabel.setBackground(((InvestmentProperty) location).getGroup().getColor());
@@ -59,10 +54,7 @@ class LocationLabel
             gui.getMainPane().add(colourLabel);}
 
         else {
-            if(index%(gui.getSquaresOnSide()-1)==0)//checks if corner
-                label.setBounds(x, y,2*gui.getOffset(), 2*gui.getOffset());
-            else
-                label.setBounds(x, y,width, height);
+        label.setBounds(x, y,gui.getOFFSET(), (int)(gui.getOFFSET()));
         }
         label.setMaximumSize(label.getSize());
         label.setBorder(BorderColour);
@@ -72,7 +64,7 @@ class LocationLabel
         int size = 20;
         label.setFont(new Font("Courier", Font.BOLD,  size));
 
-        while(label.getFontMetrics(new Font("Courier", Font.BOLD,  size)).stringWidth("investments") > gui.getOffset())
+        while(label.getFontMetrics(new Font("Courier", Font.BOLD,  size)).stringWidth("investments") > gui.getOFFSET())
         {
             size--;
             label.setFont(new Font("Courier", Font.BOLD,  size));
@@ -150,7 +142,7 @@ class LocationLabel
         }
         else if(location instanceof TaxableProperty)
         {
-            HTML+="Tax: £"+((TaxableProperty) location).getFlatAmount()+"<br>";
+            HTML+="Tax: Q"+((TaxableProperty) location).getFlatAmount()+"<br>";
         }
         boolean playerOnTile=false;
         for(Player player:gui.getPlayers())

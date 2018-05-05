@@ -4,7 +4,6 @@ package monopoly;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 public class GUIButton {
     private JButton button;
@@ -15,7 +14,7 @@ public class GUIButton {
         button=new JButton(htmlname);
         button.setFocusPainted(false);
         button.setVisible(false);
-        button.setBounds(x,y,gui.getOffset(),30);
+        button.setBounds(x,y,gui.getOFFSET(),30);
         button.setOpaque(true);
         button.setBorder(BorderFactory.createBevelBorder(1,Color.red,Color.red.darker()));
         button.setBackground(Color.black);

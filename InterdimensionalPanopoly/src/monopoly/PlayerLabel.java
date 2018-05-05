@@ -1,7 +1,6 @@
 package monopoly;
 
 import interfaces.Locatable;
-import interfaces.Mortgageable;
 import interfaces.Rentable;
 
 import javax.swing.*;
@@ -10,7 +9,6 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
-import java.util.concurrent.TimeUnit;
 
 import static java.awt.Color.getColor;
 import static java.awt.Color.green;
@@ -113,11 +111,11 @@ public class PlayerLabel
         Graphics g2 = bi2.createGraphics();
         image.paintIcon(null, g, 0,0);
         g2.dispose();
-        scale=(int)((gui.getOffset())*.5);
+        scale=(int)((gui.getOFFSET())*.5);
         newIcon =new ImageIcon(bi.getScaledInstance(scale,scale,1));
         positionIcon= new JLabel(newIcon);
-        positionIcon.setBounds(gui.getLocationLabel(player.getPosition()).getX()+(index%3*(gui.getOffset()/4)),
-                gui.getLocationLabel(player.getPosition()).getY()+1+(index%2*(gui.getOffset()/2)),scale,scale);
+        positionIcon.setBounds(gui.getLocationLabel(player.getPosition()).getX()+(index%3*(gui.getOFFSET()/4)),
+                gui.getLocationLabel(player.getPosition()).getY()+1+(index%2*(gui.getOFFSET()/2)),scale,scale);
         gui.getMainPane().add(positionIcon,index);
     }
      void updateLabel()
@@ -126,14 +124,14 @@ public class PlayerLabel
         int size = 32;
         balance.setFont(new Font("Times New Roman",Font.ITALIC,32));
 
-        while(balance.getFontMetrics(new Font("Times New Roman",Font.ITALIC,size)).stringWidth(balance.getText()) > gui.getOffset())
+        while(balance.getFontMetrics(new Font("Times New Roman",Font.ITALIC,size)).stringWidth(balance.getText()) > gui.getOFFSET())
         {
             size--;
             balance.setFont(new Font("Times New Roman",Font.ITALIC,size));
         }
         positionIcon.updateUI();
-        positionIcon.setBounds(gui.getLocationLabel(player.getPosition()).getX()+(index%3*(gui.getOffset()/4)),
-                gui.getLocationLabel(player.getPosition()).getY()+1+(index%2*(gui.getOffset()/2)),scale,scale);
+        positionIcon.setBounds(gui.getLocationLabel(player.getPosition()).getX()+(index%3*(gui.getOFFSET()/4)),
+                gui.getLocationLabel(player.getPosition()).getY()+1+(index%2*(gui.getOFFSET()/2)),scale,scale);
         icon.setBorder(border);
     }
 

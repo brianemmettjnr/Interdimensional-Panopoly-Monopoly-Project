@@ -1,177 +1,488 @@
 package monopoly;
+import base.PersonOfInterest;
 import interfaces.Groupable;
+import interfaces.InteractionAPI;
 import interfaces.Locatable;
 import interfaces.Rentable;
-
 import javax.swing.*;
 
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.concurrent.ThreadLocalRandom;
 
-class GUI {
+class GUI implements InteractionAPI {
 
-    private final int squaresOnSide;
-    private int BOARD_SIZE;
-    private Dimension FRAME_SIZE=Toolkit.getDefaultToolkit().getScreenSize();
-    private LocationLabel[] LocationLabels;
-    private PlayerLabel[] PlayerLabels;
-    private JLayeredPane MainPane;
-    private int Offset;
-    private LocationLabel SelectedLabel=null;
+    //game setup
     static String[] characters={"boat","car","dog","hat","iron","thimble"};
-    private JLabel image;
-    private static ArrayList<Player> players=new ArrayList<>();
-
-    boolean rollCommand,endCommand;
-	private GUIButton buyButton, rollButton, endturn, mortgageButton, redeemButton,buildButton,demoButton;
-
-    private static Panopoly panopoly;
+    static String symbol="Q";
     static BufferedImage[] images = new BufferedImage[6];
+
+    //Board Dimensions info
+    private final int squaresOnSide;
+    private int boardSize;
+    private Dimension FRAME_SIZE=Toolkit.getDefaultToolkit().getScreenSize();
+    private final int OFFSET;
+
+
+    //Board frames, panel and labels
+    private final JFrame mainFrame;
+    private JLayeredPane mainPane;
+    private JLabel image;
     private JLabel locationWindow=new JLabel(" ",SwingConstants.CENTER);
+    private JLabel questionWindow=new JLabel(" ",SwingConstants.CENTER);
     private JLabel latestAction=new JLabel("",SwingConstants.CENTER);
     private JLabel secondAction=new JLabel("",SwingConstants.CENTER);
+    private JLabel thirdAction=new JLabel("",SwingConstants.CENTER);
+    private JLabel auctionTimer=new JLabel("",SwingConstants.CENTER);
+    private JLabel doomsdayTimer=new JLabel("",SwingConstants.CENTER);
+    private JTextField bidBox=new JTextField();
+    private JPanel cardPanel = new JPanel();
+
+    //Arrays of objects
+    private LocationLabel[] locationLabels;
+    private PlayerLabel[] PlayerLabels;
+    private ArrayList<Player> players=new ArrayList<>();
+
+    //Buttons
+    private boolean rollCommand,endCommand;
+    GUIButton buyButton;
+    GUIButton rollButton;
+    GUIButton endButton;
+    private GUIButton mortgageButton;
+    private GUIButton leaveButton;
+    private GUIButton redeemButton;
+    private GUIButton buildButton;
+    GUIButton demolishButton;
+    GUIButton quitButton;
+    private GUIButton[] answers =new GUIButton[4];
+	private MouseAdapter correct=new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            answerCorrectlyFunction();
+        }
+    };
+    private MouseAdapter incorrect=new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            answerIncorrectlyFunction();
+        }
+    };
+
+    //Game instance objects
     private GUI gui=this;
+    private Player assignedPlayer;
+    private Panopoly panopoly;
+    private PersonOfInterest personOfInterest=new PersonOfInterest();
+    private LocationLabel selectedLabel =null;
+    private boolean noQuestion=true;
 
-    GUI(int BoardSize)
+    GUI(int boardSize,Panopoly panopoly,ArrayList<Player> players,Player player)
     {
-        try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); }
-            catch (ClassNotFoundException e) { e.printStackTrace(); }
-            catch (InstantiationException e) { e.printStackTrace(); }
-            catch (IllegalAccessException e) { e.printStackTrace(); }
-            catch (UnsupportedLookAndFeelException e) { e.printStackTrace(); }
-        BOARD_SIZE=BoardSize;
-        JFrame mainFrame = new JFrame("Interdimensional Panopoly");
+        //FRAME_SIZE=new Dimension((int)(50+(FRAME_SIZE.width/2)),(int)(50+FRAME_SIZE.height/2));//temp cod
+        this.panopoly=panopoly;
+        this.players=players;
+        assignedPlayer=player;
+        this.boardSize =boardSize;
+        squaresOnSide =(((this.boardSize -4)/4)+2);
+        OFFSET =((int)(FRAME_SIZE.getHeight()*.9))/ squaresOnSide;
+
+        mainFrame = new JFrame("Interdimensional Panopoly: "+assignedPlayer.getIdentifier());
         mainFrame.setSize(FRAME_SIZE);
-        mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        LocationLabels=new LocationLabel[BOARD_SIZE];
-        MainPane = new JLayeredPane();
-        MainPane.setLayout(null);
-        MainPane.setOpaque(true);
-        MainPane.setBackground(Color.red.darker().darker());
-        mainFrame.add(MainPane);
-        PlayerLabels=new PlayerLabel[players.size()];
-        squaresOnSide =(((BOARD_SIZE-4)/4)+2);
-        int frameSize=(int)(FRAME_SIZE.getHeight()*.9);
-        Offset=(frameSize)/(squaresOnSide +2);
-        PlacePlayers();
-        PlaceBoard();
-        setupbuttons();
+        mainFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        mainFrame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                leaveGameFunction();
+            }
+        });
 
-        image=new JLabel(new ImageIcon(GUI.class.getResource("Logo.png")));
-        image.setBounds((((int)(FRAME_SIZE.getHeight()*.9))/2)-190,(((int)(FRAME_SIZE.getHeight()*.9))/2)-220,400,400);
+        mainPane = new JLayeredPane();
+        mainPane.setLayout(null);
+        mainPane.setOpaque(true);
+        mainPane.setBackground(Color.red.darker().darker());
+        mainFrame.add(mainPane);
+
+        placeBoard();
+        placePlayers();
+        setupImage();
+        setupWindows();
+        setupButtons();
+
+        if(assignedPlayer instanceof GameBot)
+            mainFrame.setVisible(false);
+        else
+            mainFrame.setVisible(true);
+        mainFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+    }
+
+    private void placeBoard()
+    {
+        locationLabels =new LocationLabel[boardSize];
+        ArrayList<Locatable> Locations=panopoly.getBoard().getLocations();
+        int x=10,y=10;
+        int SquaresOnSide=(((boardSize -4)/4)+2);
+        int NumOnBoard=0;
+        while (x< OFFSET *(SquaresOnSide-1))
+        {
+            locationLabels[NumOnBoard]= new LocationLabel(x,y,NumOnBoard,this,Locations.get(NumOnBoard));
+            x+= OFFSET;
+            NumOnBoard++;
+
+        }
+        while(y<(OFFSET *(SquaresOnSide-1)))
+        {
+            locationLabels[NumOnBoard]= new LocationLabel(x,y,NumOnBoard,this,Locations.get(NumOnBoard));
+            y+= OFFSET;
+            NumOnBoard++;
+
+        }
+        while (x>= OFFSET)
+        {
+            locationLabels[NumOnBoard]= new LocationLabel(x,y,NumOnBoard,this,Locations.get(NumOnBoard));
+            x-= OFFSET;
+            NumOnBoard++;
+        }
+        while (y>= OFFSET)
+        {
+            locationLabels[NumOnBoard]= new LocationLabel(x,y,NumOnBoard,this,Locations.get(NumOnBoard));
+            y-= OFFSET;
+            NumOnBoard++;
+        }
+    }
+    private void setupImage()
+    {
+        ImageIcon scaleImage=new ImageIcon(GUI.class.getResource("media/Logo.png"));
+        BufferedImage bi = new BufferedImage(scaleImage.getIconWidth(), scaleImage.getIconHeight(), BufferedImage.TYPE_INT_ARGB);
+        Graphics g = bi.createGraphics();
+        scaleImage.paintIcon(null, g, 0,0);
+        g.dispose();
+        int scale=(OFFSET *(squaresOnSide -4));
+        ImageIcon newIcon =new ImageIcon(bi.getScaledInstance(scale,scale,1));
+        image=new JLabel(newIcon);
+        image.setBounds(10+2* OFFSET,10+ OFFSET,scale,scale);
         image.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
-        MainPane.add(image);
-
-        latestAction.setBounds((((int)(FRAME_SIZE.getHeight()*.9))/2)-190,(((int)(FRAME_SIZE.getHeight()*.9))/2)+210,400,30);
-        latestAction.setVisible(true);
-        latestAction.setFont(new Font("times new roman",Font.BOLD,20));
-        latestAction.setForeground(Color.white);
-        latestAction.setText("Welcome To Interdimensional Panopoly");
-        MainPane.add(latestAction);
-
-        secondAction.setBounds((((int)(FRAME_SIZE.getHeight()*.9))/2)-190,(((int)(FRAME_SIZE.getHeight()*.9))/2)+180,400,30);
-        secondAction.setVisible(true);
-        secondAction.setFont(new Font("times new roman",Font.BOLD,20));
-        secondAction.setForeground(Color.white);
-        secondAction.setText("Enjoy!");
-        MainPane.add(secondAction);
-
-
-        locationWindow.setBounds((((int)(FRAME_SIZE.getHeight()*.9))/2)-90,(((int)(FRAME_SIZE.getHeight()*.9))/2)-210,200,380);
-        locationWindow.setVisible(true);
+        mainPane.add(image);
+    }
+    private void setupWindows()
+    {
+        locationWindow.setBounds(10+3* OFFSET,10+ OFFSET, OFFSET *(squaresOnSide -6), OFFSET *(squaresOnSide -5));
         locationWindow.setBackground(Color.WHITE);
         locationWindow.setForeground(Color.BLACK);
         locationWindow.setBorder(BorderFactory.createLineBorder(Color.black,4));
         locationWindow.setVerticalAlignment(JLabel.TOP);
-        MainPane.add(locationWindow);
-        mainFrame.setVisible(true);
-        mainFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-    }
+        locationWindow.setVisible(false);
+        mainPane.add(locationWindow);
 
-    static void setPlayers(ArrayList<Player> players) {
-        GUI.players = players;
-    }
+        thirdAction.setBounds(10+ OFFSET,locationWindow.getY()+locationWindow.getHeight()+ OFFSET, OFFSET *(squaresOnSide -2),20);
+        thirdAction.setVisible(true);
+        thirdAction.setFont(new Font("times new roman",Font.BOLD,16));
+        thirdAction.setForeground(Color.white);
+        thirdAction.setText("");
+        mainPane.add(thirdAction);
 
-    static void setPanopoly(Panopoly panopoly) {
-        GUI.panopoly = panopoly;
-    }
+        secondAction.setBounds(10+ OFFSET,thirdAction.getY()+20, OFFSET *(squaresOnSide -2),20);
+        secondAction.setVisible(true);
+        secondAction.setFont(new Font("times new roman",Font.BOLD,16));
+        secondAction.setForeground(Color.white);
+        secondAction.setText("Enjoy!");
+        mainPane.add(secondAction);
 
-    private void setupbuttons()
+        latestAction.setBounds(10+ OFFSET,secondAction.getY()+20, OFFSET *(squaresOnSide -2),20);
+        latestAction.setVisible(true);
+        latestAction.setFont(new Font("Times New Roman",Font.BOLD,16));
+        latestAction.setForeground(Color.white);
+        latestAction.setText("Welcome To Interdimensional Panopoly");
+        mainPane.add(latestAction);
+
+        questionWindow.setBounds(10+ OFFSET +10,10+ OFFSET +10,-20+(squaresOnSide -2)* OFFSET,80);
+        questionWindow.setBackground(Color.WHITE);
+        questionWindow.setForeground(Color.BLACK);
+        questionWindow.setBorder(BorderFactory.createLineBorder(Color.black,4));
+        questionWindow.setVerticalAlignment(JLabel.TOP);
+        questionWindow.setVisible(false);
+        mainPane.add(questionWindow);
+        
+        cardPanel.setVisible(false);
+        cardPanel.setBounds(10+ OFFSET +10,locationWindow.getY()+locationWindow.getHeight(),-20+(squaresOnSide -2)* OFFSET, OFFSET);
+        cardPanel.setLayout(new OverlayLayout(cardPanel));
+        mainPane.add(cardPanel);
+
+        bidBox.setBounds((int)(10+(OFFSET *((squaresOnSide -1)/2.0))),-20+(squaresOnSide -1)* OFFSET, OFFSET,30);
+        bidBox.setForeground(Color.WHITE);
+        bidBox.setBackground(Color.BLACK);
+        bidBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int bid;
+                try {// if is number
+                    bid=Integer.parseInt(bidBox.getText());
+                } catch (NumberFormatException b) {
+                    updateAction(bidBox.getText()+" is not a valid bid");
+                    bidBox.setText("");
+                    return;
+                }
+                if(bid<=panopoly.getCurrentBid())
+                {updateAction(bidBox.getText()+" is not a valid bid");
+                    bidBox.setText(""); }
+                else
+                    panopoly.updateBid(bid,assignedPlayer);
+            }
+        });
+        bidBox.setBorder(BorderFactory.createLineBorder(Color.red.brighter(),1));
+        bidBox.setVisible(false);
+        mainPane.add(bidBox);
+
+        auctionTimer.setBounds((int)(10+(OFFSET *((squaresOnSide -1)/2.0)))+OFFSET,-20+(squaresOnSide -1)* OFFSET, OFFSET,30);
+        auctionTimer.setFont(new Font("Digital",Font.BOLD,20));
+        auctionTimer.setBackground(Color.BLACK);
+        auctionTimer.setForeground(Color.WHITE);
+        auctionTimer.setVisible(false);
+        auctionTimer.setBorder(BorderFactory.createLineBorder(Color.red.brighter(),1));
+
+        doomsdayTimer.setBounds((int)(10+(OFFSET *((squaresOnSide -3))))+OFFSET,-20+(squaresOnSide -1)* OFFSET, OFFSET,30);
+        doomsdayTimer.setFont(new Font("Digital",Font.BOLD,20));
+        doomsdayTimer.setBackground(Color.BLACK);
+        doomsdayTimer.setForeground(Color.WHITE);
+        doomsdayTimer.setVisible(false);
+        doomsdayTimer.setBorder(BorderFactory.createLineBorder(Color.red.brighter(),1));
+    }
+    private void setupButtons()
     {
-        rollButton=new GUIButton("Roll",(int)(10+(Offset*((squaresOnSide -1)/2.0))),(((int)(FRAME_SIZE.getHeight()*.9))/2)+240,
-        new MouseAdapter() {
+        GUIButton helpButton = new GUIButton("?", 10 + OFFSET * squaresOnSide, 10, new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                gui.updateAction(panopoly.roll());
-                if(getSelectedLocation()!=getLocationLabel(panopoly.getCurrentPlayer().getPosition())) {
-                    setSelectedLabel(getLocationLabel(panopoly.getCurrentPlayer().getPosition()));
-                }
+                SetupGUI.getHelp();
             }
-        },this);
-
-        buyButton=new GUIButton("Buy",(int)(10+(Offset*((squaresOnSide -1)/2.0))),Offset*2+20,
+        }, this);
+        helpButton.setSize(30,30);
+        helpButton.setVisible(true);
+        rollButton=new GUIButton("Roll",(int)(10+(OFFSET *((squaresOnSide -1)/2.0))),-20+(squaresOnSide -1)* OFFSET,
                 new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
-                        Rentable buyProperty= (Rentable)panopoly.getBoard().getLocation(panopoly.getCurrentPlayer().getPosition());
-                        gui.updateAction(panopoly.buyProperty(buyProperty));
-                        gui.updateGUI();
+                        rollFunction();
+                    }
+                },this);
+        endButton =new GUIButton("End",(int)(10+(OFFSET *((squaresOnSide -1)/2.0))),-20+(squaresOnSide -1)* OFFSET,
+                new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        endTurnFunction();
                     }
                 },this);
 
-        endturn=new GUIButton("End",(int)(10+(Offset*((squaresOnSide -1)/2.0))),(((int)(FRAME_SIZE.getHeight()*.9))/2)+240,
+        buyButton=new GUIButton("Buy",10+ OFFSET +(squaresOnSide -4)* OFFSET,2* OFFSET +10,
                 new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
-                        gui.updateAction(panopoly.nextPlayer());
+                        buyPropertyFunction();
                     }
                 },this);
 
-        mortgageButton=new GUIButton("Mortgage",((int)(FRAME_SIZE.getHeight()*.9)/2)-190,(((int)(FRAME_SIZE.getHeight()*.9))/2)-100,
+        mortgageButton=new GUIButton("Mortgage",10+ OFFSET +(squaresOnSide -4)* OFFSET,2* OFFSET +10+30,
                 new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
-                        RentalProperty mortgageProperty = (RentalProperty)getSelectedLocation().getLocation();
-                        gui.updateAction(panopoly.mortgage(mortgageProperty));
+                        mortgagePropertyFunction();
                     }
                 },this);
-        redeemButton =new GUIButton("Redeem",((int)(FRAME_SIZE.getHeight()*.9)/2)-190,(((int)(FRAME_SIZE.getHeight()*.9))/2)+-100,
+        redeemButton =new GUIButton("Redeem",10+ OFFSET +(squaresOnSide -4)* OFFSET,2* OFFSET +10+30,
                 new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
-                        RentalProperty redeem=(RentalProperty)getSelectedLocation().getLocation();
-                        gui.updateAction(panopoly.redeem(redeem));
-                    }
-                },this);
-
-        buildButton =new GUIButton("Build",((int)(FRAME_SIZE.getHeight()*.9)/2)+190,(((int)(FRAME_SIZE.getHeight()*.9))/2)-85,
-                new MouseAdapter() {
-                    @Override
-                    public void mouseClicked(MouseEvent e) {
-                        InvestmentProperty builder=(InvestmentProperty) getSelectedLocation().getLocation();
-                        gui.updateAction(panopoly.buildUnit(builder));
+                        redeemPropertyFunction();
                     }
                 },this);
 
-        demoButton =new GUIButton("Demolish",((int)(FRAME_SIZE.getHeight()*.9)/2)+190,(((int)(FRAME_SIZE.getHeight()*.9))/2)-115,
+        buildButton =new GUIButton("Build",10+ OFFSET +(squaresOnSide -4)* OFFSET,2* OFFSET +10+60,
                 new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
-                        InvestmentProperty breaker=(InvestmentProperty) getSelectedLocation().getLocation();
-                        gui.updateAction(panopoly.demolishUnit(breaker));
+                        buildHouseFunction();
                     }
                 },this);
+
+        demolishButton =new GUIButton("Demolish",10+ OFFSET +(squaresOnSide -4)* OFFSET,2* OFFSET +10+90,
+                new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        demolishHouseFunction();
+                    }
+                },this);
+        leaveButton =new GUIButton("Leave",(10+ OFFSET),-20+(squaresOnSide -1)* OFFSET,
+                new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        leaveGameFunction();
+                    }
+                },this);
+        leaveButton.setVisible(true);
+        quitButton =new GUIButton("Quit",(10+(OFFSET *((squaresOnSide -2)))),-20+(squaresOnSide -1)* OFFSET,
+                new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        quitTheGameFunction();
+                    }
+                },this);
+        quitButton.setVisible(true);
+        int x=0;
+        for(int i=0;i<4;i++)
+        {
+            answers[i]=new GUIButton("Answer",(questionWindow.getX())+x,questionWindow.getY()+questionWindow.getHeight(),
+                    null,this);
+            answers[i].setSize(questionWindow.getWidth()/4,30);
+            x+=questionWindow.getWidth()/4;
+        }
 
     }
 
+    public void rollFunction(){
+        panopoly.roll();
+        if(getSelectedLocation()!=getLocationLabel(panopoly.getCurrentPlayer().getPosition())
+                &&!(getLocationLabel(panopoly.getCurrentPlayer().getPosition()).getLocation() instanceof CommunityChest
+                ||getLocationLabel(panopoly.getCurrentPlayer().getPosition()).getLocation() instanceof Chance)) {
+            setSelectedLabel(getLocationLabel(panopoly.getCurrentPlayer().getPosition()));
+        }
+    }
+
+    public void endTurnFunction() {
+        if (buyButton.isVisible()) {
+            endButton.setVisible(false);
+            buyButton.setVisible(false);
+            panopoly.callAuction();
+        }
+        panopoly.startPlayerTurn(panopoly.getNextPlayer());
+    }
+
+    @Override
+    public void getHelpFunction() {
+
+    }
     private void setVisibleButtons()
     {
-    	panopoly.setPossibleCommands();
+    	if(panopoly.getCurrentPlayer().isInJail()||assignedPlayer!=panopoly.getCurrentPlayer())
+		{
+			gui.rollCommand = false;
+			gui.endCommand = false;
+		}
+
+		else if(panopoly.getCurrentPlayer().getBalance() < 0)
+		    gui.rollCommand = false;
+		
+		else
+		{
+			gui.rollCommand = panopoly.getCurrentPlayer().canRoll;
+			//unowned property and player has rolled at least once
+			gui.endCommand = (!gui.rollCommand && panopoly.getCurrentPlayer().getBalance() >= 0);
+		}
+    	hideAnswers();
     	rollButton.setVisible(rollCommand);
-    	endturn.setVisible(endCommand);
+    	endButton.setVisible(endCommand);
+    	if (panopoly.getCurrentPlayer().isInJail()&&panopoly.getCurrentPlayer()==assignedPlayer) {
+                setSelectedLabel(null);
+                setSelectedLabel(getLocationLabel(panopoly.getCurrentPlayer().getPosition()));
+                if(noQuestion) {
+                    noQuestion=false;
+
+                    String[] question =personOfInterest.Question();
+                    int rand = ThreadLocalRandom.current().nextInt(0, 3 + 1);
+                    int wrongcount = 1;
+                    for (int i = 0; i < 4; i++) {
+                        answers[i].setVisible(true);
+                        if (i == rand) {
+                            answers[i].setText(question[1]);
+                            answers[i].setMouseEvent(correct);
+                        } else {
+                            answers[i].setMouseEvent(incorrect);
+                            answers[i].setText("|"+question[1+wrongcount]);
+                            wrongcount++;
+                        }
+                    }
+                    questionWindow.setText("<html><center>" + question[0] + "</center></html>");
+
+                }
+                else
+                {
+                    for(GUIButton button:answers)
+                        button.setVisible(true);
+                }
+        }
+
+        //leaveButton.setVisible(!rollCommand&&!endCommand);
+    }
+
+    void updateGUI()
+    {
+        for(PlayerLabel player:PlayerLabels)
+        {
+            player.updateLabel();
+            if(player.getPlayer()==panopoly.getCurrentPlayer())
+            {
+                player.setCurrentPlayer();
+            }
+            if(player.getPlayer().isInJail())
+            {
+                //add more here
+                player.setBorder(BorderFactory.createBevelBorder(1));
+            }
+            else
+                player.setBorder(null);
+        }
+        setVisibleButtons();
+    }
+
+    void updateAction(String action)
+    {
+        String[] lines;
+        if(action.contains("\n"))
+        {
+            lines = action.split("\n");
+
+            if(lines.length == 2)
+            {
+                thirdAction.setText(latestAction.getText());
+                secondAction.setText(lines[0]);
+                latestAction.setText(lines[1]);
+            }
+            else
+            {
+                thirdAction.setText(lines[0]);
+                secondAction.setText(lines[1]);
+                latestAction.setText(lines[2]);
+            }
+        }
+        else{
+            thirdAction.setText(secondAction.getText());
+            secondAction.setText(latestAction.getText());
+            latestAction.setText(action);
+        }
+        updateGUI();
+    }
+
+    void displayCard(String msg)
+    {
+        setSelectedLabel(null);
+        image.setVisible(false);
+        JLabel card=new JLabel("<html><center>"+msg+"<br>Click to Close.</center></html>");
+        card.setBounds(10+ OFFSET +10,locationWindow.getY()+locationWindow.getHeight(),-20+(squaresOnSide -2)* OFFSET, OFFSET);
+        card.setVisible(true);
+        card.setOpaque(true);
+        cardPanel.add(card);
+        cardPanel.setVisible(true);
+        card.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                card.setVisible(false);
+                cardPanel.remove(card);
+                if(cardPanel.getComponentCount() == 0)
+                	cardPanel.setVisible(false);
+                setSelectedLabel(null);
+                setSelectedLabel(getLocationLabel(assignedPlayer.getPosition()));
+            }
+        });
+
     }
 
     void resetCommands()
@@ -179,9 +490,10 @@ class GUI {
     	rollCommand = false;
     	endCommand = false;
     }
-
-    private void PlacePlayers()
+    
+    private void placePlayers()
     {
+        PlayerLabels=new PlayerLabel[players.size()];
         int i=0;
         for(Player player:players)
         {
@@ -190,73 +502,201 @@ class GUI {
         }
     }
 
+    private void deletePlayers()
+    {
+        for(PlayerLabel label:PlayerLabels)
+        {
+            label.removePlayer();
+        }
+    }
+
+    void leaveGame(Player player)
+    {
+        players.remove(player);
+        deletePlayers();
+        placePlayers();
+    }
+
+    private void hideAnswers() {
+        for(GUIButton answer:answers)
+        {
+            answer.setVisible(false);
+        }
+    }
+
+    void startAuction()
+    {
+        setSelectedLabel(null);
+        setSelectedLabel(getLocationLabel(panopoly.getCurrentPlayer().getPosition()));
+        bidBox.setVisible(true);
+        auctionTimer.setVisible(true);
+    }
+
+    void updateAuctionClock(String time)
+    {
+        auctionTimer.setText("<html><center>"+time+"</center></html>");
+    }
+    void updateDoomsdayClock(String time)
+    {
+        if(!doomsdayTimer.isVisible())
+            doomsdayTimer.setVisible(true);
+        doomsdayTimer.setText("<html><center>"+time+"</center></html>");
+    }
+
+    void endAuction()
+    {
+        bidBox.setVisible(false);
+        auctionTimer.setVisible(false);
+    }
+
+    void endGame()
+    {
+        getMainPane().remove(buyButton.getButton());
+        getMainPane().remove(endButton.getButton());
+        getMainPane().remove(demolishButton.getButton());
+        getMainPane().remove(mortgageButton.getButton());
+        getMainPane().remove(buildButton.getButton());
+        getMainPane().remove(redeemButton.getButton());
+        getMainPane().remove(rollButton.getButton());
+        getMainPane().remove(quitButton.getButton());
+        getMainPane().remove(leaveButton.getButton());
+        getMainPane().validate();
+        getMainPane().repaint();
+        GUIButton again=new GUIButton("New Game?",10+ OFFSET *(squaresOnSide -2)/2,(((int)(FRAME_SIZE.getHeight()*.9))/2)+240,
+                new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        mainFrame.dispose();
+                        Main.createPanopoly();
+                    }
+                },this);
+        again.setVisible(true);
+        GUIButton exit=new GUIButton("Done?",10+ OFFSET +(OFFSET *(squaresOnSide -2)/2),(((int)(FRAME_SIZE.getHeight()*.9))/2)+240,
+                new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        mainFrame.dispose();
+                        System.exit(0);
+                    }
+                },this);
+        exit.setVisible(true);
+      }
+
+
+
+
+
+    @Override
+    public void buyPropertyFunction() {
+        Rentable buyProperty= (Rentable)panopoly.getBoard().getLocation(panopoly.getCurrentPlayer().getPosition());
+        gui.updateAction(panopoly.buyProperty(buyProperty));
+        gui.updateGUI();
+        if(assignedPlayer instanceof GameBot)
+            ((GameBot)assignedPlayer).makeGameDecision();
+    }
+
+    @Override
+    public void mortgagePropertyFunction() {
+        RentalProperty mortgageProperty = (RentalProperty)getSelectedLocation().getLocation();
+        gui.updateAction(panopoly.mortgage(mortgageProperty));
+    }
+
+    @Override
+    public void redeemPropertyFunction() {
+        RentalProperty redeem=(RentalProperty)getSelectedLocation().getLocation();
+        gui.updateAction(panopoly.redeem(redeem));
+    }
+
+    @Override
+    public void buildHouseFunction() {
+        InvestmentProperty builder=(InvestmentProperty) getSelectedLocation().getLocation();
+        gui.updateAction(panopoly.buildUnit(builder));
+    }
+
+    @Override
+    public void demolishHouseFunction() {
+        InvestmentProperty breaker=(InvestmentProperty) getSelectedLocation().getLocation();
+        gui.updateAction(panopoly.demolishUnit(breaker));
+    }
+
+    @Override
+    public void quitTheGameFunction() {
+        panopoly.endGame();
+    }
+
+    @Override
+    public void leaveGameFunction() {
+        panopoly.leaveGame(assignedPlayer);
+        mainFrame.dispose();
+    }
+
+    @Override
+    public void answerCorrectlyFunction() {
+        updateAction("Correct answer.");
+        panopoly.getCurrentPlayer().releaseFromJail();
+        noQuestion=true;
+        gui.hideAnswers();
+        setSelectedLabel(null);
+    }
+
+    @Override
+    public void answerIncorrectlyFunction() {
+        updateAction("Wrong answer.");
+        panopoly.startPlayerTurn(panopoly.getNextPlayer());
+        noQuestion=true;
+        gui.hideAnswers();
+        setSelectedLabel(null);
+    }
+
+
+
+
+
+
+    JLayeredPane getMainPane()
+    {
+        return mainPane;
+    }
+
+    Dimension getFRAME_SIZE() {
+        return FRAME_SIZE;
+    }
+
+    int getOFFSET()
+    {
+        return OFFSET;
+    }
+
+    private LocationLabel[] getLocationLabels() {
+        return locationLabels;
+    }
+
+    ArrayList<Player> getPlayers() {
+        return players;
+    }
+
+    private LocationLabel getSelectedLocation()
+    {
+        return selectedLabel;
+    }
+
     LocationLabel getLocationLabel(Locatable location) throws ArrayIndexOutOfBoundsException
     {
-        for(LocationLabel local:LocationLabels)
+        for(LocationLabel local: locationLabels)
         {
             if(local.getLocation()==location)
                 return local;
         }
         return null;
     }
+
     LocationLabel getLocationLabel(int index)throws ArrayIndexOutOfBoundsException
     {
-        return LocationLabels[index];
-    }
-    private void PlaceBoard()
-    {
-        ArrayList<Locatable> Locations=panopoly.getBoard().getLocations();
-        int x=10,y=10;
-        int SquaresOnSide=(((BOARD_SIZE-4)/4)+2);
-        int NumOnBoard=0;
-        LocationLabels[NumOnBoard]= new LocationLabel(x,y,NumOnBoard,this,Locations.get(NumOnBoard));
-        x+=Offset*2;
-        NumOnBoard++;
-        while (x<Offset*(SquaresOnSide))
-        {
-            LocationLabels[NumOnBoard]= new LocationLabel(x,y,NumOnBoard,this,Locations.get(NumOnBoard));
-            x+=Offset;
-            NumOnBoard++;
-
-        }
-        LocationLabels[NumOnBoard]= new LocationLabel(x,y,NumOnBoard,this,Locations.get(NumOnBoard));
-        y+=Offset*2;
-        NumOnBoard++;
-        while(y<(Offset*(SquaresOnSide)))
-        {
-            LocationLabels[NumOnBoard]= new LocationLabel(x,y,NumOnBoard,this,Locations.get(NumOnBoard));
-            y+=Offset;
-            NumOnBoard++;
-
-        }
-        LocationLabels[NumOnBoard]= new LocationLabel(x,y,NumOnBoard,this,Locations.get(NumOnBoard));
-        x-=Offset;
-        NumOnBoard++;
-        while (x>=Offset*2)
-        {
-            LocationLabels[NumOnBoard]= new LocationLabel(x,y,NumOnBoard,this,Locations.get(NumOnBoard));
-            x-=Offset;
-            NumOnBoard++;
-        }
-        x-=Offset;
-        LocationLabels[NumOnBoard]= new LocationLabel(x,y,NumOnBoard,this,Locations.get(NumOnBoard));
-        y-=Offset;
-        NumOnBoard++;
-        while (y>=Offset*2)
-        {
-            LocationLabels[NumOnBoard]= new LocationLabel(x,y,NumOnBoard,this,Locations.get(NumOnBoard));
-            y-=Offset;
-            NumOnBoard++;
-        }
-    }
-    static ArrayList<Player> getPlayersArray()
-    {
-        return players;
+        return locationLabels[index];
     }
 
-    private LocationLabel getSelectedLocation()
-    {
-        return SelectedLabel;
+    void setPanopoly(Panopoly panopoly) {
+        this.panopoly = panopoly;
     }
 
     void setSelectedLabel(LocationLabel location)
@@ -265,34 +705,56 @@ class GUI {
         {
             label.resetBorder();
         }
-        if(this.SelectedLabel!=null)
+        if(this.selectedLabel !=null)
         {
-            this.SelectedLabel.getLabel().setBorder(BorderFactory.createLineBorder(Color.BLACK,2));
+            this.selectedLabel.getLabel().setBorder(BorderFactory.createLineBorder(Color.BLACK,2));
 
         }
 
-        if(location==null||this.SelectedLabel==location)
+        if(location==null||this.selectedLabel ==location)
         {
-            this.SelectedLabel=null;
+            this.selectedLabel =null;
             image.setVisible(true);
             locationWindow.setText(" ");
             locationWindow.setOpaque(false);
+            locationWindow.setVisible(false);
+            questionWindow.setVisible(false);
+            questionWindow.setOpaque(false);
             buyButton.setVisible(false);
             mortgageButton.setVisible(false);
             redeemButton.setVisible(false);
             buildButton.setVisible(false);
-            demoButton.setVisible(false);
+            demolishButton.setVisible(false);
+        }
+        else if(panopoly.getCurrentPlayer().isInJail()&&location==getLocationLabel(panopoly.getCurrentPlayer().getPosition()))
+        {
+            this.selectedLabel =location;
+            image.setVisible(false);
+            questionWindow.setVisible(true);
+            questionWindow.setOpaque(true);
+            locationWindow.setText(" ");
+            locationWindow.setOpaque(false);
+            locationWindow.setVisible(false);
+            buyButton.setVisible(false);
+            mortgageButton.setVisible(false);
+            redeemButton.setVisible(false);
+            buildButton.setVisible(false);
+            demolishButton.setVisible(false);
         }
         else
         {
-            this.SelectedLabel=location;
-            this.SelectedLabel.getLabel().setBorder(BorderFactory.createLineBorder(Color.green.darker(),2));
+            questionWindow.setVisible(false);
+            questionWindow.setOpaque(false);
+            this.selectedLabel =location;
+            this.selectedLabel.getLabel().setBorder(BorderFactory.createLineBorder(Color.green.darker(),2));
             locationWindow.setOpaque(true);
+            locationWindow.setVisible(true);
             image.setVisible(false);
             if (location.getLocation() instanceof RentalProperty)
             {
+                buyButton.setEnabled(true);
                 RentalProperty locationCheck = (RentalProperty) location.getLocation();
-                if (locationCheck.getOwner() == panopoly.getCurrentPlayer())
+                if (locationCheck.getOwner() == panopoly.getCurrentPlayer()&&panopoly.getCurrentPlayer()==assignedPlayer)
                 {
                     Boolean mortgageable=true;
 
@@ -307,15 +769,24 @@ class GUI {
                 }
                 else
                 {
-                    buyButton.setVisible(locationCheck.getOwner()==null&&locationCheck.getPrice()<=panopoly.getCurrentPlayer().getBalance()
-                            &&panopoly.getCurrentPlayer().getPosition()==location.getIndex());
+                    if(locationCheck.getOwner()==null &&panopoly.getCurrentPlayer().getPosition()==location.getIndex()&&panopoly.getCurrentPlayer()==assignedPlayer)
+                    {
+                        if(panopoly.getCurrentPlayer().getBalance()<((RentalProperty) location.getLocation()).getPrice())
+                        {
+                            buyButton.setVisible(false);
+                        }
+                        else
+                            buyButton.setVisible(true);
+                    }
+                    else
+                        buyButton.setVisible(false);
                     mortgageButton.setVisible(false);
                     redeemButton.setVisible(false);
                 }
                 if(location.getLocation() instanceof InvestmentProperty)
                 {
                     InvestmentProperty investment=(InvestmentProperty)location.getLocation();
-                    if(locationCheck.getOwner()==panopoly.getCurrentPlayer())
+                    if(locationCheck.getOwner()==panopoly.getCurrentPlayer()&&panopoly.getCurrentPlayer()==assignedPlayer)
                     {
                         Boolean buildable=true;//((Player)investment.getOwner()).ownsGroup(locationCheck.getGroup());
                         for(Groupable groupLocation:locationCheck.getGroup().getMembers())
@@ -326,18 +797,18 @@ class GUI {
                                 break;
                             }
                         }
-                        demoButton.setVisible((investment.hasBuildings()));
+                        demolishButton.setVisible((investment.hasBuildings()));
                         buildButton.setVisible(buildable&&investment.hotels==0&&investment.getOwner().getBalance()>=investment.buildPrice);
                     }
                     else
                     {
-                        demoButton.setVisible(false);
+                        demolishButton.setVisible(false);
                         buildButton.setVisible(false);
                     }
                 }
                 else
                 {
-                    demoButton.setVisible(false);
+                    demolishButton.setVisible(false);
                     buildButton.setVisible(false);
                 }
 
@@ -345,7 +816,7 @@ class GUI {
 
             else
             {
-                demoButton.setVisible(false);
+                demolishButton.setVisible(false);
                 buildButton.setVisible(false);
                 mortgageButton.setVisible(false);
                 redeemButton.setVisible(false);
@@ -357,56 +828,4 @@ class GUI {
 
     }
 
-    void updateGUI()
-    {
-        for(PlayerLabel player:PlayerLabels)
-        {
-            player.updateLabel();
-            if(player.getPlayer()==panopoly.getCurrentPlayer())
-            {
-                player.setCurrentPlayer();
-            }
-        }
-        setVisibleButtons();
-    }
-
-    JLayeredPane getMainPane()
-    {
-        return MainPane;
-    }
-
-    Dimension getFRAME_SIZE() {
-        return FRAME_SIZE;
-    }
-
-   void updateAction(String action)
-    {
-        secondAction.setText(latestAction.getText());
-        latestAction.setText(action);
-        LocationLabel label=getSelectedLocation();
-        setSelectedLabel(label);
-        setSelectedLabel(label);
-        panopoly.setPossibleCommands();
-        updateGUI();
-    }
-
-    int getBOARD_SIZE()
-    {
-        return BOARD_SIZE;
-    }
-    int getOffset()
-    {
-        return  Offset;
-    }
-
-     private LocationLabel[] getLocationLabels() {
-        return LocationLabels;
-    }
-     static ArrayList<Player> getPlayers() {
-        return players;
-    }
-
-    public int getSquaresOnSide() {
-        return squaresOnSide;
-    }
 }

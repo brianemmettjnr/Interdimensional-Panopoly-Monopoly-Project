@@ -2,16 +2,9 @@ package monopoly;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.sql.Time;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
-
 import javax.swing.Timer;
-
 import interfaces.*;
 
 public class Panopoly 
@@ -19,21 +12,21 @@ public class Panopoly
 	private ArrayList<Player> players;
 	private Player currentPlayer;
 	private Board board;
-	private GUI[] gui;
+	private GUI[] guiArray;
 	private Dice dice = new Dice();
 	private boolean clockwiseMovement = true;
-	private long startTime;
 	private Timer countdownTimer;
-	private CommunityChest deck = new CommunityChest();
+	private CardDeck deck = new CardDeck();
+	private int TIME_LEFT = 300000;
+	private boolean inCountdown = false;
+	private int bid;
+	private Player highestBidder;
 	
 	Panopoly(int numLocations)
 	{
 		board = new Board(numLocations);
 		SetupGUI.PlayerCountGui(this);
-		
-		startTime = System.currentTimeMillis();
-
-		countdownTimer = new Timer(10 * 60 * 10, null);
+		countdownTimer = new Timer(300000, null);	//5 minute countdown
 		countdownTimer.setRepeats(false);
 	}
 	
@@ -42,46 +35,45 @@ public class Panopoly
 		players = playerArray;
 		currentPlayer = players.get(0);
 		int index=0;
-		gui=new GUI[playerArray.size()];
+		guiArray =new GUI[playerArray.size()];
 		for(Player player: players)
 		{
-			gui[index]=new GUI(board.getNumLocations(),this,players,player);
+			guiArray[index]=new GUI(board.getNumLocations(),this,players,player);
 			if(player instanceof GameBot)
 			{
-				((GameBot) player).setGUI(gui[index]);
+				((GameBot) player).setGUI(guiArray[index]);
 			}
 			index++;
 		}
-		System.out.println(gui.length);
 		updateGUI();
 	}
 
 	private void updateGUI() {
-		for(GUI gui:this.gui) {
+		for(GUI gui:this.guiArray) {
 			gui.updateGUI();
 		}
 	}
 	private void updateAction(String action)
 	{
-		for(GUI gui:this.gui)
+		for(GUI gui:this.guiArray)
 		{
 			gui.updateAction(action);
 		}
 	}
 	private void resetCommands() {
-		for(GUI gui:this.gui)
+		for(GUI gui:this.guiArray)
 		{
 			gui.resetCommands();
 		}
 	}
 	private void leaveGameGui(Player currentPlayer) {
-		for(GUI gui:this.gui)
+		for(GUI gui:this.guiArray)
 		{
 			gui.leaveGame(currentPlayer);
 		}
 	}
 	private void guiEndGame() {
-		for(GUI gui:this.gui)
+		for(GUI gui:this.guiArray)
 		{
 			gui.endGame();
 		}
@@ -103,8 +95,7 @@ public class Panopoly
 		return players.get((players.indexOf(currentPlayer)+1)%players.size());
 	}
 	
-	//TO DO: DRAW CARD
-	private String getSquareAction()
+	String getSquareAction()
 	{
 		Locatable square = board.getLocation(currentPlayer.getPosition());
 		String ret = "";
@@ -126,14 +117,18 @@ public class Panopoly
 		
 		else if(square.getIdentifier() == "Go to Jail")
 		{
-			currentPlayer.sendToJail();
 			ret = "\n" + currentPlayer.getIdentifier() + " has landed on Go to Jail and been sent to jail.";
-			//ret += startPlayerTurn(getNextPlayer());
+			currentPlayer.sendToJail();
 		}
-		
-		else if(square instanceof CommunityChest || square instanceof Chance)
+		else if(square instanceof Chance || square instanceof CommunityChest)
 		{
-			ret += deck.getCard(this);
+			Player player=currentPlayer;
+			String card=deck.getCard(this);
+			//if player sent to jail
+			if(currentPlayer!=player)
+				guiArray[player.getPlayerIndex()].displayCard(card);
+			else
+				guiArray[currentPlayer.getPlayerIndex()].displayCard(card);
 		}
 
 		return ret;
@@ -141,22 +136,63 @@ public class Panopoly
 	
 	public void startCountdown()
 	{
-		ActionListener timerListener = new ActionListener() {
+		inCountdown = true;
+		countdownTimer = new Timer(1000, new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				endGame();
-			}};
-			
-		countdownTimer.addActionListener(timerListener);
+			public void actionPerformed(ActionEvent arg0) 
+			{
+				TIME_LEFT -= 1000;
+				
+				SimpleDateFormat df=new SimpleDateFormat("mm:ss");
+				System.out.println(df.format(TIME_LEFT));
+				
+				if(TIME_LEFT <= 0)
+				{	
+					countdownTimer.stop();
+					endGame();
+				}
+			}});
+		
 		countdownTimer.start();
 		updateAction("COUNTDOWN STARTED");
-		updateAction("Elapsed Time in secs: " + (System.currentTimeMillis() - startTime) / 1000);
 	}
 	
+	public boolean isInCountdown()
+	{
+		return inCountdown;
+	}
+
+	public void callAuction()
+	{
+		bid=0;
+		highestBidder=currentPlayer;
+		updateAction("An auction for "+board.getLocation(currentPlayer.getPosition()).getIdentifier()+" ");
+		Locatable auctionProperty=board.getLocation(currentPlayer.getPosition());
+		for(GUI gui: guiArray)
+		{
+			gui.startAuction();
+		}
+		//chloe stuff here
+		for(GUI gui: guiArray)
+		{
+			gui.endAuction();
+		}
+		updateAction(highestBidder.getIdentifier()+" wins with a bid of "+bid);
+	}
+	public int getCurrentBid()
+	{
+		return bid;
+	}
+	public void updateBid(int bid,Player player)
+	{
+		this.bid=bid;
+		highestBidder=player;
+		updateAction(player.getIdentifier()+" is the highest bidder with "+GUI.symbol+bid);
+	}
+
 	public void startPlayerTurn(Player player)
 	{
 		if(player.getClass()==GameBot.class){
-			System.out.println(player.getIdentifier());
 			currentPlayer.doubles = 0;
 			currentPlayer.canRoll = true;
 			currentPlayer.rollComplete = false;
@@ -204,10 +240,10 @@ public class Panopoly
 		//pass GO message
 		msg += currentPlayer.move(movePositions, clockwiseMovement);
 
-		msg += getSquareAction();
 		
 		resetCommands();
 		updateGUI();
+		msg += getSquareAction();
 		updateAction(msg);
 		if(currentPlayer instanceof GameBot)
 		//todo fix
@@ -249,7 +285,8 @@ public class Panopoly
 	
 	public void leaveGame(Player player)
 	{
-
+		if(players.size()==1)
+			return;
 		for(Rentable property: player.getProperties())
 		{
 			property.reset();
@@ -260,7 +297,6 @@ public class Panopoly
 		{
 			property.reset();
 		}
-
 		int index = players.indexOf(player);
 		if(player==currentPlayer)
 			currentPlayer=getNextPlayer();
@@ -273,7 +309,6 @@ public class Panopoly
 		else
 			startPlayerTurn(players.get(index % players.size()));
 	}
-
 
 	public ArrayList<Player> decideWinners()
 	{
