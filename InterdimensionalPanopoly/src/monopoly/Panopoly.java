@@ -2,17 +2,9 @@ package monopoly;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
-
 import javax.swing.Timer;
-
 import interfaces.*;
 
 public class Panopoly 
@@ -20,18 +12,22 @@ public class Panopoly
 	private ArrayList<Player> players;
 	private Player currentPlayer;
 	private Board board;
-	private GUI[] gui;
+	private GUI[] guiArray;
 	private Dice dice = new Dice();
 	private boolean clockwiseMovement = true;
 	private Timer countdownTimer;
 	private CardDeck deck = new CardDeck();
 	private int TIME_LEFT = 300000;
 	private boolean inCountdown = false;
+	private int bid;
+	private Player highestBidder;
 	
 	Panopoly(int numLocations)
 	{
 		board = new Board(numLocations);
 		SetupGUI.PlayerCountGui(this);
+		countdownTimer = new Timer(300000, null);	//5 minute countdown
+		countdownTimer.setRepeats(false);
 	}
 	
 	public void createGUI(ArrayList<Player> playerArray)
@@ -39,46 +35,45 @@ public class Panopoly
 		players = playerArray;
 		currentPlayer = players.get(0);
 		int index=0;
-		gui=new GUI[playerArray.size()];
+		guiArray =new GUI[playerArray.size()];
 		for(Player player: players)
 		{
-			gui[index]=new GUI(board.getNumLocations(),this,players,player);
+			guiArray[index]=new GUI(board.getNumLocations(),this,players,player);
 			if(player instanceof GameBot)
 			{
-				((GameBot) player).setGUI(gui[index]);
+				((GameBot) player).setGUI(guiArray[index]);
 			}
 			index++;
 		}
-		System.out.println(gui.length);
 		updateGUI();
 	}
 
 	private void updateGUI() {
-		for(GUI gui:this.gui) {
+		for(GUI gui:this.guiArray) {
 			gui.updateGUI();
 		}
 	}
 	private void updateAction(String action)
 	{
-		for(GUI gui:this.gui)
+		for(GUI gui:this.guiArray)
 		{
 			gui.updateAction(action);
 		}
 	}
 	private void resetCommands() {
-		for(GUI gui:this.gui)
+		for(GUI gui:this.guiArray)
 		{
 			gui.resetCommands();
 		}
 	}
 	private void leaveGameGui(Player currentPlayer) {
-		for(GUI gui:this.gui)
+		for(GUI gui:this.guiArray)
 		{
 			gui.leaveGame(currentPlayer);
 		}
 	}
 	private void guiEndGame() {
-		for(GUI gui:this.gui)
+		for(GUI gui:this.guiArray)
 		{
 			gui.endGame();
 		}
@@ -131,9 +126,9 @@ public class Panopoly
 			String card=deck.getCard(this);
 			//if player sent to jail
 			if(currentPlayer!=player)
-				gui[player.getPlayerIndex()].displayCard(card);
+				guiArray[player.getPlayerIndex()].displayCard(card);
 			else
-				gui[currentPlayer.getPlayerIndex()].displayCard(card);
+				guiArray[currentPlayer.getPlayerIndex()].displayCard(card);
 		}
 
 		return ret;
@@ -166,11 +161,38 @@ public class Panopoly
 	{
 		return inCountdown;
 	}
-	
+
+	public void callAuction()
+	{
+		bid=0;
+		highestBidder=currentPlayer;
+		updateAction("An auction for "+board.getLocation(currentPlayer.getPosition()).getIdentifier()+" ");
+		Locatable auctionProperty=board.getLocation(currentPlayer.getPosition());
+		for(GUI gui: guiArray)
+		{
+			gui.startAuction();
+		}
+		//chloe stuff here
+		for(GUI gui: guiArray)
+		{
+			gui.endAuction();
+		}
+		updateAction(highestBidder.getIdentifier()+" wins with a bid of "+bid);
+	}
+	public int getCurrentBid()
+	{
+		return bid;
+	}
+	public void updateBid(int bid,Player player)
+	{
+		this.bid=bid;
+		highestBidder=player;
+		updateAction(player.getIdentifier()+" is the highest bidder with "+GUI.symbol+bid);
+	}
+
 	public void startPlayerTurn(Player player)
 	{
 		if(player.getClass()==GameBot.class){
-			//System.out.println(player.getIdentifier());
 			currentPlayer.doubles = 0;
 			currentPlayer.canRoll = true;
 			currentPlayer.rollComplete = false;
@@ -275,7 +297,6 @@ public class Panopoly
 		{
 			property.reset();
 		}
-
 		int index = players.indexOf(player);
 		if(player==currentPlayer)
 			currentPlayer=getNextPlayer();
@@ -288,7 +309,6 @@ public class Panopoly
 		else
 			startPlayerTurn(players.get(index % players.size()));
 	}
-
 
 	public ArrayList<Player> decideWinners()
 	{

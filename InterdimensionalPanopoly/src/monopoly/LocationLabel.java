@@ -28,7 +28,7 @@ class LocationLabel
         this.x=x;
         this.y=y;
         String name=location.getIdentifier().replace(" ","\n");
-        String text="<html><center><p1><body style='width: "+gui.getOffset()+"px'>"+ name + "</center></body></p1></html>";
+        String text="<html><center><p1><body style='width: "+gui.getOFFSET()+"px'>"+ name + "</center></body></p1></html>";
         label = new JLabel(text, SwingConstants.CENTER);
         label.addMouseListener(new MouseAdapter() {
             @Override
@@ -45,8 +45,8 @@ class LocationLabel
             }
         });
         if(location instanceof InvestmentProperty)
-        {label.setBounds(x, y + (gui.getOffset() / 5)-1, gui.getOffset(), (int) (gui.getOffset() * .8)+2);
-            colourLabel.setBounds(x, y , gui.getOffset(), (int) (gui.getOffset() * .2));
+        {label.setBounds(x, y + (gui.getOFFSET() / 5)-1, gui.getOFFSET(), (int) (gui.getOFFSET() * .8)+2);
+            colourLabel.setBounds(x, y , gui.getOFFSET(), (int) (gui.getOFFSET() * .2));
             colourLabel.setBorder(BorderColour);
             colourLabel.setVisible(true);
             colourLabel.setBackground(((InvestmentProperty) location).getGroup().getColor());
@@ -54,7 +54,7 @@ class LocationLabel
             gui.getMainPane().add(colourLabel);}
 
         else {
-        label.setBounds(x, y,gui.getOffset(), (int)(gui.getOffset()));
+        label.setBounds(x, y,gui.getOFFSET(), (int)(gui.getOFFSET()));
         }
         label.setMaximumSize(label.getSize());
         label.setBorder(BorderColour);
@@ -64,7 +64,7 @@ class LocationLabel
         int size = 20;
         label.setFont(new Font("Courier", Font.BOLD,  size));
 
-        while(label.getFontMetrics(new Font("Courier", Font.BOLD,  size)).stringWidth("investments") > gui.getOffset())
+        while(label.getFontMetrics(new Font("Courier", Font.BOLD,  size)).stringWidth("investments") > gui.getOFFSET())
         {
             size--;
             label.setFont(new Font("Courier", Font.BOLD,  size));
