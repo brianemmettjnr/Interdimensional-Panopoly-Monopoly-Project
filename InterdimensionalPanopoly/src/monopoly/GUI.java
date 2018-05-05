@@ -529,7 +529,9 @@ class GUI implements InteractionAPI {
     }
     void updateDoomsdayClock(String time)
     {
-
+        if(!doomsdayTimer.isVisible())
+            doomsdayTimer.setVisible(true);
+        doomsdayTimer.setText("<html><center>"+time+"</center></html>");
     }
 
     void endAuction()
