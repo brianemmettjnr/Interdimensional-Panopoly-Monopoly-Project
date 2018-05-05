@@ -144,8 +144,9 @@ public class Panopoly
 				TIME_LEFT -= 1000;
 				
 				SimpleDateFormat df=new SimpleDateFormat("mm:ss");
-				System.out.println(df.format(TIME_LEFT));
-				
+				for(GUI gui:guiArray)
+					gui.updateDoomsdayClock(df.format(TIME_LEFT));
+
 				if(TIME_LEFT <= 0)
 				{	
 					countdownTimer.stop();
