@@ -3,9 +3,7 @@ package monopoly;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-
 import javax.swing.Timer;
-
 import interfaces.*;
 
 public class Panopoly 
@@ -158,7 +156,7 @@ public class Panopoly
 		{
 			gui.startAuction();
 		}
-		//chloe stuff here
+		//todo
 		for(GUI gui: guiArray)
 		{
 			gui.endAuction();

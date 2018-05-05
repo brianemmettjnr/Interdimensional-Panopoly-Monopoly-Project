@@ -53,8 +53,8 @@ class GUI implements InteractionAPI {
     private GUIButton leaveButton;
     private GUIButton redeemButton;
     private GUIButton buildButton;
-    GUIButton demolishButton;
-    GUIButton quitButton;
+    private GUIButton demolishButton;
+    private GUIButton quitButton;
     private GUIButton[] answers =new GUIButton[4];
 	private MouseAdapter correct=new MouseAdapter() {
         @Override
@@ -350,10 +350,6 @@ class GUI implements InteractionAPI {
         panopoly.startPlayerTurn(panopoly.getNextPlayer());
     }
 
-    @Override
-    public void getHelpFunction() {
-
-    }
     private void setVisibleButtons()
     {
     	if(panopoly.getCurrentPlayer().isInJail()||assignedPlayer!=panopoly.getCurrentPlayer())
@@ -639,6 +635,10 @@ class GUI implements InteractionAPI {
         setSelectedLabel(null);
     }
 
+    @Override
+    public void getHelpFunction() {
+
+    }
 
 
 
