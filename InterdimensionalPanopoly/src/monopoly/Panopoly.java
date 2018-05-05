@@ -25,12 +25,13 @@ public class Panopoly
 	private long startTime;
 	private Timer countdownTimer;
 	private CardDeck deck = new CardDeck();
+	private int bid;
+	private Player highestBidder;
 	
 	Panopoly(int numLocations)
 	{
 		board = new Board(numLocations);
 		SetupGUI.PlayerCountGui(this);
-
 		countdownTimer = new Timer(300000, null);	//5 minute countdown
 		countdownTimer.setRepeats(false);
 	}
@@ -153,7 +154,33 @@ public class Panopoly
 		updateAction("COUNTDOWN STARTED");
 		updateAction("Elapsed Time in secs: " + (System.currentTimeMillis() - startTime) / 1000);
 	}
-	
+
+	public void callAuction()
+	{
+		bid=0;
+		highestBidder=currentPlayer;
+		updateAction("An auction for "+board.getLocation(currentPlayer.getPosition()).getIdentifier()+" ");
+		for(GUI gui:gui)
+		{
+			gui.startAuction();
+		}
+		//chloe stuff here
+		for(GUI gui:gui)
+		{
+			gui.endAuction();
+		}
+	}
+	public int getCurrentBid()
+	{
+		return bid;
+	}
+	public void updateBid(int bid,Player player)
+	{
+		this.bid=bid;
+		highestBidder=player;
+		updateAction(player.getIdentifier()+" is the highest bidder with "+GUI.symbol+bid);
+	}
+
 	public void startPlayerTurn(Player player)
 	{
 		if(player.getClass()==GameBot.class){
@@ -262,7 +289,6 @@ public class Panopoly
 		{
 			property.reset();
 		}
-
 		int index = players.indexOf(player);
 		if(player==currentPlayer)
 			currentPlayer=getNextPlayer();
@@ -275,7 +301,6 @@ public class Panopoly
 		else
 			startPlayerTurn(players.get(index % players.size()));
 	}
-
 
 	public ArrayList<Player> decideWinners()
 	{
