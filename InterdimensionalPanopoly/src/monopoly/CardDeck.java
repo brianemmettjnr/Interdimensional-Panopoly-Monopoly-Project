@@ -12,7 +12,13 @@ public class CardDeck implements Cardable
 	@Override
 	public String getCard(Panopoly panopoly)
 	{
-		Card card = drawCard(ThreadLocalRandom.current().nextInt(0, 6 + 1));
+		int bound = 6;
+		
+		//Don't allow multiple Doomsday events
+		if(panopoly.isInCountdown())
+			bound = 5;
+			
+		Card card = drawCard(ThreadLocalRandom.current().nextInt(0, bound + 1));
 		card.performConsequence(panopoly);
 		return card.getMessage();
 	}

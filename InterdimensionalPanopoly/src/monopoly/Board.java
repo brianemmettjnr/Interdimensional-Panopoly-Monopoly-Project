@@ -17,6 +17,8 @@ public class Board
 	LinkedHashMap<String, ArrayList<String>> possibleLocations = new LinkedHashMap<String, ArrayList<String>>();
 	private int index = 0;
 	
+	private PersonOfInterest ps = new PersonOfInterest();
+	
 	private int minPrice = 50;
 	private int maxPrice = 100;
 	
@@ -37,11 +39,11 @@ public class Board
 			else if(i == numLocations/4)
 				locations.add(new NamedLocation("Jail/Just Visiting"));
 			else if(i == numLocations/4 + 2)
-				locations.add(new Utility("Utility1"));
+				locations.add(generateUtility());
 			else if(i == (numLocations*3)/4)
 				locations.add(new NamedLocation("Go to Jail"));
 			else if(i == ((numLocations*3)/4)-2)
-				locations.add(new Utility("Utility2"));
+				locations.add(generateUtility());
 			else if(i == numLocations/2)
 				locations.add(new NamedLocation("Free Parking"));
 			else if(i == 4)
@@ -51,7 +53,7 @@ public class Board
 			//one in 8 chance that property is station, 1 in 4 card or 5 in 8 investment
 			else
 			{
-				int rnd = ThreadLocalRandom.current().nextInt(1, 4 + 1);//todo fix
+				int rnd = ThreadLocalRandom.current().nextInt(1, 3 + 1);//todo fix
 				if(rnd == 1) 
 					locations.add(generateStation());
 				else if(rnd == 2)
@@ -92,7 +94,7 @@ public class Board
 	
 	private void generateLocations()
 	{
-		ArrayList<String> locs = new PersonOfInterest().locations;
+		ArrayList<String> locs = ps.locations;
 		String[] splitLoc = null;
 		
 		Collections.shuffle(locs);
@@ -113,15 +115,21 @@ public class Board
 				possibleLocations.put(group, temp);
 			}
 		}
+		
+		System.out.println(possibleLocations.get("American politics"));
+		System.out.println(possibleLocations.get("American politics").size());
 	}
 	
 	private Station generateStation()
 	{
-
-		String stationName;
-		stationName = new PersonOfInterest().TransportLinks();
+		String stationName = ps.TransportLinks();
 		
 		return new Station(stationName);
+	}
+	
+	private Utility generateUtility()
+	{
+		return new Utility(ps.utility());
 	}
 	
 	private Group getNextSet()

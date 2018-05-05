@@ -2,6 +2,7 @@ package monopoly;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import javax.swing.Timer;
 import interfaces.*;
@@ -14,9 +15,10 @@ public class Panopoly
 	private GUI[] guiArray;
 	private Dice dice = new Dice();
 	private boolean clockwiseMovement = true;
-	private long startTime;
 	private Timer countdownTimer;
 	private CardDeck deck = new CardDeck();
+	private int TIME_LEFT = 300000;
+	private boolean inCountdown = false;
 	private int bid;
 	private Player highestBidder;
 	
@@ -93,7 +95,7 @@ public class Panopoly
 		return players.get((players.indexOf(currentPlayer)+1)%players.size());
 	}
 	
-	private String getSquareAction()
+	String getSquareAction()
 	{
 		Locatable square = board.getLocation(currentPlayer.getPosition());
 		String ret = "";
@@ -122,6 +124,7 @@ public class Panopoly
 		{
 			Player player=currentPlayer;
 			String card=deck.getCard(this);
+			//if player sent to jail
 			if(currentPlayer!=player)
 				guiArray[player.getPlayerIndex()].displayCard(card);
 			else
@@ -133,17 +136,30 @@ public class Panopoly
 	
 	public void startCountdown()
 	{
-		ActionListener timerListener = new ActionListener() {
+		inCountdown = true;
+		countdownTimer = new Timer(1000, new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				endGame();
-			}};
-			
-		countdownTimer.addActionListener(timerListener);
-		startTime = System.currentTimeMillis();
+			public void actionPerformed(ActionEvent arg0) 
+			{
+				TIME_LEFT -= 1000;
+				
+				SimpleDateFormat df=new SimpleDateFormat("mm:ss");
+				System.out.println(df.format(TIME_LEFT));
+				
+				if(TIME_LEFT <= 0)
+				{	
+					countdownTimer.stop();
+					endGame();
+				}
+			}});
+		
 		countdownTimer.start();
 		updateAction("COUNTDOWN STARTED");
-		updateAction("Elapsed Time in secs: " + (System.currentTimeMillis() - startTime) / 1000);
+	}
+	
+	public boolean isInCountdown()
+	{
+		return inCountdown;
 	}
 
 	public void callAuction()

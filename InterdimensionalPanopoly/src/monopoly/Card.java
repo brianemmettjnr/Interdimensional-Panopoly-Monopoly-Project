@@ -41,8 +41,10 @@ public class Card
 			case Card.BAL_MINUS:		panopoly.getCurrentPlayer().pay(consequence);
 			break;
 			case Card.POSITION_PLUS: 	panopoly.getCurrentPlayer().move(consequence, true);
+										panopoly.getSquareAction();
 			break;
 			case Card.POSITION_MINUS:	panopoly.getCurrentPlayer().move(consequence, false);
+										panopoly.getSquareAction();
 			break;
 			case Card.GO_TO_JAIL:		panopoly.getCurrentPlayer().sendToJail();
 			break;

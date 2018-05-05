@@ -38,6 +38,7 @@ class GUI implements InteractionAPI {
     private JLabel auctionTimer=new JLabel("",SwingConstants.CENTER);
     private JLabel doomsdayTimer=new JLabel("",SwingConstants.CENTER);
     private JTextField bidBox=new JTextField();
+    private JPanel cardPanel = new JPanel();
 
     //Arrays of objects
     private LocationLabel[] locationLabels;
@@ -202,6 +203,11 @@ class GUI implements InteractionAPI {
         questionWindow.setVerticalAlignment(JLabel.TOP);
         questionWindow.setVisible(false);
         mainPane.add(questionWindow);
+        
+        cardPanel.setVisible(false);
+        cardPanel.setBounds(10+ OFFSET +10,locationWindow.getY()+locationWindow.getHeight(),-20+(squaresOnSide -2)* OFFSET, OFFSET);
+        cardPanel.setLayout(new OverlayLayout(cardPanel));
+        mainPane.add(cardPanel);
 
         bidBox.setBounds((int)(10+(OFFSET *((squaresOnSide -1)/2.0))),-20+(squaresOnSide -1)* OFFSET, OFFSET,30);
         bidBox.setForeground(Color.WHITE);
@@ -459,12 +465,15 @@ class GUI implements InteractionAPI {
         card.setBounds(10+ OFFSET +10,locationWindow.getY()+locationWindow.getHeight(),-20+(squaresOnSide -2)* OFFSET, OFFSET);
         card.setVisible(true);
         card.setOpaque(true);
-        getMainPane().add(card);
+        cardPanel.add(card);
+        cardPanel.setVisible(true);
         card.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 card.setVisible(false);
-                getMainPane().remove(card);
+                cardPanel.remove(card);
+                if(cardPanel.getComponentCount() == 0)
+                	cardPanel.setVisible(false);
                 setSelectedLabel(null);
                 setSelectedLabel(getLocationLabel(assignedPlayer.getPosition()));
             }
