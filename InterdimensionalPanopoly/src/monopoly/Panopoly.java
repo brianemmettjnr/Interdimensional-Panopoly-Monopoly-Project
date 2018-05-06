@@ -22,6 +22,7 @@ public class Panopoly
 	private boolean inCountdown = false;
 	private int bid;
 	private Player highestBidder;
+	private Locatable auctionProperty;
 	private SimpleDateFormat df = new SimpleDateFormat("mm:ss");
 	
 	Panopoly(int numLocations)
@@ -162,16 +163,16 @@ public class Panopoly
 		return inCountdown;
 	}
 
-	public void callAuction()
+	public void callAuction(int onEndDo)
 	{
 		bid = 0;
 		highestBidder = currentPlayer;
-		updateAction("An auction for " + board.getLocation(currentPlayer.getPosition()).getIdentifier()+" ");
-		Locatable auctionProperty = board.getLocation(currentPlayer.getPosition());
+		auctionProperty=board.getLocation(currentPlayer.getPosition());
 		for(GUI gui: guiArray)
 		{
 			gui.startAuction();
-		}		
+		}
+		updateAction("An auction for " + auctionProperty.getIdentifier()+" ");
 		//chloe stuff here
 		Timer auctionTimer = new Timer(1000, null);
 				
@@ -189,13 +190,16 @@ public class Panopoly
 				if(AUCTION_TIME <= 0)
 				{	
 					auctionTimer.stop();
-
+					if(onEndDo==0)
+						roll();
+					else
+						startPlayerTurn(getNextPlayer());
 					for(GUI gui: guiArray)
 					{
 						gui.endAuction();
 					}
 					updateAction(highestBidder.getIdentifier()+" wins with a bid of "+bid);
-					
+					highestBidder.buyProperty((Rentable)auctionProperty,bid);
 					AUCTION_TIME = 15000;
 				}
 			}};
@@ -203,11 +207,17 @@ public class Panopoly
 		auctionTimer.addActionListener(timerListener);
 		auctionTimer.start();
 	}
-	
+
+	public Locatable getAuctionProperty()
+	{
+		return auctionProperty;
+	}
+
 	public int getCurrentBid()
 	{
 		return bid;
 	}
+
 	public void updateBid(int bid,Player player)
 	{
 		this.bid=bid;
