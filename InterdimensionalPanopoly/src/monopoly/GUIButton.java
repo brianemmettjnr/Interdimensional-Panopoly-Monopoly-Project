@@ -21,8 +21,7 @@ public class GUIButton {
         button.setForeground(Color.lightGray);
         int size = 20;
         button.setFont(new Font("Courier", Font.BOLD,  size));
-
-        while(button.getFontMetrics(new Font("Courier", Font.BOLD,  size)).stringWidth(name+"1") >= button.getWidth())
+        while(button.getFontMetrics(new Font("Courier", Font.BOLD,  size)).stringWidth(name+"__") >= button.getWidth())
         {
             size--;
             button.setFont(new Font("Courier", Font.BOLD,  size));
@@ -55,6 +54,13 @@ public class GUIButton {
     }
     public void setText(String text) {
         button.setText(text);
+        int size = 20;
+        button.setFont(new Font("Courier", Font.BOLD,  size));
+        while(button.getFontMetrics(new Font("Courier", Font.BOLD,  size)).stringWidth(button.getText()) >= button.getWidth())
+        {
+            size--;
+            button.setFont(new Font("Courier", Font.BOLD,  size));
+        }
     }
 
     public JButton getButton() {

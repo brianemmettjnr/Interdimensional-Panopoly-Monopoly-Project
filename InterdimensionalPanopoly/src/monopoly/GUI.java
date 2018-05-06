@@ -35,9 +35,8 @@ class GUI implements InteractionAPI {
     private JLabel latestAction=new JLabel("",SwingConstants.CENTER);
     private JLabel secondAction=new JLabel("",SwingConstants.CENTER);
     private JLabel thirdAction=new JLabel("",SwingConstants.CENTER);
-    private JLabel auctionTimer=new JLabel("",SwingConstants.CENTER);
+    private GUIButton auctionTimer;
     private JLabel doomsdayTimer=new JLabel("",SwingConstants.CENTER);
-    private JTextField bidBox=new JTextField();
     private JPanel cardPanel = new JPanel();
 
     //Arrays of objects
@@ -57,6 +56,7 @@ class GUI implements InteractionAPI {
     private GUIButton demolishButton;
     private GUIButton quitButton;
     private GUIButton[] answers =new GUIButton[4];
+    private GUIButton bidButton;
 	private MouseAdapter correct=new MouseAdapter() {
         @Override
         public void mouseClicked(MouseEvent e) {
@@ -80,7 +80,7 @@ class GUI implements InteractionAPI {
 
     GUI(int boardSize,Panopoly panopoly,ArrayList<Player> players,Player player)
     {
-        //FRAME_SIZE=new Dimension((int)(50+(FRAME_SIZE.width/2)),(int)(50+FRAME_SIZE.height/2));//temp cod
+        FRAME_SIZE=new Dimension((int)(50+(FRAME_SIZE.width/2)),(int)(50+FRAME_SIZE.height/2));//temp cod
         this.panopoly=panopoly;
         this.players=players;
         assignedPlayer=player;
@@ -151,6 +151,7 @@ class GUI implements InteractionAPI {
             NumOnBoard++;
         }
     }
+
     private void setupImage()
     {
         ImageIcon scaleImage=new ImageIcon(GUI.class.getResource("media/Logo.png"));
@@ -165,6 +166,7 @@ class GUI implements InteractionAPI {
         image.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
         mainPane.add(image);
     }
+
     private void setupWindows()
     {
         locationWindow.setBounds(10+3* OFFSET,10+ OFFSET, OFFSET *(squaresOnSide -6), OFFSET *(squaresOnSide -5));
@@ -175,21 +177,21 @@ class GUI implements InteractionAPI {
         locationWindow.setVisible(false);
         mainPane.add(locationWindow);
 
-        thirdAction.setBounds(10+ OFFSET,locationWindow.getY()+locationWindow.getHeight()+ OFFSET, OFFSET *(squaresOnSide -2),20);
+        thirdAction.setBounds(10+ OFFSET,locationWindow.getY()+locationWindow.getHeight()+ OFFSET, OFFSET *(squaresOnSide -2),OFFSET/3);
         thirdAction.setVisible(true);
         thirdAction.setFont(new Font("times new roman",Font.BOLD,16));
         thirdAction.setForeground(Color.white);
         thirdAction.setText("");
         mainPane.add(thirdAction);
 
-        secondAction.setBounds(10+ OFFSET,thirdAction.getY()+20, OFFSET *(squaresOnSide -2),20);
+        secondAction.setBounds(10+ OFFSET,thirdAction.getY()+thirdAction.getHeight(), OFFSET *(squaresOnSide -2),thirdAction.getHeight());
         secondAction.setVisible(true);
         secondAction.setFont(new Font("times new roman",Font.BOLD,16));
         secondAction.setForeground(Color.white);
         secondAction.setText("Enjoy!");
         mainPane.add(secondAction);
 
-        latestAction.setBounds(10+ OFFSET,secondAction.getY()+20, OFFSET *(squaresOnSide -2),20);
+        latestAction.setBounds(10+ OFFSET,secondAction.getY()+secondAction.getHeight(), OFFSET *(squaresOnSide -2),secondAction.getHeight());
         latestAction.setVisible(true);
         latestAction.setFont(new Font("Times New Roman",Font.BOLD,16));
         latestAction.setForeground(Color.white);
@@ -209,38 +211,8 @@ class GUI implements InteractionAPI {
         cardPanel.setLayout(new OverlayLayout(cardPanel));
         mainPane.add(cardPanel);
 
-        bidBox.setBounds((int)(10+(OFFSET *((squaresOnSide -1)/2.0))),-20+(squaresOnSide -1)* OFFSET, OFFSET,30);
-        bidBox.setForeground(Color.WHITE);
-        bidBox.setBackground(Color.BLACK);
-        bidBox.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int bid;
-                try {// if is number
-                    bid=Integer.parseInt(bidBox.getText());
-                } catch (NumberFormatException b) {
-                    updateAction(bidBox.getText()+" is not a valid bid");
-                    bidBox.setText("");
-                    return;
-                }
-                if(bid<=panopoly.getCurrentBid())
-                {updateAction(bidBox.getText()+" is not a valid bid");
-                    bidBox.setText(""); }
-                else
-                    panopoly.updateBid(bid,assignedPlayer);
-            }
-        });
-        bidBox.setBorder(BorderFactory.createLineBorder(Color.red.brighter(),1));
-        bidBox.setVisible(false);
-        mainPane.add(bidBox);
-
-        auctionTimer.setBounds((int)(10+(OFFSET *((squaresOnSide -1)/2.0)))+OFFSET,-20+(squaresOnSide -1)* OFFSET, OFFSET,30);
-        auctionTimer.setFont(new Font("Digital",Font.BOLD,20));
-        auctionTimer.setBackground(Color.BLACK);
-        auctionTimer.setForeground(Color.WHITE);
+        auctionTimer=new GUIButton("",(int)(10+(OFFSET *((squaresOnSide -1)/2.0)))+OFFSET,-20+(squaresOnSide -1)*OFFSET,null,this);
         auctionTimer.setVisible(false);
-        auctionTimer.setBorder(BorderFactory.createLineBorder(Color.red.brighter(),1));
-        mainPane.add(auctionTimer);
 
         doomsdayTimer.setBounds((int)(10+(OFFSET *((squaresOnSide -3)))),-20+(squaresOnSide -1)* OFFSET, OFFSET,30);
         doomsdayTimer.setFont(new Font("Digital",Font.BOLD,20));
@@ -251,6 +223,7 @@ class GUI implements InteractionAPI {
         doomsdayTimer.setBorder(BorderFactory.createLineBorder(Color.red.brighter(),1));
         mainPane.add(doomsdayTimer);
     }
+
     private void setupButtons()
     {
         GUIButton helpButton = new GUIButton("?", 10 + OFFSET * squaresOnSide, 10, new MouseAdapter() {
@@ -261,6 +234,7 @@ class GUI implements InteractionAPI {
         }, this);
         helpButton.setSize(30,30);
         helpButton.setVisible(true);
+
         rollButton=new GUIButton("Roll",(int)(10+(OFFSET *((squaresOnSide -1)/2.0))),-20+(squaresOnSide -1)* OFFSET,
                 new MouseAdapter() {
                     @Override
@@ -268,6 +242,7 @@ class GUI implements InteractionAPI {
                         rollFunction();
                     }
                 },this);
+
         endButton =new GUIButton("End",(int)(10+(OFFSET *((squaresOnSide -1)/2.0))),-20+(squaresOnSide -1)* OFFSET,
                 new MouseAdapter() {
                     @Override
@@ -291,6 +266,7 @@ class GUI implements InteractionAPI {
                         mortgagePropertyFunction();
                     }
                 },this);
+
         redeemButton =new GUIButton("Redeem",10+ OFFSET +(squaresOnSide -4)* OFFSET,2* OFFSET +10+30,
                 new MouseAdapter() {
                     @Override
@@ -314,6 +290,7 @@ class GUI implements InteractionAPI {
                         demolishHouseFunction();
                     }
                 },this);
+
         leaveButton =new GUIButton("Leave",(10+ OFFSET),-20+(squaresOnSide -1)* OFFSET,
                 new MouseAdapter() {
                     @Override
@@ -322,6 +299,7 @@ class GUI implements InteractionAPI {
                     }
                 },this);
         leaveButton.setVisible(true);
+
         quitButton =new GUIButton("Quit",(10+(OFFSET *((squaresOnSide -2)))),-20+(squaresOnSide -1)* OFFSET,
                 new MouseAdapter() {
                     @Override
@@ -330,6 +308,7 @@ class GUI implements InteractionAPI {
                     }
                 },this);
         quitButton.setVisible(true);
+
         int x=0;
         for(int i=0;i<4;i++)
         {
@@ -339,30 +318,46 @@ class GUI implements InteractionAPI {
             x+=questionWindow.getWidth()/4;
         }
 
+        bidButton=new GUIButton("Bid",(int)(10+(OFFSET *((squaresOnSide -3)/2.0))),-20+(squaresOnSide -1)* OFFSET,
+                new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        if(panopoly.getCurrentBid()+(int)(((RentalProperty)panopoly.getAuctionProperty()).getPrice()*.1)<=assignedPlayer.getBalance())
+                            panopoly.updateBid(panopoly.getCurrentBid()+(int)(((RentalProperty)panopoly.getAuctionProperty()).getPrice()*.1),assignedPlayer);
+                        else
+                            updateAction("Insufficient funds to bid.");
+                    }
+                },this);
+        bidButton.setSize(2*OFFSET,30);
     }
 
     public void rollFunction(){
-        if (buyButton.isVisible())
+        if (panopoly.getBoard().getLocation(panopoly.getCurrentPlayer().getPosition()) instanceof RentalProperty
+                && !((RentalProperty) panopoly.getBoard().getLocation(panopoly.getCurrentPlayer().getPosition())).isOwned())
         {
             rollButton.setVisible(false);
             buyButton.setVisible(false);
-            panopoly.callAuction();
+            panopoly.callAuction(0);
         }
-        panopoly.roll();
-        if(getSelectedLocation()!=getLocationLabel(panopoly.getCurrentPlayer().getPosition())
-                &&!(getLocationLabel(panopoly.getCurrentPlayer().getPosition()).getLocation() instanceof CommunityChest
-                ||getLocationLabel(panopoly.getCurrentPlayer().getPosition()).getLocation() instanceof Chance)) {
-            setSelectedLabel(getLocationLabel(panopoly.getCurrentPlayer().getPosition()));
+        else {
+            panopoly.roll();
+            if (getSelectedLocation() != getLocationLabel(panopoly.getCurrentPlayer().getPosition())
+                    && !(getLocationLabel(panopoly.getCurrentPlayer().getPosition()).getLocation() instanceof CommunityChest
+                    || getLocationLabel(panopoly.getCurrentPlayer().getPosition()).getLocation() instanceof Chance)) {
+                setSelectedLabel(getLocationLabel(panopoly.getCurrentPlayer().getPosition()));
+            }
         }
     }
 
     public void endTurnFunction() {
-        if (buyButton.isVisible()) {
+        if ((panopoly.getBoard().getLocation(panopoly.getCurrentPlayer().getPosition()) instanceof RentalProperty
+                && !((RentalProperty) panopoly.getBoard().getLocation(panopoly.getCurrentPlayer().getPosition())).isOwned())) {
             endButton.setVisible(false);
             buyButton.setVisible(false);
-            panopoly.callAuction();
+            panopoly.callAuction(1);
         }
-        panopoly.startPlayerTurn(panopoly.getNextPlayer());
+        else
+            panopoly.startPlayerTurn(panopoly.getNextPlayer());
     }
 
     private void setVisibleButtons()
@@ -435,7 +430,8 @@ class GUI implements InteractionAPI {
             else
                 player.setBorder(null);
         }
-        setVisibleButtons();
+        if(!auctionTimer.isVisible())
+            setVisibleButtons();
     }
 
     void updateAction(String action)
@@ -533,14 +529,23 @@ class GUI implements InteractionAPI {
     {
         setSelectedLabel(null);
         setSelectedLabel(getLocationLabel(panopoly.getCurrentPlayer().getPosition()));
-        bidBox.setVisible(true);
+        bidButton.setText("Bid: "+GUI.symbol+(int)(((RentalProperty)panopoly.getAuctionProperty()).getPrice()*.1));
+        if((int)(((RentalProperty)panopoly.getAuctionProperty()).getPrice()*.1)<=assignedPlayer.getBalance())
+            bidButton.setVisible(true);
         auctionTimer.setVisible(true);
     }
 
     void updateAuctionClock(String time)
     {
+        endButton.setVisible(false);
+        rollButton.setVisible(false);
         auctionTimer.setText("<html><center>"+time+"</center></html>");
+        if((panopoly.getCurrentBid()+(int)(((RentalProperty)(panopoly.getAuctionProperty())).getPrice()*.1))>assignedPlayer.getBalance())
+            bidButton.setVisible(false);
+        else
+            bidButton.setText("Bid: "+GUI.symbol+(panopoly.getCurrentBid()+(int)(((RentalProperty)(panopoly.getAuctionProperty())).getPrice()*.1)));
     }
+
     void updateDoomsdayClock(String time)
     {
     	doomsdayTimer.setVisible(true);
@@ -551,8 +556,10 @@ class GUI implements InteractionAPI {
 
     void endAuction()
     {
-        bidBox.setVisible(false);
+        bidButton.setVisible(false);
+        bidButton.setText("No Bid");
         auctionTimer.setVisible(false);
+        setSelectedLabel(getLocationLabel(panopoly.getAuctionProperty()));
     }
 
     void endGame()
@@ -566,9 +573,12 @@ class GUI implements InteractionAPI {
         getMainPane().remove(rollButton.getButton());
         getMainPane().remove(quitButton.getButton());
         getMainPane().remove(leaveButton.getButton());
+        for(int i=0;i<4;i++)
+            getMainPane().remove(answers[i].getButton());
+        getMainPane().remove(questionWindow);
         getMainPane().validate();
         getMainPane().repaint();
-        GUIButton again=new GUIButton("New Game?",10+ OFFSET *(squaresOnSide -2)/2,(((int)(FRAME_SIZE.getHeight()*.9))/2)+240,
+        GUIButton again=new GUIButton("New Game?",10+ OFFSET *(squaresOnSide -2)/2,-20+(squaresOnSide -1)* OFFSET,
                 new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
@@ -577,7 +587,7 @@ class GUI implements InteractionAPI {
                     }
                 },this);
         again.setVisible(true);
-        GUIButton exit=new GUIButton("Done?",10+ OFFSET +(OFFSET *(squaresOnSide -2)/2),(((int)(FRAME_SIZE.getHeight()*.9))/2)+240,
+        GUIButton exit=new GUIButton("Done?",10+ OFFSET +(OFFSET *(squaresOnSide -2)/2),-20+(squaresOnSide -1)* OFFSET,
                 new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
