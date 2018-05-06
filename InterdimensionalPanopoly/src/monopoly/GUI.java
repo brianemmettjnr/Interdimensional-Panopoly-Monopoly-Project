@@ -54,8 +54,8 @@ class GUI implements InteractionAPI {
     private GUIButton leaveButton;
     private GUIButton redeemButton;
     private GUIButton buildButton;
-    GUIButton demolishButton;
-    GUIButton quitButton;
+    private GUIButton demolishButton;
+    private GUIButton quitButton;
     private GUIButton[] answers =new GUIButton[4];
 	private MouseAdapter correct=new MouseAdapter() {
         @Override
@@ -240,13 +240,16 @@ class GUI implements InteractionAPI {
         auctionTimer.setForeground(Color.WHITE);
         auctionTimer.setVisible(false);
         auctionTimer.setBorder(BorderFactory.createLineBorder(Color.red.brighter(),1));
+        mainPane.add(auctionTimer);
 
-        doomsdayTimer.setBounds((int)(10+(OFFSET *((squaresOnSide -3))))+OFFSET,-20+(squaresOnSide -1)* OFFSET, OFFSET,30);
+        doomsdayTimer.setBounds((int)(10+(OFFSET *((squaresOnSide -3)))),-20+(squaresOnSide -1)* OFFSET, OFFSET,30);
         doomsdayTimer.setFont(new Font("Digital",Font.BOLD,20));
         doomsdayTimer.setBackground(Color.BLACK);
         doomsdayTimer.setForeground(Color.WHITE);
         doomsdayTimer.setVisible(false);
+        doomsdayTimer.setOpaque(true);
         doomsdayTimer.setBorder(BorderFactory.createLineBorder(Color.red.brighter(),1));
+        mainPane.add(doomsdayTimer);
     }
     private void setupButtons()
     {
@@ -339,6 +342,12 @@ class GUI implements InteractionAPI {
     }
 
     public void rollFunction(){
+        if (buyButton.isVisible())
+        {
+            rollButton.setVisible(false);
+            buyButton.setVisible(false);
+            panopoly.callAuction();
+        }
         panopoly.roll();
         if(getSelectedLocation()!=getLocationLabel(panopoly.getCurrentPlayer().getPosition())
                 &&!(getLocationLabel(panopoly.getCurrentPlayer().getPosition()).getLocation() instanceof CommunityChest
@@ -356,10 +365,6 @@ class GUI implements InteractionAPI {
         panopoly.startPlayerTurn(panopoly.getNextPlayer());
     }
 
-    @Override
-    public void getHelpFunction() {
-
-    }
     private void setVisibleButtons()
     {
     	if(panopoly.getCurrentPlayer().isInJail()||assignedPlayer!=panopoly.getCurrentPlayer())
@@ -538,9 +543,10 @@ class GUI implements InteractionAPI {
     }
     void updateDoomsdayClock(String time)
     {
-        if(!doomsdayTimer.isVisible())
-            doomsdayTimer.setVisible(true);
+    	doomsdayTimer.setVisible(true);
         doomsdayTimer.setText("<html><center>"+time+"</center></html>");
+        System.out.println(time);
+
     }
 
     void endAuction()
@@ -648,6 +654,10 @@ class GUI implements InteractionAPI {
         setSelectedLabel(null);
     }
 
+    @Override
+    public void getHelpFunction() {
+
+    }
 
 
 

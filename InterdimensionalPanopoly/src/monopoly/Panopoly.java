@@ -17,17 +17,17 @@ public class Panopoly
 	private boolean clockwiseMovement = true;
 	private Timer countdownTimer;
 	private CardDeck deck = new CardDeck();
-	private int TIME_LEFT = 300000;
+	private int TIME_LEFT = 300000;	//5 minutes
+	private int AUCTION_TIME = 15000; //15 seconds
 	private boolean inCountdown = false;
 	private int bid;
 	private Player highestBidder;
+	private SimpleDateFormat df = new SimpleDateFormat("mm:ss");
 	
 	Panopoly(int numLocations)
 	{
 		board = new Board(numLocations);
 		SetupGUI.PlayerCountGui(this);
-		countdownTimer = new Timer(300000, null);	//5 minute countdown
-		countdownTimer.setRepeats(false);
 	}
 	
 	public void createGUI(ArrayList<Player> playerArray)
@@ -143,9 +143,9 @@ public class Panopoly
 			{
 				TIME_LEFT -= 1000;
 				
-				SimpleDateFormat df=new SimpleDateFormat("mm:ss");
-				System.out.println(df.format(TIME_LEFT));
-				
+				for(GUI gui:guiArray)
+					gui.updateDoomsdayClock(df.format(TIME_LEFT));
+
 				if(TIME_LEFT <= 0)
 				{	
 					countdownTimer.stop();
@@ -164,21 +164,46 @@ public class Panopoly
 
 	public void callAuction()
 	{
-		bid=0;
-		highestBidder=currentPlayer;
-		updateAction("An auction for "+board.getLocation(currentPlayer.getPosition()).getIdentifier()+" ");
-		Locatable auctionProperty=board.getLocation(currentPlayer.getPosition());
+		bid = 0;
+		highestBidder = currentPlayer;
+		updateAction("An auction for " + board.getLocation(currentPlayer.getPosition()).getIdentifier()+" ");
+		Locatable auctionProperty = board.getLocation(currentPlayer.getPosition());
 		for(GUI gui: guiArray)
 		{
 			gui.startAuction();
-		}
+		}		
 		//chloe stuff here
-		for(GUI gui: guiArray)
-		{
-			gui.endAuction();
-		}
-		updateAction(highestBidder.getIdentifier()+" wins with a bid of "+bid);
+		Timer auctionTimer = new Timer(1000, null);
+				
+		ActionListener timerListener = new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) 
+			{
+				AUCTION_TIME -= 1000;
+				
+				for(GUI gui: guiArray)
+				{
+					gui.updateAuctionClock(df.format(AUCTION_TIME));;
+				}
+				
+				if(AUCTION_TIME <= 0)
+				{	
+					auctionTimer.stop();
+
+					for(GUI gui: guiArray)
+					{
+						gui.endAuction();
+					}
+					updateAction(highestBidder.getIdentifier()+" wins with a bid of "+bid);
+					
+					AUCTION_TIME = 15000;
+				}
+			}};
+		
+		auctionTimer.addActionListener(timerListener);
+		auctionTimer.start();
 	}
+	
 	public int getCurrentBid()
 	{
 		return bid;
