@@ -344,6 +344,22 @@ class GUI implements InteractionAPI {
                     }
                 }, this);
 
+        playAgain=new GUIButton("New Game?",10+ OFFSET *(squaresOnSide -2)/2,-20+(squaresOnSide -1)* OFFSET,
+                new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        mainFrame.dispose();
+                        Main.createPanopoly();
+                    }
+                },this);
+        exitGame=new GUIButton("Done?",10+ OFFSET +(OFFSET *(squaresOnSide -2)/2),-20+(squaresOnSide -1)* OFFSET,
+                new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        mainFrame.dispose();
+                        System.exit(0);
+                    }
+                },this);
         int x=0;
         for(int i=0;i<4;i++)
         {
@@ -631,23 +647,7 @@ class GUI implements InteractionAPI {
         getMainPane().remove(questionWindow);
         getMainPane().validate();
         getMainPane().repaint();
-        playAgain=new GUIButton("New Game?",10+ OFFSET *(squaresOnSide -2)/2,-20+(squaresOnSide -1)* OFFSET,
-                new MouseAdapter() {
-                    @Override
-                    public void mouseClicked(MouseEvent e) {
-                        mainFrame.dispose();
-                        Main.createPanopoly();
-                    }
-                },this);
         playAgain.setVisible(true);
-        exitGame=new GUIButton("Done?",10+ OFFSET +(OFFSET *(squaresOnSide -2)/2),-20+(squaresOnSide -1)* OFFSET,
-                new MouseAdapter() {
-                    @Override
-                    public void mouseClicked(MouseEvent e) {
-                        mainFrame.dispose();
-                        System.exit(0);
-                    }
-                },this);
         exitGame.setVisible(true);
       }
 
