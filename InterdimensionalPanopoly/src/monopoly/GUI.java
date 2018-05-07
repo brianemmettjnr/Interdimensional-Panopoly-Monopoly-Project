@@ -38,6 +38,7 @@ class GUI implements InteractionAPI {
     private GUIButton auctionTimer;
     private JLabel doomsdayTimer=new JLabel("",SwingConstants.CENTER);
     private JPanel cardPanel = new JPanel();
+    private JTextField tradeBox=new JTextField();
 
     //Arrays of objects
     private LocationLabel[] locationLabels;
@@ -59,9 +60,11 @@ class GUI implements InteractionAPI {
     GUIButton exitGame;
     GUIButton bidButton;
     private GUIButton[] answers =new GUIButton[4];
-    private GUIButton bidButton;
     private GUIButton GOOJButton;
     private GUIButton tradeButton;
+    private GUIButton acceptTradeButton;
+    private GUIButton declineTradeButton;
+    private GUIButton sendTradeButton;
 	private MouseAdapter correct=new MouseAdapter() {
         @Override
         public void mouseClicked(MouseEvent e) {
@@ -82,6 +85,10 @@ class GUI implements InteractionAPI {
     private PersonOfInterest personOfInterest=new PersonOfInterest();
     private LocationLabel selectedLabel =null;
     private boolean noQuestion=true;
+    private Player trader;
+    private Player selectedPlayer;
+    private int tradeValue;
+    private Locatable tradeLocation;
 
     GUI(int boardSize,Panopoly panopoly,ArrayList<Player> players,Player player)
     {
@@ -235,14 +242,13 @@ class GUI implements InteractionAPI {
         doomsdayTimer.setOpaque(true);
         doomsdayTimer.setBorder(BorderFactory.createLineBorder(Color.red.brighter(),1));
         mainPane.add(doomsdayTimer);
+
+
         tradeBox.setVisible(false);
-        tradeBox.setBounds((int)(10+(OFFSET *((squaresOnSide -1)/2.0))),-20+(squaresOnSide -1)* OFFSET,30,OFFSET);
-        tradeBox.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                sendTradefunction();
-            }
-        });
+        tradeBox.setOpaque(true);
+        tradeBox.setBorder(BorderFactory.createLineBorder(Color.red,1));
+        tradeBox.setBounds((int)(10+(OFFSET *((squaresOnSide -2)/2.0))),-20+(squaresOnSide -1)* OFFSET,OFFSET*2,30);
+        mainPane.add(tradeBox);
     }
 
     private void setupButtons()
@@ -330,13 +336,13 @@ class GUI implements InteractionAPI {
                 },this);
         quitButton.setVisible(true);
 
-        tradeButton=new GUIButton("Trade",demolishButton.getButton().getX(),demolishButton.getButton().getY()+demolishButton.getButton().getHeight(),
+        sendTradeButton=new GUIButton("Send",tradeBox.getX()+tradeBox.getWidth() , -20 + (squaresOnSide - 1) * OFFSET,
                 new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
-                        tradeFunction();
+                        sendTradefunction();
                     }
-                },this);
+                }, this);
 
         int x=0;
         for(int i=0;i<4;i++)
@@ -346,6 +352,31 @@ class GUI implements InteractionAPI {
             answers[i].setSize(questionWindow.getWidth()/4,30);
             x+=questionWindow.getWidth()/4;
         }
+
+        tradeButton=new GUIButton("Trade",demolishButton.getButton().getX(),demolishButton.getButton().getY(),
+                new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        tradeFunction();
+                    }
+                },this);
+
+        acceptTradeButton=new GUIButton("Accept",rollButton.getButton().getX(),rollButton.getButton().getY(),
+                new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        acceptTradeFunction();
+                    }
+                },this);
+
+        declineTradeButton=new GUIButton("Decline",rollButton.getButton().getX()+OFFSET,rollButton.getButton().getY(),
+                new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        declineTradeFunction();
+                    }
+                },this);
+
 
         bidButton=new GUIButton("Bid",(int)(10+(OFFSET *((squaresOnSide -3)/2.0))),-20+(squaresOnSide -1)* OFFSET,
                 new MouseAdapter() {
@@ -629,6 +660,7 @@ class GUI implements InteractionAPI {
         {
             rollButton.setVisible(false);
             buyButton.setVisible(false);
+            tradeButton.setVisible(false);
             panopoly.callAuction(0);
         }
         else {
@@ -648,6 +680,7 @@ class GUI implements InteractionAPI {
                 && !((RentalProperty) panopoly.getBoard().getLocation(panopoly.getCurrentPlayer().getPosition())).isOwned())) {
             endButton.setVisible(false);
             buyButton.setVisible(false);
+            tradeButton.setVisible(false);
             panopoly.callAuction(1);
         }
         else {
@@ -765,31 +798,80 @@ class GUI implements InteractionAPI {
     public void tradeFunction()
     {
         tradeButton.setText("Cancel");
-        tradeButton.setMouseEvent(new MouseAdapter() {
-                @Override
-                public void mouseClicked(MouseEvent e) {
-                    cancelTrade();
-                }
-        });
         if(  ((RentalProperty)(getSelectedLocation().getLocation())).getOwner()==assignedPlayer  )
         {
             updateAction("Choose the player you would like to trade with");
             updateAction("Enter the amount you want from them");
             tradeBox.setVisible(true);
+            sendTradeButton.setVisible(true);
 
         }
         else
         {
             updateAction("Choose the amount you will pay for this");
+            tradeBox.setVisible(true);
+            sendTradeButton.setVisible(true);
         }
+        tradeButton.setMouseEvent(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                cancelTrade(true);
+            }
+        });
+        tradeBox.setVisible(true);
     }
 
     public void sendTradefunction()
     {
+        int tradeValue;
+        try
+        {
+            tradeValue=Integer.parseInt(tradeBox.getText());
+        }
+        catch (NumberFormatException e)
+        {
+            updateAction("Enter a positive integer number");
+            tradeBox.setText("");
+            return;
+        }
+        if(tradeValue<0)
+        {
+            updateAction("Enter a positive integer number");
+            tradeBox.setText("");
+            return;
+        }
+        Locatable location=getSelectedLocation().getLocation();
+        tradeBox.setVisible(false);
+        sendTradeButton.setVisible(false);
+        if(assignedPlayer!= ((Player)((RentalProperty)location).getOwner()))
+            ((Player)((RentalProperty)location).getOwner()).getGUI().receiveTradeFunction(tradeValue,location,assignedPlayer);
+        else
+        {
+            if(selectedPlayer!=null)
+                selectedPlayer.getGUI().receiveTradeFunction(-tradeValue,location,assignedPlayer);
+            else
+                updateAction("Please select a player");
+        }
 
     }
 
-    public void cancelTrade()
+    public void receiveTradeFunction(int value,Locatable location,Player sender)
+    {
+        if(value<0)
+            updateAction(sender.getIdentifier()+" wants you to give "+-value+" for "+location.getIdentifier());
+        else
+            updateAction(sender.getIdentifier()+" wants to give "+value+" for "+location.getIdentifier());
+
+        trader=sender;
+        tradeValue=value;
+        tradeLocation=location;
+        declineTradeButton.setVisible(true);
+        acceptTradeButton.setVisible(true);
+
+    }
+
+
+    public void cancelTrade(boolean isSucessful)
     {
         tradeButton.setText("Trade");
         tradeButton.setMouseEvent(new MouseAdapter() {
@@ -798,12 +880,33 @@ class GUI implements InteractionAPI {
                 tradeFunction();
             }
         });
+        tradeBox.setVisible(false);
+        sendTradeButton.setVisible(false);
+        if(!isSucessful)
+            updateAction("Trade Cancelled.");
     }
 
-    public void completeTrade()
+
+    public void acceptTradeFunction()
     {
-
+        declineTradeButton.setVisible(false);
+        acceptTradeButton.setVisible(false);
+        trader.getGUI().updateAction(assignedPlayer.getIdentifier()+" accepted the trade.");
+        if(tradeValue<0)
+            trader.sellProperty((Rentable)tradeLocation,-tradeValue,assignedPlayer);
+        else
+            assignedPlayer.sellProperty((Rentable)tradeLocation,tradeValue,trader);
+        trader.getGUI().cancelTrade(true);
     }
+
+    public void declineTradeFunction()
+    {
+        declineTradeButton.setVisible(false);
+        acceptTradeButton.setVisible(false);
+        trader.getGUI().updateAction(assignedPlayer.getIdentifier()+" declined the trade.");
+        trader.getGUI().cancelTrade(true);
+    }
+
 
     public void useGOOJ()
     {
@@ -866,6 +969,8 @@ class GUI implements InteractionAPI {
 
     void setSelectedLabel(LocationLabel location)
     {
+        if(tradeBox.isVisible())
+            cancelTrade(false);
         for(LocationLabel label:gui.getLocationLabels())
         {
             label.resetBorder();
@@ -919,7 +1024,9 @@ class GUI implements InteractionAPI {
             {
                 RentalProperty locationCheck = (RentalProperty) location.getLocation();
 
-                tradeButton.setVisible(locationCheck.isOwned());
+                tradeButton.setVisible(locationCheck.isOwned()&&panopoly.getCurrentPlayer()==assignedPlayer);
+                if(!tradeButton.isVisible()&&tradeButton.getButton().getText()=="Cancel")
+                    cancelTrade(true);
                 if (locationCheck.getOwner() == panopoly.getCurrentPlayer()&&panopoly.getCurrentPlayer()==assignedPlayer)
                 {
                     Boolean mortgageable=true;
@@ -994,16 +1101,11 @@ class GUI implements InteractionAPI {
 
     }
 
-	@Override
-	public void wonGameStopFunction() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void wonGameReplayFunction() {
-		// TODO Auto-generated method stub
-		
-	}
-
+    public void setSelectedPlayer(Player selectedPlayer) {
+        if(selectedPlayer!=assignedPlayer)
+        {
+            updateAction(selectedPlayer.getIdentifier()+" is the selected player");
+            this.selectedPlayer = selectedPlayer;
+        }
+    }
 }

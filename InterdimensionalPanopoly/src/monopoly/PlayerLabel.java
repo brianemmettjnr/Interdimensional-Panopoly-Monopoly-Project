@@ -51,6 +51,7 @@ public class PlayerLabel
             @Override
             public void mouseClicked(MouseEvent e) {
                 gui.setSelectedLabel(null);
+                gui.setSelectedPlayer(player);
                 for(Rentable property:player.getProperties())
                 {
                     if(((RentalProperty) property).isMortgaged())
