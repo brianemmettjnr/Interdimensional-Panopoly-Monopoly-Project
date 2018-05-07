@@ -96,7 +96,6 @@ public class PersonOfInterest
 			{		
 				for(int z = 0; z < rands; z++)
 				{
-					
 					int n = DICE.nextInt(allPeople.size());
 					locations.add((String) allPeople.get(n));
 					allPeople.remove(n);
@@ -107,15 +106,13 @@ public class PersonOfInterest
 		removes.addAll(locations);
 		locations.clear();
 		locations.addAll(removes); // removes duplicates
-		locations.remove(0);		
-		System.out.println(locations);
+		locations.remove(0);
 	}
 
 	public String Surnames()
 	{
 		stations 	= NOC.getAllKeys("Character");
 		int rand = 0;
-		int rand2 = 0;
 		String stationName = "";
 		do {
 			rand = DICE.nextInt(stations.size() - 2) + 1;
@@ -140,7 +137,7 @@ public class PersonOfInterest
 
 	public String utility()
 	{
-		String[] utilityNames = {"cryptocurrency enchanges", "data bank", "hydroelectric dam", "wind turbines", "nuclear power station", "lightning farm", "solar panels"};
+		String[] utilityNames = {"Cryptocurrency Exchange", "Data Bank", "Hydroelectric Dam", "Wind Turbines", "Nuclear Power Station", "Lightning Farm", "Solar Panels"};
 		int rand = 0;
 		rand = DICE.nextInt(utilityNames.length);
 		String utility = Surnames() + " " + utilityNames[rand];
@@ -237,8 +234,6 @@ public class PersonOfInterest
 	{
 		int rands = DICE.nextInt(blackmailBritish.size());
 		opponents = NOC3.getAllKeysWithFieldValueNon("Character", blackmailBritish.get(rands));
-		double moneyValues[] = {50,100,150,200,250};
-		int mons = DICE.nextInt(moneyValues.length);
 		String output = "You catch " + blackmailBritish.get(rands) + " in bed with " + opponents + ", receive a free pardon from prison";
 		output = output.replace("]", "");
 		output = output.replace("[", "");
@@ -255,7 +250,7 @@ public class PersonOfInterest
 		output = output.replace("]", "");
 		output = output.replace("[", "");
 		return new Card(Card.BAL_MINUS, output, moneyValues[mons]);
-		}
+	}
 	
 	public Card Pawns()
 	{
@@ -465,21 +460,5 @@ public class PersonOfInterest
 		}
 
 		return qandA;
-	}
-
-	public static void main(String[] args) {
-		PersonOfInterest ps = new PersonOfInterest();
-//		int j = 0;
-		System.out.print(ps.TransportLinks() + "\n");
-		System.out.print(ps.utility());
-//		while(j < 1000)
-//		{
-//			String[] str1 = ps.Question();
-//			for (String str : str1) {
-//				System.out.print(str + "\n");
-//			}
-//			j++;
-//		}
-
 	}
 }

@@ -11,7 +11,8 @@ import interfaces.Locatable;
 public class Board 
 {
 	private ArrayList<Locatable> locations = new ArrayList<Locatable>();
-	private ArrayList<String> currentSet;
+	private ArrayList<String> addresses = new ArrayList<String>();
+	private ArrayList<String> currentSet = new ArrayList<String>();
 	private Group currentGroup;
 
 	LinkedHashMap<String, ArrayList<String>> possibleLocations = new LinkedHashMap<String, ArrayList<String>>();
@@ -27,9 +28,11 @@ public class Board
 		int priceIncrease = 44/ numLocations;
 		int setIndex = 0;
 
-		
 		generateLocations();
-		currentGroup = getNextSet();
+		do 
+		{
+			currentGroup = getNextSet();
+		} while(currentSet.size() < 2);
 		
 		//Fill in locations for board - hard-coded Named Locations/Tax and Utilities
 		for(int i = 0; i < numLocations; i++)
@@ -77,7 +80,11 @@ public class Board
 					
 					if(setIndex == currentSet.size() || setIndex == 3)
 					{
-						currentGroup = getNextSet();
+						do
+						{
+							currentGroup = getNextSet();
+						} while(currentSet.size() < 2);
+						
 						setIndex = 0;
 					}
 					
@@ -96,6 +103,7 @@ public class Board
 	{
 		ArrayList<String> locs = PersonOfInterest.locations;
 		String[] splitLoc = null;
+		String[] splitAddress = null;
 		
 		Collections.shuffle(locs);
 		
@@ -110,14 +118,23 @@ public class Board
 				//key = group, value += address
 				if(possibleLocations.containsKey(group))
 					temp = possibleLocations.get(group);
-								
-				temp.add(splitLoc[0]);
+				
+				//split multi-line addresses
+				splitAddress = splitLoc[0].split(", ");
+				
+				for(String a: splitAddress)
+				{
+					//check for duplicates across groups
+					if(!addresses.contains(a))
+					{
+						temp.add(a);
+						addresses.add(a);
+					}
+				}
+				
 				possibleLocations.put(group, temp);
 			}
 		}
-		
-		System.out.println(possibleLocations.get("American politics"));
-		System.out.println(possibleLocations.get("American politics").size());
 	}
 	
 	private Station generateStation()
