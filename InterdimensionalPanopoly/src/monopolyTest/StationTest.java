@@ -2,7 +2,6 @@ package monopolyTest;
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 
-import monopoly.Panopoly;
 import org.junit.Test;
 
 import monopoly.Player;

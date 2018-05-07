@@ -173,7 +173,7 @@ public class Panopoly
 			gui.startAuction();
 		}
 		updateAction("An auction for " + auctionProperty.getIdentifier()+" ");
-		//chloe stuff here
+
 		Timer auctionTimer = new Timer(1000, null);
 				
 		ActionListener timerListener = new ActionListener() {
