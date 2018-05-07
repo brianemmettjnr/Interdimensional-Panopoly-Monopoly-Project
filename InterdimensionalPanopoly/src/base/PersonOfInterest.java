@@ -2,6 +2,7 @@ package base;
 
 import monopoly.Card;
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class PersonOfInterest
 {
@@ -394,14 +395,16 @@ public class PersonOfInterest
 			questions = NOC.getAllKeys("Opponent");
 			int rand = 0;
 			rand = DICE.nextInt(questions.size() - 2) + 1;
-			qandA[0] = "Which of the following is an opponet(s) of " + questions.get(rand) + "?";
+			qandA[0] = "Which of the following is an opponent of " + questions.get(rand) + "?";
 			answers = NOC3.getAllKeysWithFieldValueNon("Character", questions.get(rand));
-			qandA[1] = "" + answers.firstElement();
+			String[] possibles = answers.firstElement().split(", ");
+			qandA[1] = "" + possibles[ThreadLocalRandom.current().nextInt(possibles.length)].replace(",", "");
 			wrongs = NOC3.getAllKeysWithoutFieldValue("Character", questions.get(rand));
 			int rand2 = 0;
 			for (int i = 2; i < 5; i++) {
 				rand2 = DICE.nextInt(wrongs.size() - 2) + 1;
-				String temp = wrongs.get(rand2);
+				possibles = wrongs.get(rand2).split(", ");
+				String temp = possibles[ThreadLocalRandom.current().nextInt(possibles.length)].replace(",", "");
 				qandA[i] = temp;
 			}
 		}
@@ -413,13 +416,15 @@ public class PersonOfInterest
 			rand = DICE.nextInt(questions.size()-2)+1;
 			qandA[0] = questions.get(rand) + " is associated with which of the following modes of transport?";
 			answers = NOC2.getAllKeysWithFieldValueNon("Character", questions.get(rand));
-			qandA[1] = "" + answers.firstElement();
+			String[] possibles = answers.firstElement().split(", ");
+			qandA[1] = "" + possibles[ThreadLocalRandom.current().nextInt(possibles.length)].replace(",", "");
 			wrongs = NOC2.getAllKeysWithoutFieldValue("Character", questions.get(rand));
 			int rand2 = 0;
 			for (int i = 2; i < 5; i++)
 			{
 				rand2 = DICE.nextInt(wrongs.size() - 2) + 1;
-				String temp = wrongs.get(rand2);
+				possibles = wrongs.get(rand2).split(", ");
+				String temp = possibles[ThreadLocalRandom.current().nextInt(possibles.length)].replace(",", "");
 				qandA[i] = temp;
 			}
 		}
@@ -431,13 +436,15 @@ public class PersonOfInterest
 			rand = DICE.nextInt(questions.size()-2)+1;
 			qandA[0] = questions.get(rand) + " is a creation of which of the following?";
 			answers = NOC6.getAllKeysWithFieldValueNon("Character", questions.get(rand));
-			qandA[1] = "" + answers.firstElement();
+			String[] possibles = answers.firstElement().split(", ");
+			qandA[1] = "" + possibles[ThreadLocalRandom.current().nextInt(possibles.length)].replace(",", "");
 			wrongs = NOC6.getAllKeysWithoutFieldValue("Character", questions.get(rand));
 			int rand2 = 0;
 			for (int i = 2; i < 5; i++)
 			{
 				rand2 = DICE.nextInt(wrongs.size() - 2) + 1;
-				String temp = wrongs.get(rand2);
+				possibles = wrongs.get(rand2).split(", ");
+				String temp = possibles[ThreadLocalRandom.current().nextInt(possibles.length)].replace(",", "");
 				qandA[i] = temp;
 			}
 		}
@@ -448,13 +455,15 @@ public class PersonOfInterest
 			rand = DICE.nextInt(questions.size()-2)+1;
 			qandA[0] = questions.get(rand) + " is portrayed by which of the following?";
 			answers = NOC7.getAllKeysWithFieldValueNon("Character", questions.get(rand));
-			qandA[1] = "" + answers.firstElement();
+			String[] possibles = answers.firstElement().split(", ");
+			qandA[1] = "" + possibles[ThreadLocalRandom.current().nextInt(possibles.length)].replace(",", "");
 			wrongs = NOC7.getAllKeysWithoutFieldValue("Character", questions.get(rand));
 			int rand2 = 0;
 			for (int i = 2; i < 5; i++)
 			{
 				rand2 = DICE.nextInt(wrongs.size() - 2) + 1;
-				String temp = wrongs.get(rand2);
+				possibles = wrongs.get(rand2).split(", ");
+				String temp = possibles[ThreadLocalRandom.current().nextInt(possibles.length)].replace(",", "");
 				qandA[i] = temp;
 			}
 		}
