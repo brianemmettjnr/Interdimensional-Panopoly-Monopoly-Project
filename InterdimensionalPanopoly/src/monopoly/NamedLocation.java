@@ -3,8 +3,9 @@
 package monopoly;
 
 import interfaces.Identifiable;
+import interfaces.Locatable;
 
-public class NamedLocation implements Identifiable {
+public class NamedLocation implements Identifiable, Locatable {
 	
 	private String name;
 	
@@ -15,5 +16,11 @@ public class NamedLocation implements Identifiable {
 	@Override
 	public String getIdentifier() {
 		return name;
+	}
+
+	@Override
+	public int getPosition() 
+	{
+		return 0;
 	}
 }
