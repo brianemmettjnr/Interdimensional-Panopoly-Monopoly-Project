@@ -11,6 +11,8 @@ public interface InteractionAPI {
     void buyPropertyFunction();
     void mortgagePropertyFunction();
     void redeemPropertyFunction();
+    void wonGameQuitFunction();
+    void wonGameReplayFunction();
     void buildHouseFunction();
     void demolishHouseFunction();
     void quitTheGameFunction();

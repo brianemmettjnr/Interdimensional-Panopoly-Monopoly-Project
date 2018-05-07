@@ -49,12 +49,14 @@ class GUI implements InteractionAPI {
     GUIButton buyButton;
     GUIButton rollButton;
     GUIButton endButton;
-    private GUIButton mortgageButton;
-    private GUIButton leaveButton;
-    private GUIButton redeemButton;
-    private GUIButton buildButton;
-    private GUIButton demolishButton;
-    private GUIButton quitButton;
+    GUIButton mortgageButton;
+    GUIButton leaveButton;
+    GUIButton redeemButton;
+    GUIButton buildButton;
+    GUIButton demolishButton;
+    GUIButton quitButton;
+    GUIButton playAgain;
+    GUIButton exitGame;
     private GUIButton[] answers =new GUIButton[4];
     private GUIButton bidButton;
     private GUIButton GOOJButton;
@@ -581,7 +583,7 @@ class GUI implements InteractionAPI {
         getMainPane().remove(questionWindow);
         getMainPane().validate();
         getMainPane().repaint();
-        GUIButton again=new GUIButton("New Game?",10+ OFFSET *(squaresOnSide -2)/2,-20+(squaresOnSide -1)* OFFSET,
+        playAgain=new GUIButton("New Game?",10+ OFFSET *(squaresOnSide -2)/2,-20+(squaresOnSide -1)* OFFSET,
                 new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
@@ -589,8 +591,8 @@ class GUI implements InteractionAPI {
                         Main.createPanopoly();
                     }
                 },this);
-        again.setVisible(true);
-        GUIButton exit=new GUIButton("Done?",10+ OFFSET +(OFFSET *(squaresOnSide -2)/2),-20+(squaresOnSide -1)* OFFSET,
+        playAgain.setVisible(true);
+        exitGame=new GUIButton("Done?",10+ OFFSET +(OFFSET *(squaresOnSide -2)/2),-20+(squaresOnSide -1)* OFFSET,
                 new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
@@ -598,7 +600,7 @@ class GUI implements InteractionAPI {
                         System.exit(0);
                     }
                 },this);
-        exit.setVisible(true);
+        exitGame.setVisible(true);
       }
 
 
@@ -663,6 +665,18 @@ class GUI implements InteractionAPI {
         gui.updateAction(panopoly.redeem(redeem));
         if(panopoly.getCurrentPlayer() instanceof GameBot)
             ((GameBot) panopoly.getCurrentPlayer()).makeGameDecision();
+    }
+
+    @Override
+    public void wonGameQuitFunction() {
+
+        System.exit(0);
+    }
+
+    @Override
+    public void wonGameReplayFunction() {
+
+        Main.createPanopoly();
     }
 
     @Override
