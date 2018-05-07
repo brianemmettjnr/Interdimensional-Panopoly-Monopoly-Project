@@ -12,6 +12,7 @@ public class Player extends Thread implements Playable, Locatable {
 	
 	private static final int STARTING_BALANCE = 1500;
 	private int playerIndex;
+	private GUI gui;
 
 	protected String name;
 	protected int balance;
@@ -227,5 +228,13 @@ public class Player extends Thread implements Playable, Locatable {
 	{
 		inJail = false;
 		panopoly.startPlayerTurn(panopoly.getNextPlayer());
+	}
+	public GUI getGUI()
+	{
+		return gui;
+	}
+	public void setGUI(GUI gui)
+	{
+		this.gui=gui;
 	}
 }
