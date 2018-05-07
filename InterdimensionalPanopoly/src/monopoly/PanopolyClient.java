@@ -123,7 +123,6 @@ public class PanopolyClient {
                 }
             }
 
-
             //System.out.println("board");
 
         }catch(Exception e){

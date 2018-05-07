@@ -38,6 +38,7 @@ class GUI implements InteractionAPI {
     private GUIButton auctionTimer;
     private JLabel doomsdayTimer=new JLabel("",SwingConstants.CENTER);
     private JPanel cardPanel = new JPanel();
+    private JTextField tradeBox=new JTextField();
 
     //Arrays of objects
     private LocationLabel[] locationLabels;
@@ -59,7 +60,7 @@ class GUI implements InteractionAPI {
     GUIButton exitGame;
     GUIButton bidButton;
     private GUIButton[] answers =new GUIButton[4];
-    private GUIButton bidButton;
+
     private GUIButton GOOJButton;
     private GUIButton tradeButton;
 	private MouseAdapter correct=new MouseAdapter() {
@@ -235,6 +236,8 @@ class GUI implements InteractionAPI {
         doomsdayTimer.setOpaque(true);
         doomsdayTimer.setBorder(BorderFactory.createLineBorder(Color.red.brighter(),1));
         mainPane.add(doomsdayTimer);
+
+       /*
         tradeBox.setVisible(false);
         tradeBox.setBounds((int)(10+(OFFSET *((squaresOnSide -1)/2.0))),-20+(squaresOnSide -1)* OFFSET,30,OFFSET);
         tradeBox.addActionListener(new ActionListener() {
@@ -242,7 +245,7 @@ class GUI implements InteractionAPI {
             public void actionPerformed(ActionEvent e) {
                 sendTradefunction();
             }
-        });
+        });*/
     }
 
     private void setupButtons()
@@ -994,16 +997,6 @@ class GUI implements InteractionAPI {
 
     }
 
-	@Override
-	public void wonGameStopFunction() {
-		// TODO Auto-generated method stub
-		
-	}
 
-	@Override
-	public void wonGameReplayFunction() {
-		// TODO Auto-generated method stub
-		
-	}
 
 }

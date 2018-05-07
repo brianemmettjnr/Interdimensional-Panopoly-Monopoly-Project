@@ -23,19 +23,24 @@ public class GameBot extends Player{
 
         if(isInJail()){
             gui.answerCorrectlyFunction();
-        } else if(gui.rollButton.isVisible()) {
-            gui.rollFunction();
-        } else if(gui.bidButton.isVisible()){
+        }
+        //bidding cant work as bid is free for all and the bot player is never active to bid
+        /*else if(gui.bidButton.isVisible()){
             if(bidsMade<2){
                 gui.bidFunction();
                 bidsMade++;
             }else{
                 bidsMade=0;
-            }
+            }gui.getLocationLabel(this.getPosition()).getLocation().
+        }*/
+        else if(gui.rollButton.isVisible()) {
+            gui.rollFunction();
         } else if(gui.exitGame.isVisible()){
             gui.wonGameQuitFunction();
-        } else if(gui.buyButton.isVisible()){
-            gui.buyPropertyFunction();
+//        } else if(gui.buyButton.isVisible()){
+//            if (balance > 300) {
+//                gui.buyPropertyFunction();
+//            }
         } else if(gui.endButton.isVisible()){
             gui.endTurnFunction();
         } else if(balance<0){

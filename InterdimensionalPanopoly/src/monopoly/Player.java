@@ -18,7 +18,7 @@ public class Player extends Thread implements Playable, Locatable {
 	private ArrayList<Rentable> properties = new ArrayList<>();
 	private int position;
 	private int imageIndex=0;
-	private Panopoly panopoly;
+	public Panopoly panopoly;
 	boolean canRoll = true;
 	boolean rollComplete = false;
 	private boolean inJail = false;
