@@ -92,7 +92,7 @@ class GUI implements InteractionAPI {
 
     GUI(int boardSize,Panopoly panopoly,ArrayList<Player> players,Player player)
     {
-        //FRAME_SIZE=new Dimension((int)(50+(FRAME_SIZE.width/2)),(int)(50+FRAME_SIZE.height/2));//temp cod
+        FRAME_SIZE=new Dimension((int)(50+(FRAME_SIZE.width/2)),(int)(50+FRAME_SIZE.height/2));//temp cod
         this.panopoly=panopoly;
         this.players=players;
         assignedPlayer=player;
@@ -344,6 +344,22 @@ class GUI implements InteractionAPI {
                     }
                 }, this);
 
+        playAgain=new GUIButton("New Game?",10+ OFFSET *(squaresOnSide -2)/2,-20+(squaresOnSide -1)* OFFSET,
+                new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        mainFrame.dispose();
+                        Main.createPanopoly();
+                    }
+                },this);
+        exitGame=new GUIButton("Done?",10+ OFFSET +(OFFSET *(squaresOnSide -2)/2),-20+(squaresOnSide -1)* OFFSET,
+                new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        mainFrame.dispose();
+                        System.exit(0);
+                    }
+                },this);
         int x=0;
         for(int i=0;i<4;i++)
         {
@@ -626,28 +642,14 @@ class GUI implements InteractionAPI {
         getMainPane().remove(rollButton.getButton());
         getMainPane().remove(quitButton.getButton());
         getMainPane().remove(leaveButton.getButton());
+        getMainPane().remove(auctionTimer.getButton());
+        getMainPane().remove(bidButton.getButton());
         for(int i=0;i<4;i++)
             getMainPane().remove(answers[i].getButton());
         getMainPane().remove(questionWindow);
         getMainPane().validate();
         getMainPane().repaint();
-        playAgain=new GUIButton("New Game?",10+ OFFSET *(squaresOnSide -2)/2,-20+(squaresOnSide -1)* OFFSET,
-                new MouseAdapter() {
-                    @Override
-                    public void mouseClicked(MouseEvent e) {
-                        mainFrame.dispose();
-                        Main.createPanopoly();
-                    }
-                },this);
         playAgain.setVisible(true);
-        exitGame=new GUIButton("Done?",10+ OFFSET +(OFFSET *(squaresOnSide -2)/2),-20+(squaresOnSide -1)* OFFSET,
-                new MouseAdapter() {
-                    @Override
-                    public void mouseClicked(MouseEvent e) {
-                        mainFrame.dispose();
-                        System.exit(0);
-                    }
-                },this);
         exitGame.setVisible(true);
       }
 
@@ -1020,6 +1022,7 @@ class GUI implements InteractionAPI {
             locationWindow.setOpaque(true);
             locationWindow.setVisible(true);
             image.setVisible(false);
+            tradeButton.setVisible(false);
             if (location.getLocation() instanceof RentalProperty)
             {
                 RentalProperty locationCheck = (RentalProperty) location.getLocation();
