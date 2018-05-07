@@ -28,12 +28,11 @@ public class PanopolyServer {
 
             Socket socket = serverSocket.accept();
 
-            DataOutputStream out;
+            DataOutputStream out = new DataOutputStream(socket.getOutputStream());;
             DataInputStream in;
 
             if(players.size()!=maxNumOfPlayers){
                 System.out.println("connection from: " + socket.getInetAddress());
-                out = new DataOutputStream(socket.getOutputStream());
                 outs.add(out);
                 in = new DataInputStream(socket.getInputStream());
                 players.add(new NetworkedPlayer("Player"+i, i, i, panopoly,out,in));
@@ -44,11 +43,13 @@ public class PanopolyServer {
             if(players.size()==maxNumOfPlayers){
 
                 SetupGUI.PlayerNameServerGUI(panopoly,players);
-                for (int j = 0; j < outs.size(); j++) {
-                    System.out.println("sent f ");
-                    outs.get(j).writeChar('f');
-                }
-                //out.writeChar('f');
+//                for(int j = 0; j < outs.size(); j++) {
+//                    System.out.println("sent f ");
+//                    outs.get(j).writeChar('f');
+//                    System.out.println("sent f 2 ");
+//                }
+                System.out.println("full");
+                out.writeChar('f');
 //                for (Socket s: clientSockets) {
 //                    System.out.println("setupGUI");
 //                    System.out.println("Making Panopoly");

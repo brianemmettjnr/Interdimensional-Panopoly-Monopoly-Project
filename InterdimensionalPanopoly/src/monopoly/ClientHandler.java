@@ -17,17 +17,19 @@ public class ClientHandler implements Runnable{
     }
     @Override
     public void run() {
-        while(true){
+
             try {
-                System.out.println("hi");
-                char status = in.readChar();
-                System.out.println("received f");
-                int playerId = in.readInt();
-                client.whatUpDog(status,playerId);
+                while(true) {
+
+                    System.out.println("hi");
+                    char status = in.readChar();
+//                System.out.println("received f");
+//                int playerId = in.readInt();
+                    client.whatUpDog(status);
+                }
             } catch (IOException e) {
-                e.printStackTrace();
+                System.out.println("handler");
             }
 
         }
     }
-}

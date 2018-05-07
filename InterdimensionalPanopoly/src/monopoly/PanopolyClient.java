@@ -31,6 +31,7 @@ public class PanopolyClient implements Runnable {
         }
             while(true){
             in.readChar();
+                System.out.println("YUPPP");
                 if(in.readChar()=='f'){
                     System.out.println("yoyo");
                     int x = in.readInt();
@@ -53,11 +54,11 @@ public class PanopolyClient implements Runnable {
         PanopolyClient client = new PanopolyClient();
         client.makeClient(serverAddress,port);
     }
-    public void whatUpDog(char status,int pid){
+    public void whatUpDog(char status){
 
-        System.out.println(pid);
         if(status=='f'){
-            PanopolyServer.panopoly.setNetworkedPlayerGUI(pid);
+            System.out.println("hey");
+            PanopolyServer.panopoly.setNetworkedPlayerGUI(1);
         }
 
     }
@@ -65,8 +66,11 @@ public class PanopolyClient implements Runnable {
     public void run() {
         while(true){
             try {
-                out.writeInt(playerId);
-                System.out.println();
+                if(in.readChar()=='f'){
+                    System.out.println("Received");
+                }
+//                out.writeInt(playerId);
+//                System.out.println();
             } catch (IOException e) {
                 System.out.println("pid error");
             }
