@@ -114,7 +114,7 @@ public class PanopolyServer {
                 System.out.println("connection from: " + socket.getInetAddress());
 
                 players.add(new Player("Player"+i, i, i, panopoly));
-                //out.writeInt(i);
+                out.writeInt(i);
                 outs.add(out);
                 Thread thread = new Thread(players.get(i));
                 i++;

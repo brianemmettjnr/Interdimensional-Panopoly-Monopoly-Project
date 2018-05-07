@@ -107,18 +107,19 @@ public class PanopolyClient {
             socket = new Socket(serverAddress, port);
             System.out.println("connected");
             in = new DataInputStream(socket.getInputStream());
-            //playerId = in.readInt();
+            playerId = in.readInt();
             out = new DataOutputStream(socket.getOutputStream());
-            clientFrame = new JFrame("OK MATE");
-            clientFrame.setVisible(true);
+//            clientFrame = new JFrame("OK MATE");
+//            clientFrame.setVisible(true);
             while(true){
 
                 char x = in.readChar();
 //                int pid = in.readInt();
                 if(x=='f'){
                     System.out.println("RECEIVED");
+                    System.out.println(playerId);
 //                    int pid = in.readInt();
-//                    PanopolyServer.panopoly.setNetworkedPlayerGUI(pid);
+                    PanopolyServer.panopoly.setNetworkedPlayerGUI(playerId);
                 }
             }
 
