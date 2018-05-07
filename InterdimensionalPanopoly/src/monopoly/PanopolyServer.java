@@ -11,7 +11,6 @@ public class PanopolyServer {
 
     public static ArrayList<Player> players;
     static int maxNumOfPlayers = 3;
-    static Player[] ppl = new Player[maxNumOfPlayers];
     static ArrayList<Socket> clientSockets;
     static ServerSocket serverSocket;
     private static int numLocations = 4 * ThreadLocalRandom.current().nextInt(8, 14 + 1);
@@ -21,26 +20,35 @@ public class PanopolyServer {
         players=new ArrayList<>();
         System.out.println("Starting server...");
         serverSocket = new ServerSocket(7777);
+        System.out.println("Server Started");
+        ArrayList<DataOutputStream> outs = new ArrayList<>();
         int i=0;
 
         while (true) {
 
-            System.out.println("Server Started");
             Socket socket = serverSocket.accept();
-            DataOutputStream out = new DataOutputStream(socket.getOutputStream());
-            DataInputStream in = new DataInputStream(socket.getInputStream());
+
+            DataOutputStream out;
+            DataInputStream in;
 
             if(players.size()!=maxNumOfPlayers){
                 System.out.println("connection from: " + socket.getInetAddress());
-
-                players.add(new Player("Player"+i, i, i, panopoly));
+                out = new DataOutputStream(socket.getOutputStream());
+                outs.add(out);
+                in = new DataInputStream(socket.getInputStream());
+                players.add(new NetworkedPlayer("Player"+i, i, i, panopoly,out,in));
                 Thread thread = new Thread(players.get(i));
-                i++;
                 thread.start();
-
+                i++;
             }
             if(players.size()==maxNumOfPlayers){
 
+                SetupGUI.PlayerNameServerGUI(panopoly,players);
+                for (int j = 0; j < outs.size(); j++) {
+                    System.out.println("sent f ");
+                    outs.get(j).writeChar('f');
+                }
+                //out.writeChar('f');
 //                for (Socket s: clientSockets) {
 //                    System.out.println("setupGUI");
 //                    System.out.println("Making Panopoly");
@@ -48,7 +56,6 @@ public class PanopolyServer {
 //                    System.out.println("panopoly object made");
 //                }
 
-                SetupGUI.PlayerNameServerGUI(panopoly,players);
             }
 //            for (int i = 0; i < maxNumOfPlayers; i++) {
 //                if (players.get(i) == null) {

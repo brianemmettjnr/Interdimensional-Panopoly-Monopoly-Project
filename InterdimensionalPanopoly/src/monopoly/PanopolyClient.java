@@ -5,7 +5,7 @@ import java.io.*;
 import java.net.Socket;
 import java.util.Scanner;
 
-public class PanopolyClient {
+public class PanopolyClient implements Runnable {
 
     static DataInputStream in;
     static DataOutputStream out;
@@ -17,27 +17,27 @@ public class PanopolyClient {
 
         try {
             System.out.println("Connecting..");
-            socket = new Socket(serverAddress, port);
+            socket = new Socket("localhost", 7777);
             System.out.println("connected");
             in = new DataInputStream(socket.getInputStream());
-            //playerId = in.readInt();
+            playerId = in.readInt();
             out = new DataOutputStream(socket.getOutputStream());
-            clientFrame = new JFrame("OK MATE");
-            clientFrame.setVisible(true);
-//            while(true){
-//                if(in.readChar()=='f'){
-//                    System.out.println("RECEIVED");
-//
-////                   SetupGUI.PlayerNameGUI(PanopolyServer.panopoly,PanopolyServer.players);
-//                }
-//            }
+            ClientHandler input = new ClientHandler(in,out,this);
+            Thread thread = new Thread(input);
+            thread.start();
 
-
-            //System.out.println("board");
-
-        }catch(Exception e){
+        }catch (Exception e){
             System.out.println("Unable to start client");
         }
+            while(true){
+            in.readChar();
+                if(in.readChar()=='f'){
+                    System.out.println("yoyo");
+                    int x = in.readInt();
+                    PanopolyServer.panopoly.setNetworkedPlayerGUI(x);
+                }
+            }
+            //System.out.println("board");
     }
 
     public static void main(String[] args) throws Exception {
@@ -52,5 +52,29 @@ public class PanopolyClient {
         int port=7777;
         PanopolyClient client = new PanopolyClient();
         client.makeClient(serverAddress,port);
+    }
+    public void whatUpDog(char status,int pid){
+
+        System.out.println(pid);
+        if(status=='f'){
+            PanopolyServer.panopoly.setNetworkedPlayerGUI(pid);
+        }
+
+    }
+    @Override
+    public void run() {
+        while(true){
+            try {
+                out.writeInt(playerId);
+                System.out.println();
+            } catch (IOException e) {
+                System.out.println("pid error");
+            }
+            try {
+                Thread.sleep(400);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
