@@ -1,10 +1,5 @@
 package monopoly;
 
-import interfaces.Playable;
-import interfaces.Rentable;
-
-import java.util.ArrayList;
-
 public class GameBot extends Player{
 
     private int bidsMade = 0;

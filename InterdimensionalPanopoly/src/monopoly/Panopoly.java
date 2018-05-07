@@ -206,10 +206,6 @@ public class Panopoly
 				if(AUCTION_TIME <= 0)
 				{	
 					auctionTimer.stop();
-					if(onEndDo==0)
-						roll();
-					else
-						startPlayerTurn(getNextPlayer());
 					for(GUI gui: guiArray)
 					{
 						gui.endAuction();
@@ -217,6 +213,10 @@ public class Panopoly
 					updateAction(highestBidder.getIdentifier()+" wins with a bid of "+bid);
 					highestBidder.buyProperty((Rentable)auctionProperty,bid);
 					AUCTION_TIME = 15000;
+					if(onEndDo==0)
+						roll();
+					else
+						startPlayerTurn(getNextPlayer());
 				}
 			}};
 		

@@ -145,13 +145,6 @@ public class PersonOfInterest
 		return utility;
 	}
 
-	public ArrayList<String> placenames (ArrayList<String> locations)
-	{
-		ArrayList<String> places = new ArrayList<String>();
-		places.addAll(locations);
-		return places;
-	}
-	
 	public Card CriminalCardsBalancePos()
 	{
 		int rands = DICE.nextInt(criminals.size());
