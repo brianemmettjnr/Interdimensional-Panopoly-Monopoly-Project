@@ -128,6 +128,8 @@ class LocationLabel
             else {
                 HTML += "Owned by: " + owner.getIdentifier() + "<br>";
                 HTML += "Rent: "+GUI.symbol + rentable.getRentalAmount() + "<br>";
+                HTML += "Mortgage Cost: "+GUI.symbol + ((RentalProperty)rentable).getMortgageAmount() + "<br>";
+                HTML += "Redeemable Amount: "+GUI.symbol + ((RentalProperty)rentable).getRedeemAmount() + "<br>";
                 if(((RentalProperty) location).isMortgaged())
                     HTML += "Site is currently Mortgaged<br>Cost to Redeem: $"+((RentalProperty) location).getRedeemAmount()+"<br>";
 
