@@ -20,11 +20,9 @@ public class GameBot extends Player{
     }
 
     public void makeGameDecision(){
-        if(isInJail())
-        {
+        if(isInJail()){
             gui.answerCorrectlyFunction();
-        }
-        else if(gui.rollButton.isVisible()) {
+        } else if(gui.rollButton.isVisible()) {
             gui.rollFunction();
         } else if(gui.exitGame.isVisible()){
             gui.wonGameQuitFunction();

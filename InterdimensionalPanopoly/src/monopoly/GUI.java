@@ -83,7 +83,7 @@ class GUI implements InteractionAPI {
 
     GUI(int boardSize,Panopoly panopoly,ArrayList<Player> players,Player player)
     {
-        FRAME_SIZE=new Dimension((int)(50+(FRAME_SIZE.width/2)),(int)(50+FRAME_SIZE.height/2));//temp cod
+        //FRAME_SIZE=new Dimension((int)(50+(FRAME_SIZE.width/2)),(int)(50+FRAME_SIZE.height/2));//temp cod
         this.panopoly=panopoly;
         this.players=players;
         assignedPlayer=player;
@@ -555,7 +555,6 @@ class GUI implements InteractionAPI {
     {
     	doomsdayTimer.setVisible(true);
         doomsdayTimer.setText("<html><center>"+time+"</center></html>");
-        System.out.println(time);
 
     }
 
@@ -923,5 +922,17 @@ class GUI implements InteractionAPI {
 
 
     }
+
+	@Override
+	public void wonGameStopFunction() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void wonGameReplayFunction() {
+		// TODO Auto-generated method stub
+		
+	}
 
 }
