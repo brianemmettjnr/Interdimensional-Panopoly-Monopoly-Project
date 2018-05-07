@@ -57,6 +57,7 @@ class GUI implements InteractionAPI {
     private GUIButton quitButton;
     private GUIButton[] answers =new GUIButton[4];
     private GUIButton bidButton;
+    private GUIButton GOOJButton;
 	private MouseAdapter correct=new MouseAdapter() {
         @Override
         public void mouseClicked(MouseEvent e) {
@@ -80,7 +81,7 @@ class GUI implements InteractionAPI {
 
     GUI(int boardSize,Panopoly panopoly,ArrayList<Player> players,Player player)
     {
-        FRAME_SIZE=new Dimension((int)(50+(FRAME_SIZE.width/2)),(int)(50+FRAME_SIZE.height/2));//temp cod
+        //FRAME_SIZE=new Dimension((int)(50+(FRAME_SIZE.width/2)),(int)(50+FRAME_SIZE.height/2));//temp cod
         this.panopoly=panopoly;
         this.players=players;
         assignedPlayer=player;
@@ -179,21 +180,28 @@ class GUI implements InteractionAPI {
 
         thirdAction.setBounds(10+ OFFSET,locationWindow.getY()+locationWindow.getHeight()+ OFFSET, OFFSET *(squaresOnSide -2),OFFSET/3);
         thirdAction.setVisible(true);
-        thirdAction.setFont(new Font("times new roman",Font.BOLD,16));
+        int size = 32;
+        thirdAction.setFont(new Font("Arial",Font.BOLD,32));
+
+        while(thirdAction.getFontMetrics(new Font("Arial",Font.BOLD,size)).stringWidth(" ")*3.5 >thirdAction.getHeight())
+        {
+            size--;
+            thirdAction.setFont(new Font("Arial",Font.BOLD,size));
+        }
         thirdAction.setForeground(Color.white);
         thirdAction.setText("");
         mainPane.add(thirdAction);
 
         secondAction.setBounds(10+ OFFSET,thirdAction.getY()+thirdAction.getHeight(), OFFSET *(squaresOnSide -2),thirdAction.getHeight());
         secondAction.setVisible(true);
-        secondAction.setFont(new Font("times new roman",Font.BOLD,16));
+        secondAction.setFont(thirdAction.getFont());
         secondAction.setForeground(Color.white);
         secondAction.setText("Enjoy!");
         mainPane.add(secondAction);
 
         latestAction.setBounds(10+ OFFSET,secondAction.getY()+secondAction.getHeight(), OFFSET *(squaresOnSide -2),secondAction.getHeight());
         latestAction.setVisible(true);
-        latestAction.setFont(new Font("Times New Roman",Font.BOLD,16));
+        latestAction.setFont(thirdAction.getFont());
         latestAction.setForeground(Color.white);
         latestAction.setText("Welcome To Interdimensional Panopoly");
         mainPane.add(latestAction);
@@ -209,9 +217,10 @@ class GUI implements InteractionAPI {
         cardPanel.setVisible(false);
         cardPanel.setBounds(10+ OFFSET +10,locationWindow.getY()+locationWindow.getHeight(),-20+(squaresOnSide -2)* OFFSET, OFFSET);
         cardPanel.setLayout(new OverlayLayout(cardPanel));
+        cardPanel.setBackground(Color.red.darker().darker());
         mainPane.add(cardPanel);
 
-        auctionTimer=new GUIButton("",(int)(10+(OFFSET *((squaresOnSide -1)/2.0)))+OFFSET,-20+(squaresOnSide -1)*OFFSET,null,this);
+        auctionTimer=new GUIButton("00:00",(int)(10+(OFFSET *((squaresOnSide -1)/2.0)))+OFFSET,-20+(squaresOnSide -1)*OFFSET,null,this);
         auctionTimer.setVisible(false);
 
         doomsdayTimer.setBounds((int)(10+(OFFSET *((squaresOnSide -3)))),-20+(squaresOnSide -1)* OFFSET, OFFSET,30);
@@ -329,39 +338,26 @@ class GUI implements InteractionAPI {
                     }
                 },this);
         bidButton.setSize(2*OFFSET,30);
+        GOOJButton=new GUIButton("", (int) (10 + (OFFSET * ((squaresOnSide - 3) / 2.0))), -20 + (squaresOnSide - 1) * OFFSET,
+                new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        useGOOJ();
+                    }
+                }, this);
+        GOOJButton.setSize(2*OFFSET,30);
+        GOOJButton.setText("GET OUT OF JAIL FREE");
     }
 
-    public void rollFunction(){
-        if (panopoly.getBoard().getLocation(panopoly.getCurrentPlayer().getPosition()) instanceof RentalProperty
-                && !((RentalProperty) panopoly.getBoard().getLocation(panopoly.getCurrentPlayer().getPosition())).isOwned())
-        {
-            rollButton.setVisible(false);
-            buyButton.setVisible(false);
-            panopoly.callAuction(0);
-        }
-        else {
-            panopoly.roll();
-            if (getSelectedLocation() != getLocationLabel(panopoly.getCurrentPlayer().getPosition())
-                    && !(getLocationLabel(panopoly.getCurrentPlayer().getPosition()).getLocation() instanceof CommunityChest
-                    || getLocationLabel(panopoly.getCurrentPlayer().getPosition()).getLocation() instanceof Chance)) {
-                setSelectedLabel(getLocationLabel(panopoly.getCurrentPlayer().getPosition()));
-            }
-        }
-    }
-
-    public void endTurnFunction() {
-        if ((panopoly.getBoard().getLocation(panopoly.getCurrentPlayer().getPosition()) instanceof RentalProperty
-                && !((RentalProperty) panopoly.getBoard().getLocation(panopoly.getCurrentPlayer().getPosition())).isOwned())) {
-            endButton.setVisible(false);
-            buyButton.setVisible(false);
-            panopoly.callAuction(1);
-        }
-        else
-            panopoly.startPlayerTurn(panopoly.getNextPlayer());
-    }
 
     private void setVisibleButtons()
     {
+        if(!(getLocationLabel(panopoly.getCurrentPlayer().getPosition()).getLocation() instanceof Chance
+                ||getLocationLabel(panopoly.getCurrentPlayer().getPosition()).getLocation() instanceof CommunityChest )) {
+            LocationLabel label = getSelectedLocation();
+            setSelectedLabel(null);
+            setSelectedLabel(label);
+        }
     	if(panopoly.getCurrentPlayer().isInJail()||assignedPlayer!=panopoly.getCurrentPlayer())
 		{
 			gui.rollCommand = false;
@@ -369,7 +365,8 @@ class GUI implements InteractionAPI {
 		}
 
 		else if(panopoly.getCurrentPlayer().getBalance() < 0)
-		    gui.rollCommand = false;
+        {gui.rollCommand = false;
+            gui.endCommand = false;}
 		
 		else
 		{
@@ -400,6 +397,8 @@ class GUI implements InteractionAPI {
                             wrongcount++;
                         }
                     }
+                    if(assignedPlayer.hasGOOJFree())
+                        GOOJButton.setVisible(true);
                     questionWindow.setText("<html><center>" + question[0] + "</center></html>");
 
                 }
@@ -465,11 +464,15 @@ class GUI implements InteractionAPI {
     void displayCard(String msg)
     {
         setSelectedLabel(null);
+        setSelectedLabel(getLocationLabel(panopoly.getCurrentPlayer().getPosition()));
         image.setVisible(false);
-        JLabel card=new JLabel("<html><center>"+msg+"<br>Click to Close.</center></html>");
+        JLabel card=new JLabel("<html><center>"+msg+"<br>Click to Close.</center></html>",SwingConstants.CENTER);
         card.setBounds(10+ OFFSET +10,locationWindow.getY()+locationWindow.getHeight(),-20+(squaresOnSide -2)* OFFSET, OFFSET);
         card.setVisible(true);
         card.setOpaque(true);
+        card.setBackground(Color.white);
+        card.setForeground(Color.BLACK);
+        card.setBorder(BorderFactory.createBevelBorder(1,Color.red,Color.red.darker()));
         cardPanel.add(card);
         cardPanel.setVisible(true);
         card.addMouseListener(new MouseAdapter() {
@@ -527,12 +530,12 @@ class GUI implements InteractionAPI {
 
     void startAuction()
     {
+        auctionTimer.setVisible(true);
         setSelectedLabel(null);
         setSelectedLabel(getLocationLabel(panopoly.getCurrentPlayer().getPosition()));
         bidButton.setText("Bid: "+GUI.symbol+(int)(((RentalProperty)panopoly.getAuctionProperty()).getPrice()*.1));
         if((int)(((RentalProperty)panopoly.getAuctionProperty()).getPrice()*.1)<=assignedPlayer.getBalance())
             bidButton.setVisible(true);
-        auctionTimer.setVisible(true);
     }
 
     void updateAuctionClock(String time)
@@ -601,6 +604,41 @@ class GUI implements InteractionAPI {
 
 
 
+    public void rollFunction(){
+        if (panopoly.getBoard().getLocation(panopoly.getCurrentPlayer().getPosition()) instanceof RentalProperty
+                && !((RentalProperty) panopoly.getBoard().getLocation(panopoly.getCurrentPlayer().getPosition())).isOwned())
+        {
+            rollButton.setVisible(false);
+            buyButton.setVisible(false);
+            panopoly.callAuction(0);
+        }
+        else {
+            panopoly.roll();
+            if (getSelectedLocation() != getLocationLabel(panopoly.getCurrentPlayer().getPosition())
+                    && !(getLocationLabel(panopoly.getCurrentPlayer().getPosition()).getLocation() instanceof CommunityChest
+                    || getLocationLabel(panopoly.getCurrentPlayer().getPosition()).getLocation() instanceof Chance)) {
+                setSelectedLabel(getLocationLabel(panopoly.getCurrentPlayer().getPosition()));
+            }
+            if(panopoly.getCurrentPlayer() instanceof GameBot)
+                ((GameBot) panopoly.getCurrentPlayer()).makeGameDecision();
+        }
+    }
+
+    public void endTurnFunction() {
+        if ((panopoly.getBoard().getLocation(panopoly.getCurrentPlayer().getPosition()) instanceof RentalProperty
+                && !((RentalProperty) panopoly.getBoard().getLocation(panopoly.getCurrentPlayer().getPosition())).isOwned())) {
+            endButton.setVisible(false);
+            buyButton.setVisible(false);
+            panopoly.callAuction(1);
+        }
+        else {
+            Player player=panopoly.getNextPlayer();
+            panopoly.startPlayerTurn(player);
+            if(panopoly.getCurrentPlayer()==assignedPlayer&&assignedPlayer instanceof GameBot)
+                ((GameBot)assignedPlayer).makeGameDecision();
+        }
+    }
+
 
     @Override
     public void buyPropertyFunction() {
@@ -615,24 +653,32 @@ class GUI implements InteractionAPI {
     public void mortgagePropertyFunction() {
         RentalProperty mortgageProperty = (RentalProperty)getSelectedLocation().getLocation();
         gui.updateAction(panopoly.mortgage(mortgageProperty));
+        if(panopoly.getCurrentPlayer() instanceof GameBot)
+            ((GameBot) panopoly.getCurrentPlayer()).makeGameDecision();
     }
 
     @Override
     public void redeemPropertyFunction() {
         RentalProperty redeem=(RentalProperty)getSelectedLocation().getLocation();
         gui.updateAction(panopoly.redeem(redeem));
+        if(panopoly.getCurrentPlayer() instanceof GameBot)
+            ((GameBot) panopoly.getCurrentPlayer()).makeGameDecision();
     }
 
     @Override
     public void buildHouseFunction() {
         InvestmentProperty builder=(InvestmentProperty) getSelectedLocation().getLocation();
         gui.updateAction(panopoly.buildUnit(builder));
+        if(panopoly.getCurrentPlayer() instanceof GameBot)
+            ((GameBot) panopoly.getCurrentPlayer()).makeGameDecision();
     }
 
     @Override
     public void demolishHouseFunction() {
         InvestmentProperty breaker=(InvestmentProperty) getSelectedLocation().getLocation();
         gui.updateAction(panopoly.demolishUnit(breaker));
+        if(panopoly.getCurrentPlayer() instanceof GameBot)
+            ((GameBot) panopoly.getCurrentPlayer()).makeGameDecision();
     }
 
     @Override
@@ -644,6 +690,8 @@ class GUI implements InteractionAPI {
     public void leaveGameFunction() {
         panopoly.leaveGame(assignedPlayer);
         mainFrame.dispose();
+        if(panopoly.getCurrentPlayer() instanceof GameBot)
+            ((GameBot) panopoly.getCurrentPlayer()).makeGameDecision();
     }
 
     @Override
@@ -652,7 +700,10 @@ class GUI implements InteractionAPI {
         panopoly.getCurrentPlayer().releaseFromJail();
         noQuestion=true;
         gui.hideAnswers();
+        GOOJButton.setVisible(false);
         setSelectedLabel(null);
+        if(panopoly.getCurrentPlayer() instanceof GameBot)
+            ((GameBot) panopoly.getCurrentPlayer()).makeGameDecision();
     }
 
     @Override
@@ -660,13 +711,25 @@ class GUI implements InteractionAPI {
         updateAction("Wrong answer.");
         panopoly.startPlayerTurn(panopoly.getNextPlayer());
         noQuestion=true;
+        GOOJButton.setVisible(false);
         gui.hideAnswers();
         setSelectedLabel(null);
+        if(panopoly.getCurrentPlayer() instanceof GameBot)
+            ((GameBot) panopoly.getCurrentPlayer()).makeGameDecision();
     }
 
     @Override
     public void getHelpFunction() {
 
+    }
+
+    public void useGOOJ()
+    {
+        updateAction(assignedPlayer.getIdentifier()+" used get out of Jail free.");
+        assignedPlayer.useGOOJFree();
+        GOOJButton.setVisible(false);
+        if(panopoly.getCurrentPlayer() instanceof GameBot)
+            ((GameBot) panopoly.getCurrentPlayer()).makeGameDecision();
     }
 
 
@@ -746,7 +809,7 @@ class GUI implements InteractionAPI {
             buildButton.setVisible(false);
             demolishButton.setVisible(false);
         }
-        else if(panopoly.getCurrentPlayer().isInJail()&&location==getLocationLabel(panopoly.getCurrentPlayer().getPosition()))
+        else if(panopoly.getCurrentPlayer().isInJail()&&location==getLocationLabel(panopoly.getCurrentPlayer().getPosition())&panopoly.getCurrentPlayer()==assignedPlayer)
         {
             this.selectedLabel =location;
             image.setVisible(false);
@@ -772,7 +835,6 @@ class GUI implements InteractionAPI {
             image.setVisible(false);
             if (location.getLocation() instanceof RentalProperty)
             {
-                buyButton.setEnabled(true);
                 RentalProperty locationCheck = (RentalProperty) location.getLocation();
                 if (locationCheck.getOwner() == panopoly.getCurrentPlayer()&&panopoly.getCurrentPlayer()==assignedPlayer)
                 {
@@ -791,7 +853,7 @@ class GUI implements InteractionAPI {
                 {
                     if(locationCheck.getOwner()==null &&panopoly.getCurrentPlayer().getPosition()==location.getIndex()&&panopoly.getCurrentPlayer()==assignedPlayer)
                     {
-                        if(panopoly.getCurrentPlayer().getBalance()<((RentalProperty) location.getLocation()).getPrice())
+                        if(panopoly.getCurrentPlayer().getBalance()<((RentalProperty) location.getLocation()).getPrice()||auctionTimer.isVisible())
                         {
                             buyButton.setVisible(false);
                         }
@@ -808,7 +870,7 @@ class GUI implements InteractionAPI {
                     InvestmentProperty investment=(InvestmentProperty)location.getLocation();
                     if(locationCheck.getOwner()==panopoly.getCurrentPlayer()&&panopoly.getCurrentPlayer()==assignedPlayer)
                     {
-                        Boolean buildable=true;//((Player)investment.getOwner()).ownsGroup(locationCheck.getGroup());
+                        Boolean buildable=((Player)investment.getOwner()).ownsGroup(locationCheck.getGroup());
                         for(Groupable groupLocation:locationCheck.getGroup().getMembers())
                         {
                             if(((InvestmentProperty)groupLocation).isMortgaged()||((InvestmentProperty) groupLocation).getNumBuildings()<investment.getNumBuildings())
