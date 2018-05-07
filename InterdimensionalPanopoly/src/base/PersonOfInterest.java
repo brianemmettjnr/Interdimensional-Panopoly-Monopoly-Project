@@ -478,31 +478,4 @@ public class PersonOfInterest
 
 		return qandA;
 	}
-	
-	public static void main(String[] args)
-	{
-		PersonOfInterest ps = new PersonOfInterest();
-		int i = 0;
-		
-		while(i < 1000)
-		{
-			System.out.println(ps.CriminalCardsBalancePos().getMessage());
-			System.out.println(ps.CriminalCardsPosition().getMessage());
-			System.out.println(ps.Blackmailer().getMessage());
-			System.out.println(ps.BlackmailerBr().getMessage());
-			System.out.println(ps.CarCrash().getMessage());
-			System.out.println(ps.Inherit().getMessage());
-			System.out.println(ps.CriminalCardsBalanceNeg().getMessage());
-			System.out.println(ps.Lectured().getMessage());
-			System.out.println(ps.Opponents().getMessage());
-			System.out.println(ps.Parties().getMessage());
-			System.out.println(ps.Pawns().getMessage());
-			System.out.println(ps.Wedding().getMessage());
-			System.out.println(ps.Terrorism().getMessage());
-			System.out.println(ps.TestDrive().getMessage());
-			System.out.println(ps.Villainy().getMessage());
-			System.out.println(ps.Weapons().getMessage());
-			i++;
-		}
-	}
 }
