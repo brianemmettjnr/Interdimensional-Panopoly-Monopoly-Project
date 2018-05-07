@@ -285,17 +285,38 @@ public class SetupGUI
     public static void getHelp() {
         JFrame helpFrame=new JFrame();
         helpFrame.setVisible(true);
-        helpFrame.setBounds(100,100,450,600);
+        helpFrame.setBounds(100,100,1500,310);
         helpFrame.setResizable(false);
         JPanel panel=new JPanel();
-        panel.setBounds(0,0,400,600);
+        panel.setBounds(0,0,1475,300);
         helpFrame.add(panel);
         JTextArea text=new JTextArea();
-        text.setBounds(0,0,400,600);
+        text.setBounds(0,0,1475,300);
         text.setLineWrap(true);
         text.setEditable(false);
         panel.add(text);
-        text.setText("Go away I havent written actual rules yet shut up chloe");
+        text.setText(
+                "1. Each player recieves Q1500 at the start of the game \n" +
+                "2. A player balance and name are displayed on the right-hand side as well as indicating whose turn it is \n"+
+                "3. Push the roll dice button to roll the dice, the playes icon will then move the alloted number of squares \n" +
+                "4. If a player lands on an unowned property they have the option to buy it, if they have the required funds, this action is performed using the buy button.\n" +
+                "4.b If the player choses not to buy said property the proerty goes to auction where a player may bid within the 12 second window using the bid button, the highest bidder wins the property.\n" +
+                "5. If a player lands on a chance or community chest type square they are assigned a random card and the cards consequences are then imposed on the player \n" +
+                "6. If a player lands on an owned property they must pay the rent alloted which is taken automatically from their account\n" +
+                "7. If a player owns an entire colour group they can built on a relevent property by selcting it and clicking the build button, this will build a house on the proeprty increasing its rent while " +
+                        " taking the cost of the house from the players balance. \n" +
+                "8. Once a players passes GO square they will reciveve Q200 \n" +
+                "9. If a player lands on go to jail ore receives a relevent card they roceed to jail to escape jail a player can pay the fine or answeer the supplied question correctly by clicking the \n" +
+                        " appropriate button, the player is also given the option" +
+                        " to use their get out of jail free card by clicking the appropriate button" +
+                "10. If a player lands on free parking  they receive any money that has been collected from tax squares, etc. \n" +
+                "11. If a player lands on a tax square the amount is deducted from their balance \n" +
+                "12. A property once owned can be mortgaged,the player will receive the mortgage value, however hey will no longer receive rent if the properrty is landed upon this can be done by clicking " +
+                        " the relevant property and clicking the mortgage button \n" +
+                "13. If player is unable to escape bankruptcy they must leave the game by clicking the relevant leave button \n" +
+                "14. Once the doomsday card is activated the game will end 5 minutes from that point with the remaining time indicated by the counter in the bott-right of the screen, the winner of" +
+                "    the game will then be calculated based the sum total of a players assets value and balance.\n" +
+                "15. A winner is declared");
     }
 
 
