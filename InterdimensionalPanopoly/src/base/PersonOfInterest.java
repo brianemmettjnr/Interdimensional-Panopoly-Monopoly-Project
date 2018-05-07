@@ -381,7 +381,7 @@ public class PersonOfInterest
 	public Card DoomsDay()
 	{
 		int rands = DICE.nextInt(villain.size());
-		String endWorld[] = {"zombie apocalypse", "nuclear weapons", "one-inch punch", "virus", "infinity gauntlet", "elderwand", "asteroid", "plague", "Death Star", "robot killing machines", "terminators", "alien invaders"};
+		String endWorld[] = {"zombie apocalypse", "nuclear weapons", "one-inch punch", "virus", "infinity gauntlet", "elderwand", "asteroid", "plague", "Death Star", "robot killing machines", "terminators", "alien invaders", "left-on immersion"};
 		int ends = DICE.nextInt(endWorld.length);
 		String output = "The end of the world is nigh, " + villain.get(rands) + " and their " + endWorld[ends] + " have brought about armageddon in t-minus 5 minutes, spend your remaining time wisely";
 		placeholder = NOC2.getAllKeysWithFieldValueNon("Characters", cars.get(rands));
