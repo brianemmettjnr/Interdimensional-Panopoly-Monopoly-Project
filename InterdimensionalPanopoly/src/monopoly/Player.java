@@ -9,7 +9,7 @@ import interfaces.Rentable;
 
 public class Player extends Thread implements Playable {
 	
-	private static final int STARTING_BALANCE = 200;
+	private static final int STARTING_BALANCE = 1500;
 	private int playerIndex;
 
 	protected String name;
