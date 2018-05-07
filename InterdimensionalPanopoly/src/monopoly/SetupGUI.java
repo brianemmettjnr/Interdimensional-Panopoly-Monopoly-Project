@@ -163,6 +163,7 @@ public class SetupGUI
     private static void PlayerNameGUI(int AIcount) {
         createIcons();
         playerCount=playerCount-AIcount;
+        players=new ArrayList<>();
         JFrame playerFrame= new JFrame("Interdimensional Panopoly");
         JPanel playerPanel=new JPanel();
         playerFrame.setBounds(300,300,636,270);
@@ -176,6 +177,8 @@ public class SetupGUI
         playerFrame.setVisible(true);
         String[] AInames={"Bob","Rob","Dob","Sob","Jim"};
         int[] availableIcons={0,1,2,3,4,5};
+        selectedpictureIndex=-1;
+
         for(int i=0;i<6;i++)
         {
             JLabel image=new JLabel(new ImageIcon(GUI.images[i]));
@@ -226,6 +229,9 @@ public class SetupGUI
         sendinputButton.setText("PRESS TO CONFIRM");
         sendinputButton.setFocusPainted(false);
         sendinputButton.setFont(new Font("Chiller",Font.ITALIC,16));
+        sendinputButton.setBorder(BorderFactory.createBevelBorder(1,Color.red,Color.red.darker()));
+        sendinputButton.setBackground(Color.black);
+        sendinputButton.setForeground(Color.lightGray);
         nameSpace.setText("");
         final int[] playerIncrement = {0};
         sendinputButton.addMouseListener(new MouseAdapter() {
@@ -256,6 +262,7 @@ public class SetupGUI
                             count++;
                         players.add(new GameBot(AInames[i],availableIcons[count],playerIncrement[0],panopoly));
                         playerIncrement[0]++;
+                        availableIcons[count]=-1;
                     }
                     panopoly.createGUI(players);
                 }

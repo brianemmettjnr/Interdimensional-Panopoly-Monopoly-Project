@@ -69,6 +69,7 @@ public class Panopoly
 			gui.updateGUI();
 		}
 	}
+
 	private void updateAction(String action)
 	{
 		for(GUI gui:this.guiArray)
@@ -76,18 +77,21 @@ public class Panopoly
 			gui.updateAction(action);
 		}
 	}
+
 	private void resetCommands() {
 		for(GUI gui:this.guiArray)
 		{
 			gui.resetCommands();
 		}
 	}
+
 	private void leaveGameGui(Player currentPlayer) {
 		for(GUI gui:this.guiArray)
 		{
 			gui.leaveGame(currentPlayer);
 		}
 	}
+
 	private void guiEndGame() {
 		for(GUI gui:this.guiArray)
 		{

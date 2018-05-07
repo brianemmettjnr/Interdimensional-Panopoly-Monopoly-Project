@@ -58,7 +58,7 @@ public class PlayerLabel
                         BorderFactory.createLineBorder(Color.red,4),BorderFactory.createLineBorder(Color.red.darker(),2)));
                     else
                         gui.getLocationLabel(((Locatable)property)).setTempBorder(BorderFactory.createCompoundBorder(
-                                BorderFactory.createLineBorder(Color.green,4),BorderFactory.createLineBorder(Color.green.darker(),2)));
+                                BorderFactory.createLineBorder(Color.green,4),BorderFactory.createLineBorder(Color.red.brighter(),2)));
                 }
             }
             @Override
@@ -80,12 +80,12 @@ public class PlayerLabel
         name.setText(player.getIdentifier());
         name.setBounds(this.gui.getFRAME_SIZE().height+width,10+i*width,2*width,width);
         int size = 32;
-        name.setFont(new Font("Arial",Font.BOLD,32));
+        name.setFont(new Font("Chiller",Font.BOLD,32));
 
-        while(name.getFontMetrics(new Font("Arial",Font.BOLD,size)).stringWidth(name.getText()) >2*width)
+        while(name.getFontMetrics(new Font("Chiller",Font.BOLD,size)).stringWidth(name.getText()) >2*width)
         {
             size--;
-            name.setFont(new Font("Arial",Font.BOLD,size));
+            name.setFont(new Font("Chiller",Font.BOLD,size));
         }
         name.setVisible(true);
         name.setBackground(Color.DARK_GRAY);
@@ -152,7 +152,7 @@ public class PlayerLabel
     }
 
     public void setCurrentPlayer() {
-        icon.setBorder(BorderFactory.createLineBorder(green.darker(),3));
+        icon.setBorder(BorderFactory.createLineBorder(Color.red.brighter(),3));
     }
 
     public void setBorder(Border border) {
