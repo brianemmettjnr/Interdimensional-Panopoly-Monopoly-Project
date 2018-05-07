@@ -32,6 +32,10 @@ public class Panopoly
 		board = new Board(numLocations);
 		SetupGUI.PlayerCountGui(this);
 	}
+	Panopoly(int numLocations, String s){
+		board = new Board(numLocations);
+		int x = s.length();
+	}
 	public void createGUI(ArrayList<Player> playerArray)
 	{
 		players = playerArray;

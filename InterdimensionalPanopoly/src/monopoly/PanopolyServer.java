@@ -95,7 +95,7 @@ public class PanopolyServer {
     static Player[] ppl = new Player[maxNumOfPlayers];
     static ServerSocket serverSocket;
     private static int numLocations = 4 * ThreadLocalRandom.current().nextInt(8, 14 + 1);
-    public static final Panopoly panopoly = new Panopoly(numLocations);
+    public static final Panopoly panopoly = new Panopoly(numLocations, "panopoly");
 
     void BeginServer() throws Exception {
         players=new ArrayList<>();
@@ -130,6 +130,7 @@ public class PanopolyServer {
                 for (int j = 0; j < outs.size(); j++) {
                     System.out.println("sent f");
                     outs.get(j).writeChar('f');
+                    //panopoly.setNetworkedPlayerGUI(j);
                     //outs.get(j).writeInt(j);
                 }
 //                System.out.println("sent f");

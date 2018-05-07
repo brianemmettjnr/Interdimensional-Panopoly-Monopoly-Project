@@ -119,7 +119,7 @@ public class PanopolyClient {
                     System.out.println("RECEIVED");
                     System.out.println(playerId);
 //                    int pid = in.readInt();
-                    PanopolyServer.panopoly.setNetworkedPlayerGUI(playerId);
+                    //PanopolyServer.panopoly.setNetworkedPlayerGUI(playerId);
                 }
             }
 
