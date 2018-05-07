@@ -20,11 +20,8 @@ public class GameBot extends Player{
     }
 
     public void makeGameDecision(){
-        gui=super.getGUI();
         if(isInJail()){
             gui.answerCorrectlyFunction();
-        } else if(gui.rollButton.isVisible()) {
-            gui.rollFunction();
         } else if(gui.bidButton.isVisible()){
             if(bidsMade<2){
                 gui.bidFunction();
@@ -32,6 +29,9 @@ public class GameBot extends Player{
             }else{
                 bidsMade=0;
             }
+
+        }else if(gui.rollButton.isVisible()) {
+            gui.rollFunction();
         } else if(gui.exitGame.isVisible()){
             gui.wonGameQuitFunction();
         } else if(gui.buyButton.isVisible()){
