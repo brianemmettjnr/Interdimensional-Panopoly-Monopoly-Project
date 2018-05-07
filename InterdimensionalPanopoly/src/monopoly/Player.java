@@ -23,6 +23,7 @@ public class Player extends Thread implements Playable, Locatable {
 	boolean rollComplete = false;
 	private boolean inJail = false;
 	private int GOOJFree;
+	private GUI gui;
 	int doubles;
 	
 	public Player(String name, int imageIndex, int playerIndex,Panopoly panopoly)
@@ -227,5 +228,13 @@ public class Player extends Thread implements Playable, Locatable {
 	{
 		inJail = false;
 		panopoly.startPlayerTurn(panopoly.getNextPlayer());
+	}
+	public void setGUI(GUI gui)
+	{
+		this.gui=gui;
+	}
+	public GUI getGUI()
+	{
+		return gui;
 	}
 }

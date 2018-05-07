@@ -42,10 +42,7 @@ public class Panopoly
 		for(Player player: players)
 		{
 			guiArray[index]=new GUI(board.getNumLocations(),this,players,player);
-			if(player instanceof GameBot)
-			{
-				((GameBot) player).setGUI(guiArray[index]);
-			}
+			(player).setGUI(guiArray[index]);
 			index++;
 		}
 		updateGUI();

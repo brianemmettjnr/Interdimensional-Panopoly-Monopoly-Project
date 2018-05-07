@@ -60,6 +60,7 @@ public class PlayerLabel
                         gui.getLocationLabel(((Locatable)property)).setTempBorder(BorderFactory.createCompoundBorder(
                                 BorderFactory.createLineBorder(Color.green,4),BorderFactory.createLineBorder(Color.red.brighter(),2)));
                 }
+                    gui.setSelectedPlayer(player);
             }
             @Override
             public void mouseEntered(MouseEvent e)
