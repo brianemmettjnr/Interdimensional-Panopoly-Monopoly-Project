@@ -20,7 +20,7 @@ public class GameBot extends Player{
     }
 
     public void makeGameDecision(){
-        if(this.isInJail())
+        if(isInJail())
         {
             gui.answerCorrectlyFunction();
         }

@@ -21,6 +21,7 @@ public abstract class RentalProperty extends PrivateProperty implements Rentable
 		group.addMember(this);
 	}
 	
+	@Override
 	public void reset()
 	{
 		setOwner(null);
@@ -34,6 +35,7 @@ public abstract class RentalProperty extends PrivateProperty implements Rentable
 		return mortgage;
 	}
 
+	@Override
 	public int getRedeemAmount()
 	{
 		return (int) (mortgage*1.1);

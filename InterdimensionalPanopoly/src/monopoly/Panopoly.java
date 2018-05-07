@@ -5,6 +5,8 @@ import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import javax.swing.Timer;
+
+//import com.sun.org.apache.xpath.internal.operations.Bool;
 import interfaces.*;
 
 public class Panopoly 
@@ -186,7 +188,7 @@ public class Panopoly
 			gui.startAuction();
 		}
 		updateAction("An auction for " + auctionProperty.getIdentifier()+" ");
-		//chloe stuff here
+
 		Timer auctionTimer = new Timer(1000, null);
 				
 		ActionListener timerListener = new ActionListener() {
@@ -245,11 +247,10 @@ public class Panopoly
 			currentPlayer.canRoll = true;
 			currentPlayer.rollComplete = false;
 			currentPlayer = player;
-
+			resetCommands();
 			updateGUI();
 			updateAction(currentPlayer.getIdentifier() + "'s turn");
-			//todo fix
-			((GameBot) player).makeGameDecision();
+				((GameBot)currentPlayer).makeGameDecision();
 		}else{
 			currentPlayer.doubles = 0;
 			currentPlayer.canRoll = true;
@@ -294,8 +295,7 @@ public class Panopoly
 		msg += getSquareAction();
 		updateAction(msg);
 		if(currentPlayer instanceof GameBot)
-		//todo fix
-		 ((GameBot) currentPlayer).makeGameDecision();
+			((GameBot)currentPlayer).makeGameDecision();
 	}
 	
 	//PROPERTY METHODS
@@ -349,9 +349,15 @@ public class Panopoly
 		if(player==currentPlayer)
 			currentPlayer=getNextPlayer();
 		players.remove(player);
+		boolean noHumans=true;
+		for(Player eachPlayer:players)
+		{
+			if(eachPlayer instanceof Player&& !(eachPlayer instanceof GameBot))
+				noHumans=false;
+		}
 		leaveGameGui(player);
 		//if one player left, they win automatically and game ends
-		if(players.size() == 1)
+		if(players.size() == 1||noHumans)
 			endGame();
 		
 		else

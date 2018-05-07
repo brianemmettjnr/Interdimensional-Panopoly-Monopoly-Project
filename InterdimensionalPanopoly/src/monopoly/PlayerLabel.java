@@ -33,7 +33,7 @@ public class PlayerLabel
         int width=(int)((this.gui.getFRAME_SIZE().width-this.gui.getFRAME_SIZE().height)/4)-10;
         if(width*gui.getPlayers().size()>gui.getFRAME_SIZE().height-20)
         {
-            width=(gui.getFRAME_SIZE().height-20)/gui.getPlayers().size();
+            width=(int)(gui.getFRAME_SIZE().height*.9-20)/gui.getPlayers().size();
         }
         BufferedImage bi = new BufferedImage(image.getIconWidth(), image.getIconHeight(), BufferedImage.TYPE_INT_ARGB);
         Graphics g = bi.createGraphics();
