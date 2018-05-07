@@ -94,7 +94,7 @@ public class SetupGUI
         playerPanel.setBackground(Color.WHITE);
         playerPanel.setLayout(null);
         JLabel image=new JLabel(new ImageIcon(GUI.class.getResource("Media/Logo.png")));
-        JLabel[] button=new JLabel[5];
+        JLabel[] button=new JLabel[6];
         int width=375/PlayerCount;
         for(int i=0;i<PlayerCount;i++)
         {
