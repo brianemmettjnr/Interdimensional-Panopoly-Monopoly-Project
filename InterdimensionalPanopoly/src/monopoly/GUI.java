@@ -57,8 +57,8 @@ class GUI implements InteractionAPI {
     GUIButton quitButton;
     GUIButton playAgain;
     GUIButton exitGame;
+    GUIButton bidButton;
     private GUIButton[] answers =new GUIButton[4];
-    private GUIButton bidButton;
     private GUIButton GOOJButton;
 	private MouseAdapter correct=new MouseAdapter() {
         @Override
@@ -640,6 +640,14 @@ class GUI implements InteractionAPI {
         }
     }
 
+    @Override
+    public void bidFunction() {
+        if(panopoly.getCurrentBid()+(int)(((RentalProperty)panopoly.getAuctionProperty()).getPrice()*.1)<=assignedPlayer.getBalance())
+            panopoly.updateBid(panopoly.getCurrentBid()+(int)(((RentalProperty)panopoly.getAuctionProperty()).getPrice()*.1),assignedPlayer);
+        else
+            updateAction("Insufficient funds to bid.");
+    }
+
 
     @Override
     public void buyPropertyFunction() {
@@ -922,17 +930,5 @@ class GUI implements InteractionAPI {
 
 
     }
-
-	@Override
-	public void wonGameStopFunction() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void wonGameReplayFunction() {
-		// TODO Auto-generated method stub
-		
-	}
 
 }

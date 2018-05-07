@@ -6,9 +6,8 @@ public interface InteractionAPI {
 
     //Functions that a bot can use to play the game without buttons
     void rollFunction();
-    void wonGameStopFunction();
-    void wonGameReplayFunction();
     void endTurnFunction();
+    void bidFunction();
     void getHelpFunction();
     void buyPropertyFunction();
     void mortgagePropertyFunction();
