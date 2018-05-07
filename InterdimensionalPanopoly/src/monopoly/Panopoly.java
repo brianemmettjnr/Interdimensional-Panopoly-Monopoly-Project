@@ -6,7 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import javax.swing.Timer;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
+//import com.sun.org.apache.xpath.internal.operations.Bool;
 import interfaces.*;
 
 public class Panopoly 
@@ -175,7 +175,7 @@ public class Panopoly
 			gui.startAuction();
 		}
 		updateAction("An auction for " + auctionProperty.getIdentifier()+" ");
-		//chloe stuff here
+
 		Timer auctionTimer = new Timer(1000, null);
 				
 		ActionListener timerListener = new ActionListener() {

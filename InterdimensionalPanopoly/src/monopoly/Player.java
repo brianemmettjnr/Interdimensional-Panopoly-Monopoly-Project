@@ -3,11 +3,12 @@ package monopoly;
 import java.util.ArrayList;
 
 import interfaces.Groupable;
+import interfaces.Locatable;
 import interfaces.Ownable;
 import interfaces.Playable;
 import interfaces.Rentable;
 
-public class Player extends Thread implements Playable {
+public class Player extends Thread implements Playable, Locatable {
 	
 	private static final int STARTING_BALANCE = 1500;
 	private int playerIndex;
@@ -42,7 +43,8 @@ public class Player extends Thread implements Playable {
 		return name;
 	}
 
-	 int getPosition()
+	@Override
+	public int getPosition()
 	{
 		return position;
 	}

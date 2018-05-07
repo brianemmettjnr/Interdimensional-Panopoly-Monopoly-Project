@@ -2,12 +2,12 @@
 
 package monopoly;
 
+import interfaces.Identifiable;
 import interfaces.Locatable;
 
-public class NamedLocation implements Locatable {
+public class NamedLocation implements Identifiable, Locatable {
 	
 	private String name;
-	private Locatable left = null, right = null;
 	
 	public NamedLocation(String name) {
 		this.name = name;
@@ -17,25 +17,10 @@ public class NamedLocation implements Locatable {
 	public String getIdentifier() {
 		return name;
 	}
-	
-	//sets property to the left
-	public void setLeft(Locatable leftProperty) {
-		left = leftProperty;
-	}
-	
-	//sets property to the right
-	public void setRight(Locatable rightProperty) {
-		right = rightProperty;
-	}
 
 	@Override
-	public Locatable goLeft() {
-		return left;
+	public int getPosition() 
+	{
+		return 0;
 	}
-
-	@Override
-	public Locatable goRight() {
-		return right;
-	}
-
 }

@@ -94,7 +94,7 @@ public class Board
 	
 	private void generateLocations()
 	{
-		ArrayList<String> locs = ps.locations;
+		ArrayList<String> locs = PersonOfInterest.locations;
 		String[] splitLoc = null;
 		
 		Collections.shuffle(locs);
