@@ -92,7 +92,7 @@ class GUI implements InteractionAPI {
 
     GUI(int boardSize,Panopoly panopoly,ArrayList<Player> players,Player player)
     {
-        FRAME_SIZE=new Dimension((int)(50+(FRAME_SIZE.width/2)),(int)(50+FRAME_SIZE.height/2));//temp cod
+        //FRAME_SIZE=new Dimension((int)(50+(FRAME_SIZE.width/2)),(int)(50+FRAME_SIZE.height/2));//temp cod
         this.panopoly=panopoly;
         this.players=players;
         assignedPlayer=player;
