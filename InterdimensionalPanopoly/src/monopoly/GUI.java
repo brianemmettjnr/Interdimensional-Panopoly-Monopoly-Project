@@ -181,12 +181,12 @@ class GUI implements InteractionAPI {
         thirdAction.setBounds(10+ OFFSET,locationWindow.getY()+locationWindow.getHeight()+ OFFSET, OFFSET *(squaresOnSide -2),OFFSET/3);
         thirdAction.setVisible(true);
         int size = 32;
-        thirdAction.setFont(new Font("Arial",Font.BOLD,32));
+        thirdAction.setFont(new Font("Chiller",Font.BOLD,32));
 
-        while(thirdAction.getFontMetrics(new Font("Arial",Font.BOLD,size)).stringWidth(" ")*3.5 >thirdAction.getHeight())
+        while(thirdAction.getFontMetrics(new Font("Chiller",Font.BOLD,size)).stringWidth(" ")*2.5 >thirdAction.getHeight())
         {
             size--;
-            thirdAction.setFont(new Font("Arial",Font.BOLD,size));
+            thirdAction.setFont(new Font("Chiller",Font.BOLD,size));
         }
         thirdAction.setForeground(Color.white);
         thirdAction.setText("");
