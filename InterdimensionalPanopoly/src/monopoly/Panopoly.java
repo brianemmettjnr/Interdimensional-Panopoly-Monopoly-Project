@@ -28,10 +28,26 @@ public class Panopoly
 	Panopoly(int numLocations)
 	{
 		board = new Board(numLocations);
-		//SetupGUI.PlayerCountGui(this);
+		SetupGUI.PlayerCountGui(this);
 	}
-	
 	public void createGUI(ArrayList<Player> playerArray)
+	{
+		players = playerArray;
+		currentPlayer = players.get(0);
+		int index=0;
+		guiArray =new GUI[playerArray.size()];
+		for(Player player: players)
+		{
+			guiArray[index]=new GUI(board.getNumLocations(),this,players,player);
+			if(player instanceof GameBot)
+			{
+				((GameBot) player).setGUI(guiArray[index]);
+			}
+			index++;
+		}
+		updateGUI();
+	}
+	public void createNetworkedGUI(ArrayList<Player> playerArray)
 	{
 		players = playerArray;
 		currentPlayer = players.get(0);
@@ -40,12 +56,10 @@ public class Panopoly
 
 	}
 	public void setNetworkedPlayerGUI(int i){
-		Player player = players.get(i);
-		guiArray[i]=new GUI(board.getNumLocations(),this,players,player);
-			if(player instanceof GameBot)
-			{
-				((GameBot) player).setGUI(guiArray[i]);
-			}
+		Player p = players.get(i);
+		System.out.println("setNtworkdplayr gui");
+		guiArray[i]=new GUI(board.getNumLocations(),this,players,p);
+
 		updateGUI();
 	}
 	private void updateGUI() {

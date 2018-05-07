@@ -100,7 +100,7 @@ public class SetupGUI
     public static void PlayerNameServerGUI(Panopoly panopoly, ArrayList<Player> playerArray) {
         createIcons();
 
-        panopoly.createGUI(playerArray);
+        panopoly.createNetworkedGUI(playerArray);
     }
     private static void PlayerNameGUI() {
         createIcons();
