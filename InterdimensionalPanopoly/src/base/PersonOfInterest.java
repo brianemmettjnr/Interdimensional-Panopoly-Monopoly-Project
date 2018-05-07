@@ -198,7 +198,7 @@ public class PersonOfInterest
 	public Card Murderer()
 	{
 		int rands = DICE.nextInt(murder.size());
-		String output = "You kill the evil " + murder.get(rands) + " your reward is:  go to jail :)";
+		String output = "You kill the evil " + murder.get(rands) + " your reward is:  go to jail";
 		return  new Card(Card.GO_TO_JAIL, output);
 	}
 	
