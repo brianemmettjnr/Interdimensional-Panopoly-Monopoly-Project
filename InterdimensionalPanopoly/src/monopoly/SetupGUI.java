@@ -3,7 +3,9 @@ package monopoly;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -222,42 +224,6 @@ public class SetupGUI
         upperline.setForeground(Color.white);
         playerPanel.add(upperline);
         nameSpace.setBounds(218,150,200,20);
-        final int[] playerIncrement = {0};
-        nameSpace.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(!(nameSpace.getText().isEmpty()||selectedImage==null||nameSpace.getText()==null))
-                {
-                    upperline.setForeground(Color.white);
-                    players.add(new Player(nameSpace.getText(),selectedpictureIndex,playerIncrement[0],panopoly));
-                    nameSpace.setText("");
-                    availableIcons[selectedpictureIndex]=-1;
-                    selectedImage.setVisible(false);
-                    selectedImage=null;
-                    playerIncrement[0]++;
-                }
-                else
-                {
-                    upperline.setForeground(Color.red);
-                }
-                if(playerCount== playerIncrement[0])
-                {
-                    playerFrame.dispatchEvent(new WindowEvent(playerFrame, WindowEvent.WINDOW_CLOSING));
-                    //create main game GUI
-                    int count=0;
-                    for(int i=0;i<AIcount;i++)
-                    {
-                        while(availableIcons[count]==-1)
-                            count++;
-                        players.add(new GameBot(AInames[i],availableIcons[count],playerIncrement[0],panopoly));
-                        playerIncrement[0]++;
-                        availableIcons[count]=-1;
-                    }
-                    panopoly.createGUI(players);
-                }
-
-            }
-        });
         JButton sendinputButton=new JButton();
         sendinputButton.setBounds(218,180,200,40);
         sendinputButton.setText("PRESS TO CONFIRM");
@@ -267,6 +233,7 @@ public class SetupGUI
         sendinputButton.setBackground(Color.black);
         sendinputButton.setForeground(Color.lightGray);
         nameSpace.setText("");
+        final int[] playerIncrement = {0};
         sendinputButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {

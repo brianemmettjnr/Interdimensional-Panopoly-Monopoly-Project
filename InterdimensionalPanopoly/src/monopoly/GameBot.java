@@ -7,7 +7,9 @@ import java.util.ArrayList;
 
 public class GameBot extends Player{
 
-    private GUI gui=super.getGUI();
+
+    private GUI gui;
+
     public GameBot(String name, int imageIndex, int playerIndex, Panopoly panopoly) {
         super(name, imageIndex, playerIndex, panopoly);
     }
@@ -34,5 +36,9 @@ public class GameBot extends Player{
             gui.leaveGameFunction();
         }
 
+    }
+    public void setGUI(GUI gui)
+    {
+        this.gui=gui;
     }
 }

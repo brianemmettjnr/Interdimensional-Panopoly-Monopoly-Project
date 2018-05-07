@@ -59,6 +59,7 @@ class GUI implements InteractionAPI {
     private GUIButton[] answers =new GUIButton[4];
     private GUIButton bidButton;
     private GUIButton GOOJButton;
+    private GUIButton tradeButton;
 	private MouseAdapter correct=new MouseAdapter() {
         @Override
         public void mouseClicked(MouseEvent e) {
@@ -232,6 +233,14 @@ class GUI implements InteractionAPI {
         doomsdayTimer.setOpaque(true);
         doomsdayTimer.setBorder(BorderFactory.createLineBorder(Color.red.brighter(),1));
         mainPane.add(doomsdayTimer);
+        tradeBox.setVisible(false);
+        tradeBox.setBounds((int)(10+(OFFSET *((squaresOnSide -1)/2.0))),-20+(squaresOnSide -1)* OFFSET,30,OFFSET);
+        tradeBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                sendTradefunction();
+            }
+        });
     }
 
     private void setupButtons()
@@ -318,6 +327,14 @@ class GUI implements InteractionAPI {
                     }
                 },this);
         quitButton.setVisible(true);
+
+        tradeButton=new GUIButton("Trade",demolishButton.getButton().getX(),demolishButton.getButton().getY()+demolishButton.getButton().getHeight(),
+                new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        tradeFunction();
+                    }
+                },this);
 
         int x=0;
         for(int i=0;i<4;i++)
@@ -723,6 +740,49 @@ class GUI implements InteractionAPI {
     public void getHelpFunction() {
 
     }
+    
+    public void tradeFunction()
+    {
+        tradeButton.setText("Cancel");
+        tradeButton.setMouseEvent(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    cancelTrade();
+                }
+        });
+        if(  ((RentalProperty)(getSelectedLocation().getLocation())).getOwner()==assignedPlayer  )
+        {
+            updateAction("Choose the player you would like to trade with");
+            updateAction("Enter the amount you want from them");
+            tradeBox.setVisible(true);
+
+        }
+        else
+        {
+            updateAction("Choose the amount you will pay for this");
+        }
+    }
+
+    public void sendTradefunction()
+    {
+
+    }
+
+    public void cancelTrade()
+    {
+        tradeButton.setText("Trade");
+        tradeButton.setMouseEvent(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                tradeFunction();
+            }
+        });
+    }
+
+    public void completeTrade()
+    {
+
+    }
 
     public void useGOOJ()
     {
@@ -837,6 +897,8 @@ class GUI implements InteractionAPI {
             if (location.getLocation() instanceof RentalProperty)
             {
                 RentalProperty locationCheck = (RentalProperty) location.getLocation();
+                
+                tradeButton.setVisible(locationCheck.isOwned());
                 if (locationCheck.getOwner() == panopoly.getCurrentPlayer()&&panopoly.getCurrentPlayer()==assignedPlayer)
                 {
                     Boolean mortgageable=true;
