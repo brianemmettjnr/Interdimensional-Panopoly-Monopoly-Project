@@ -19,18 +19,14 @@ public class GameBot extends Player{
         return name+"(BOT)";
     }
 
-    public void makeGameDecision(){
+    public void makeGameDecision() {
         if(isInJail()){
             gui.answerCorrectlyFunction();
-        } else if(gui.bidButton.isVisible()){
-            if(bidsMade<2){
-                gui.bidFunction();
-                bidsMade++;
-            }else{
-                bidsMade=0;
-            }
-
-        }else if(gui.rollButton.isVisible()) {
+        } else if(gui.auctionTimer.isVisible()){
+            gui.bidFunction();
+        } else if(gui.buildButton.isVisible()){
+            gui.buildHouseFunction();
+        } else if(gui.rollButton.isVisible()) {
             gui.rollFunction();
         } else if(gui.exitGame.isVisible()){
             gui.wonGameQuitFunction();
@@ -38,9 +34,13 @@ public class GameBot extends Player{
             gui.buyPropertyFunction();
         } else if(gui.endButton.isVisible()){
             gui.endTurnFunction();
+        } else if(gui.mortgageButton.isVisible() && balance<0){
+            gui.mortgagePropertyFunction();
+        } else if(balance<400 && gui.redeemButton.isVisible()){
+            gui.redeemPropertyFunction();
         } else if(balance<0){
             gui.leaveGameFunction();
-        } else {
+        } else{
             gui.leaveGameFunction();
         }
     }

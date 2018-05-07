@@ -20,7 +20,7 @@ public class Panopoly
 	private Timer countdownTimer;
 	private CardDeck deck = new CardDeck();
 	private int TIME_LEFT = 300000;	//5 minutes
-	private int AUCTION_TIME = 15000; //15 seconds
+	private int AUCTION_TIME = 10000; //15 seconds
 	private boolean inCountdown = false;
 	private int bid;
 	private Player highestBidder;
@@ -208,17 +208,18 @@ public class Panopoly
 				if(AUCTION_TIME <= 0)
 				{	
 					auctionTimer.stop();
-					if(onEndDo==0)
-						roll();
-					else
-						startPlayerTurn(getNextPlayer());
+
 					for(GUI gui: guiArray)
 					{
 						gui.endAuction();
 					}
 					updateAction(highestBidder.getIdentifier()+" wins with a bid of "+bid);
 					highestBidder.buyProperty((Rentable)auctionProperty,bid);
-					AUCTION_TIME = 15000;
+					AUCTION_TIME = 10000;
+					if(onEndDo==0)
+						roll();
+					else
+						startPlayerTurn(getNextPlayer());
 				}
 			}};
 		
