@@ -45,7 +45,7 @@
 //    public static void main(String[] args) throws Exception {
 //
 //        Scanner keyboard = new Scanner(System.in);
-//        System.out.print("Please enter the address of the Nim server (press enter if it is a localhost): ");
+//        System.out.print("Please enter the address of the Panopoly server (press enter if it is a localhost): ");
 ////        String serverAddress= keyboard.nextLine();
 //        String serverAddress = "localhost";
 //        if(serverAddress.equals("")) {
@@ -133,7 +133,7 @@ public class PanopolyClient {
     public static void main(String[] args) throws Exception {
 
         Scanner keyboard = new Scanner(System.in);
-        System.out.print("Please enter the address of the Nim server (press enter if it is a localhost): ");
+        System.out.print("Please enter the address of the panopoly server (press enter if it is a localhost): ");
 //        String serverAddress= keyboard.nextLine();
         String serverAddress = "localhost";
         if(serverAddress.equals("")) {
