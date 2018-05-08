@@ -41,6 +41,7 @@ public class GUIButton {
     public void setSize(int width,int height)
     {
         button.setSize(width,height);
+
     }
 
     public void setMouseEvent(MouseAdapter mouse)
@@ -54,6 +55,14 @@ public class GUIButton {
     }
     public void setText(String text) {
         button.setText(text);
+        if(!text.contains("00:"))
+        {int size = 20;
+            button.setFont(new Font("Courier", Font.BOLD,  size));
+            while(button.getFontMetrics(new Font("Courier", Font.BOLD,  size)).stringWidth(text) > button.getWidth())
+            {
+                size--;
+                button.setFont(new Font("Courier", Font.BOLD,  size));
+            }}
     }
 
     public JButton getButton() {
