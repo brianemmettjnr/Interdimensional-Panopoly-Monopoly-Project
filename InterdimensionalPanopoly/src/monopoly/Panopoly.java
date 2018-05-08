@@ -30,7 +30,8 @@ public class Panopoly
 	Panopoly(int numLocations)
 	{
 		board = new Board(numLocations);
-		SetupGUI.PlayerCountGui(this);
+		SetupGUI setup = new SetupGUI();
+		setup.PlayerCountGui(this);
 	}
 	public void createGUI(ArrayList<Player> playerArray)
 	{

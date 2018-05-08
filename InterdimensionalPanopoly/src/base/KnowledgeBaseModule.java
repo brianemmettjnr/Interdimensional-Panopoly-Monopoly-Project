@@ -544,22 +544,12 @@ public class KnowledgeBaseModule
 
 	private void loadKnowledgeBaseFrom(String filename, int keyPosition)
 	{
-		FileInputStream input;
+		InputStream input;
 
-		try {
-		    input = new FileInputStream(filename);
+		input = this.getClass().getResourceAsStream(filename);
 
-		    loadKnowledgeBaseFrom(input, keyPosition);
-		}
-		catch (IOException e)
-		{
-			System.out.println("Cannot find/load knowledge file: " + filename);
-
-			e.printStackTrace();
-		}
+		loadKnowledgeBaseFrom(input, keyPosition);
 	}
-
-
 
 	private void loadKnowledgeBaseFrom(InputStream stream, int keyPosition)
 	{
@@ -580,7 +570,6 @@ public class KnowledgeBaseModule
 		}
 
 	}
-
 
 	private void parseFieldsIntoKB(Vector fieldNames, String line, int keyPosition)
 	{

@@ -19,7 +19,7 @@ public class SetupGUI
     private static JTextField nameSpace=new JTextField();
     private static ArrayList<Player> players=new ArrayList<>();
 
-    static void PlayerCountGui(Panopoly panopoly1)
+    void PlayerCountGui(Panopoly panopoly1)
     {
         panopoly = panopoly1;
 
@@ -34,7 +34,7 @@ public class SetupGUI
         //panel changes after here
         playerPanel.setBackground(Color.WHITE);
         playerPanel.setLayout(null);
-        JLabel image=new JLabel(new ImageIcon(GUI.class.getResource("Media/Logo.png")));
+        JLabel image=new JLabel(new ImageIcon(this.getClass().getResource("media/Logo.PNG")));
         JLabel[] button=new JLabel[5];
         for(int i=0;i<5;i++)
         {
@@ -81,7 +81,7 @@ public class SetupGUI
         //PlayerNameGUI();
     }
 
-    static void AICountGui(int PlayerCount)
+    void AICountGui(int PlayerCount)
     {
         //how many players
         JFrame playerFrame= new JFrame("Interdimensional Panopoly");
@@ -93,7 +93,7 @@ public class SetupGUI
         //panel changes after here
         playerPanel.setBackground(Color.WHITE);
         playerPanel.setLayout(null);
-        JLabel image=new JLabel(new ImageIcon(GUI.class.getResource("Media/Logo.png")));
+        JLabel image=new JLabel(new ImageIcon(this.getClass().getResource("media/Logo.PNG")));
         JLabel[] button=new JLabel[6];
         int width=375/PlayerCount;
         for(int i=0;i<PlayerCount;i++)
@@ -148,7 +148,7 @@ public class SetupGUI
 
             try
             {
-                GUI.images[i] = ImageIO.read(GUI.class.getResource("media/"+GUI.characters[i]+".png"));
+                GUI.images[i] = ImageIO.read(GUI.class.getResource("media/" + GUI.characters[i]+".png"));
             } catch (IOException e) {
                 e.printStackTrace();
             }

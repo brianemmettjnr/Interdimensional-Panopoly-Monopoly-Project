@@ -92,7 +92,7 @@ class GUI implements InteractionAPI {
 
     GUI(int boardSize,Panopoly panopoly,ArrayList<Player> players,Player player)
     {
-        FRAME_SIZE=new Dimension((int)(50+(FRAME_SIZE.width/2)),(int)(50+FRAME_SIZE.height/2));//temp cod
+        //FRAME_SIZE=new Dimension((int)(50+(FRAME_SIZE.width/2)),(int)(50+FRAME_SIZE.height/2));//temp cod
         this.panopoly=panopoly;
         this.players=players;
         assignedPlayer=player;
@@ -166,7 +166,7 @@ class GUI implements InteractionAPI {
 
     private void setupImage()
     {
-        ImageIcon scaleImage=new ImageIcon(GUI.class.getResource("media/Logo.png"));
+        ImageIcon scaleImage=new ImageIcon(GUI.class.getResource("media/Logo.PNG"));
         BufferedImage bi = new BufferedImage(scaleImage.getIconWidth(), scaleImage.getIconHeight(), BufferedImage.TYPE_INT_ARGB);
         Graphics g = bi.createGraphics();
         scaleImage.paintIcon(null, g, 0,0);
@@ -460,7 +460,7 @@ class GUI implements InteractionAPI {
                             answers[i].setMouseEvent(correct);
                         } else {
                             answers[i].setMouseEvent(incorrect);
-                            answers[i].setText("|"+question[1+wrongcount]);
+                            answers[i].setText(question[1+wrongcount]);
                             wrongcount++;
                         }
                     }
