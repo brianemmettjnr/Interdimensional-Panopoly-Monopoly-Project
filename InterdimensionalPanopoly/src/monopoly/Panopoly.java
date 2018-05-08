@@ -6,7 +6,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import javax.swing.Timer;
 
-//import com.sun.org.apache.xpath.internal.operations.Bool;
 import interfaces.*;
 
 public class Panopoly 
@@ -32,6 +31,10 @@ public class Panopoly
 		board = new Board(numLocations);
 		SetupGUI setup = new SetupGUI();
 		setup.PlayerCountGui(this);
+	}
+	Panopoly(int numLocations, String s){
+		board = new Board(numLocations);
+		int x = s.length();
 	}
 	public void createGUI(ArrayList<Player> playerArray)
 	{
@@ -209,12 +212,14 @@ public class Panopoly
 				if(AUCTION_TIME <= 0)
 				{	
 					auctionTimer.stop();
+					
 					for(GUI gui: guiArray)
 					{
 						gui.endAuction();
 					}
 					updateAction(highestBidder.getIdentifier()+" wins with a bid of "+bid);
 					highestBidder.buyProperty((Rentable)auctionProperty,bid);
+					
 					AUCTION_TIME = 15000;
 					if(onEndDo==0)
 						roll();

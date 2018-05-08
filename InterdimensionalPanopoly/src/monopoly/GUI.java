@@ -35,7 +35,7 @@ class GUI implements InteractionAPI {
     private JLabel latestAction=new JLabel("",SwingConstants.CENTER);
     private JLabel secondAction=new JLabel("",SwingConstants.CENTER);
     private JLabel thirdAction=new JLabel("",SwingConstants.CENTER);
-    private GUIButton auctionTimer;
+    GUIButton auctionTimer;
     private JLabel doomsdayTimer=new JLabel("",SwingConstants.CENTER);
     private JPanel cardPanel = new JPanel();
     private JTextField tradeBox=new JTextField();
@@ -706,7 +706,7 @@ class GUI implements InteractionAPI {
     public void buyPropertyFunction() {
         Rentable buyProperty= (Rentable)panopoly.getBoard().getLocation(panopoly.getCurrentPlayer().getPosition());
         gui.updateAction(panopoly.buyProperty(buyProperty));
-        gui.updateGUI();
+        //gui.updateGUI();
         if(assignedPlayer instanceof GameBot)
             ((GameBot)assignedPlayer).makeGameDecision();
     }
